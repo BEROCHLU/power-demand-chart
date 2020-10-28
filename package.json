@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "webpack": "npx webpack",
-    "babel": "npx babel middle.js --out-file script.js"
+    "pre-babel": "npx babel ./src/index.js --out-file ./pre-babel.js",
+    "post-babel": "npx babel middle.js --out-file script.js"
   },
   "keywords": [],
   "author": "",

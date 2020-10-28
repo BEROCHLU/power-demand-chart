@@ -3,9 +3,9 @@ const webpack = require('webpack');
 
 module.exports = {
     mode: 'production', //production | development
-    entry: './src/index.js',
+    entry: './src/index.js', //./src/index.js | ./pre-babel.js
     output: {
-        filename: './middle.js',
+        filename: './middle.js', //./middle.js | ./script.js
         path: path.join(__dirname)
     },
     plugins: [
@@ -21,7 +21,6 @@ module.exports = {
     module: {
         rules: [{
             test: /\.css$/,
-            exclude: /node_modules/,
             use: ["style-loader",
                 {
                     loader: "css-loader"
