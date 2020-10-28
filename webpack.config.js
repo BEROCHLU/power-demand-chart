@@ -3,9 +3,9 @@ const webpack = require('webpack');
 
 module.exports = {
     mode: 'production', //production | development
-    entry: './script.js',
+    entry: './src/index.js',
     output: {
-        filename: './script3.js',
+        filename: './middle.js',
         path: path.join(__dirname)
     },
     plugins: [

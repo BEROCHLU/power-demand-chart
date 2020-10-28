@@ -1,52 +1,136 @@
 'use strict';
 
-//株数計算
-$('.text-group tr:nth-of-type(2) td:not(:nth-of-type(2)) > input').change(function () {
+import {
+  arrHsh
+} from './rowdata.js';
 
-    let strPower = ''; //replaceを使うため明示的にstring宣言
-    let dShares, dPrice;
-    let strTextarea;
-    const FEE = 23.09; //売却手数料を適用
+import "../css/style.css";
 
-    if ('number' === $(this)[0].type) {
+const arrX = _.chain(arrHsh).map(hsh => hsh['月日']).uniq().value();
+const arrY = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
 
-        strPower = $('.text-group tr:nth-of-type(2) td:first-of-type > input').val();
-        dPrice = $(this).val();
-    } else {
+let arrMaxin = [];
+let arrAxisX = [];
 
-        strPower = $(this).val();
-        dPrice = $('.text-group tr:nth-of-type(2) td:last-of-type > input').val();
-    }
+// [x, y, z]
+// [0-23, 0-30, value]
+const arrPlot = _.map(arrHsh, (hsh, i) => {
 
-    strPower = strPower.replace(/,/g, '').trim(); //空白コンマ除去;
-    let dPower = parseFloat(strPower); //文字列float変換
+    const int_day = parseInt(i / 24);
+    const int_hour = parseInt(hsh['時刻']);
+    const int_value = parseInt(hsh['太陽光実績']);
+    const str_day = hsh['月日'];
+    const str_h = hsh['時刻'];
+    const str_xAxis = `${str_day} ${str_h}:00`;
 
-    if ($.isNumeric(dPower) == false || $.isNumeric(dPrice) == false) {
-        return false; //両方入力されてなければ処理中断
-    }
+    arrAxisX.push(str_xAxis);
+    arrMaxin.push(int_value);
 
-    dShares = Math.floor((dPower - FEE) / dPrice); //小数点以下を切り捨て
-
-    $('.text-group tr:nth-of-type(2) td:nth-of-type(2) > input').val(dShares);
-
-    strTextarea = `${dPower}:${dShares}:${dPrice}\n${$('textarea').val()}`; //履歴結合
-
-    $('textarea').val(strTextarea);
+    return [int_day, int_hour, int_value || '-'];
 });
 
-//クリップボードにコピー
-$('.text-group tr:nth-of-type(2) td:nth-of-type(2) > input').click(function () {
+const myChart1 = echarts.init(document.getElementById('cn1'));
+const myChart2 = echarts.init(document.getElementById('cn2'));
 
-    $(this).select();
-    document.execCommand('copy');
-});
+const option1 = {
+    tooltip: {
+        formatter: (p) => {
+            return `${p.name} ${p.value[1]}:00 <br> ${p.value[2]}`;
+        },
+        position: 'top'
+    },
+    animation: false,
+    grid: {
+        height: '90%',
+        width: '70%',
+        top: '5%'
+    },
+    xAxis: {
+        type: 'category',
+        data: arrX,
+        splitArea: {
+            show: true
+        }
+    },
+    yAxis: {
+        type: 'category',
+        data: arrY,
+        splitArea: {
+            show: true
+        }
+    },
+    visualMap: {
+        min: _.min(arrMaxin),
+        max: _.max(arrMaxin),
+        calculable: true,
+        orient: 'vertical', //horizontal | vertical
+        //left: '10%',
+        right: '5%',
+        bottom: '5%',
+        padding: 0
+    },
+    series: [{
+        name: 'power',
+        type: 'heatmap',
+        data: arrPlot,
+        label: {
+            show: false
+        },
+        emphasis: {
+            itemStyle: {
+                shadowBlur: 10,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        }
+    }]
+}
 
-//テキストクリア
-$('.clear-button').click(function () {
+const option2 = {
+    tooltip: {
+        trigger: 'axis', // item | axis
+        position: 'top'
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataView: {
+                readOnly: false
+            },
+            magicType: {
+                type: ["line", "bar"]
+            },
+            restore: {},
+            saveAsImage: {}
+        }
+    },
+    xAxis: {
+        type: 'category',
+        data: arrAxisX
+    },
+    yAxis: {
+        type: 'value'
+    },
+    dataZoom: [{
+            type: 'inside',
+            start: 0,
+            end: 100
+        },
+        {
+            show: true,
+            type: 'slider',
+            bottom: '1%',
+            throttle: 128,
+            start: 0,
+            end: 100
+        }
+    ],
+    series: [{
+        data: arrMaxin,
+        symbol: 'circle',
+        symbolSize: 4,
+        type: 'line' //line | bar
+    }]
+};
 
-    $('.text-group input').each(function () {
-        $(this).val(''); //class下の全inputのvalueをクリア
-    });
-
-    $('textarea').val('');
-});
+myChart1.setOption(option1);
+myChart2.setOption(option2);
