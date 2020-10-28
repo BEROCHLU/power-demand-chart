@@ -8,6 +8,13 @@
 	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/dist/echarts-en.min.js"></script>
 	<style>
+		/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v7.0.29,
+* Autoprefixer: v9.7.6
+* Browsers: last 4 version
+*/
+
 		@charset "utf-8";
 
 		body {
@@ -18,18 +25,27 @@
 		.wrapper {
 			width: 100%;
 			height: 99.7vh;
-			display: grid;
 			display: -ms-grid;
-			grid-template-columns: 1fr 1fr;
+			display: grid;
 			-ms-grid-columns: 1fr 1fr;
-			-ms-grid-rows: auto;
+			grid-template-columns: 1fr 1fr;
+			-ms-grid-rows: 1fr;
+			grid-template-rows: 1fr;
+		}
+
+		.wrapper>*:nth-child(1) {
+			-ms-grid-row: 1;
+			-ms-grid-column: 1;
+		}
+
+		.wrapper>*:nth-child(2) {
+			-ms-grid-row: 1;
+			-ms-grid-column: 2;
 		}
 
 		.grid1 {
+			-ms-grid-column: 1;
 			grid-column: 1fr;
-			-ms-grid-columns: 1fr;
-			grid-row: auto;
-			-ms-grid-rows: auto;
 		}
 
 		#cn1 {
@@ -39,10 +55,8 @@
 		}
 
 		.grid2 {
+			-ms-grid-column: 1;
 			grid-column: 1fr;
-			-ms-grid-columns: 1fr;
-			grid-row: auto;
-			-ms-grid-rows: auto;
 		}
 
 		#cn2 {
