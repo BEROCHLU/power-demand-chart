@@ -1,6 +1,10 @@
 'use strict';
 
-var arrX = _.chain(arrHsh).map(function (hsh) {
+var _rowdata = require("./rowdata.js");
+
+//require("./style.css");
+
+var arrX = _.chain(_rowdata.arrHsh).map(function (hsh) {
   return hsh['月日'];
 }).uniq().value();
 
@@ -9,7 +13,7 @@ var arrMaxin = [];
 var arrAxisX = []; // [x, y, z]
 // [0-23, 0-30, value]
 
-var arrPlot = _.map(arrHsh, function (hsh, i) {
+var arrPlot = _.map(_rowdata.arrHsh, function (hsh, i) {
   var int_day = parseInt(i / 24);
   var int_hour = parseInt(hsh['時刻']);
   var int_value = parseInt(hsh['太陽光実績']);
