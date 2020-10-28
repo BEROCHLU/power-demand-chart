@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="icon" type="image/png" href="./favicon.png">
+		<title>CalcShares</title>
+	</head>
+	<body>
+		<div class="text-group">
+			<table>
+				<tr>
+					<th>Power</th>
+					<th>Shares</th>
+					<th>Price</th>
+				</tr>
+				<tr>
+					<td><input type="text"></td>
+					<td><input readonly type="text"></td>
+					<td><input type="number" step=0.01></td>
+				</tr>
+			</table>
+		</div>
+		<div>
+			<textarea></textarea>
+		</div>
+		<input type="button" value="clear" class="clear-button">
+		<style>
+			.text-group {
+				padding: 5px 5px 5px 5px;
+			}
+			
+			.text-group input{
+				font-size: 15pt;
+				margin: 5px 5px 5px 5px;
+				width: 155px;
+			}
+
+			.text-group tr:nth-of-type(2) td:first-of-type > input {
+				ime-mode: disabled;
+			}
+			
+			.text-group tr:nth-of-type(2) td:nth-of-type(2) > input {
+				background: lightgrey;
+			}
+			
+			textarea {
+				font-size: 15pt;
+				margin: 5px 5px 5px 13px;
+				width: 505px;
+				height: 75vh;
+			}
+			
+			.clear-button {
+				margin: 5px 0px 0px 12px;
+			}
+
+			@media screen and (max-width: 767px) {
+
+				.text-group input{
+					font-size: 12pt;
+					margin: 5px 0px 0px 5px;
+				}
+
+				.text-group tr:nth-of-type(2) td:first-of-type > input {
+					width: 30vw;
+				}
+				
+				.text-group tr:nth-of-type(2) td:nth-of-type(2) > input {
+					width: 25vw;
+					background: lightgrey;
+				}
+				
+				.text-group tr:nth-of-type(2) td:last-of-type > input {
+					width: 25vw;
+				}
+
+				textarea {
+					font-size: 12pt;
+					margin: 10px 10px 10px 13px;
+					width: 87vw;
+					height: 50vh;
+				}
+			}
+			
+		</style>
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+		<script>
+		'use strict';
+		
+		//株数計算
+		$('.text-group tr:nth-of-type(2) td:not(:nth-of-type(2)) > input').change(function(){
+		
+			let strPower = '';//replaceを使うため明示的にstring宣言
+			let dShares,dPrice;
+			let strTextarea;
+			const FEE = 23.09;//売却手数料を適用
+			
+			if('number' === $(this)[0].type){
+				
+				strPower = $('.text-group tr:nth-of-type(2) td:first-of-type > input').val();
+				dPrice = $(this).val();
+			}
+			else{
+			
+				strPower = $(this).val();
+				dPrice = $('.text-group tr:nth-of-type(2) td:last-of-type > input').val();
+			}
+
+			strPower = strPower.replace(/,/g, '').trim();//空白コンマ除去;
+			let dPower = parseFloat(strPower);//文字列float変換
+
+			if($.isNumeric(dPower)==false || $.isNumeric(dPrice)==false ){
+				return false;//両方入力されてなければ処理中断
+			}
+			
+			dShares = Math.floor( (dPower - FEE) / dPrice );//小数点以下を切り捨て
+
+			$('.text-group tr:nth-of-type(2) td:nth-of-type(2) > input').val(dShares);
+
+			strTextarea = `${dPower}:${dShares}:${dPrice}\n${$('textarea').val()}`;//履歴結合
+
+			$('textarea').val(strTextarea);
+		});
+		
+		//クリップボードにコピー
+		$('.text-group tr:nth-of-type(2) td:nth-of-type(2) > input').click(function(){
+		
+			$(this).select();
+			document.execCommand('copy');
+		});
+
+		//テキストクリア
+		$('.clear-button').click(function(){
+
+			$('.text-group input').each(function(){
+				$(this).val('');//class下の全inputのvalueをクリア
+			});
+
+			$('textarea').val('');
+		});
+		
+		</script>
+	</body>
+</html>
