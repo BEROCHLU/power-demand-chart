@@ -94,13 +94,22 @@ const option2 = {
         show: true,
         feature: {
             dataView: {
-                readOnly: false
+                title: 'data view',
+                readOnly: true
             },
             magicType: {
+                title: {
+                    line: 'for line charts',
+                    bar: 'for bar charts'
+                },
                 type: ["line", "bar"]
             },
-            restore: {},
-            saveAsImage: {}
+            restore: {
+                title: 'restore'
+            },
+            saveAsImage: {
+                title: 'save as image'
+            }
         }
     },
     xAxis: {
