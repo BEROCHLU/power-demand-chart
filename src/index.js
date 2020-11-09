@@ -1,7 +1,7 @@
 'use strict';
 
 import {
-  arrHsh
+    arrHsh
 } from './rowdata.js';
 
 import "../css/style.css";
@@ -93,9 +93,10 @@ const option2 = {
     toolbox: {
         show: true,
         feature: {
-            dataView: {
+            dataView: { // not work IE11
                 title: 'data view',
-                readOnly: true
+                readOnly: true,
+                lang: ['data view', 'turn off', 'refresh']
             },
             magicType: {
                 title: {
