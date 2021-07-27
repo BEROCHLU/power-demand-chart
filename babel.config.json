@@ -1,12 +1,13 @@
 {
     "presets": [
         [
-            "@babel/env",
+            "@babel/preset-env",
             {
                 "targets": {
                     "ie": 11
                 }
             }
         ]
-    ]
+    ],
+    "compact": true
 }
