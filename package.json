@@ -12,8 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "csv2json": "^2.0.2",
-    "echarts": "^4.9.0",
+    "echarts": "^5.1.2",
     "lodash": "^4.17.20"
   },
   "devDependencies": {
