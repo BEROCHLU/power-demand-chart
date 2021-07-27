@@ -6,7 +6,7 @@
   "scripts": {
     "webpack": "npx webpack",
     "pre-babel": "npx babel ./src/index.js --out-file ./pre-babel.js",
-    "post-babel": "npx babel ./dist/pack.js --out-file script.js"
+    "post-babel": "npx babel ./dist/pack.js --out-file ./dist/pack-babel.js"
   },
   "keywords": [],
   "author": "",
