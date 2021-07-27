@@ -5,7 +5,7 @@ module.exports = {
     mode: 'production', //production | development
     entry: './src/index.js', //./src/index.js | ./pre-babel.js
     output: {
-        filename: './middle.js', //./middle.js | ./script.js
+        filename: './dist/pack.js', //./middle.js | ./script.js
         path: path.join(__dirname)
     },
     plugins: [
