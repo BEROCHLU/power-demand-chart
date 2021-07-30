@@ -2,21 +2,36 @@
 <html>
 
 <head>
-	<title>heatmap-demo</title>
+	<title>Echarts Dash</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
 	<link rel="stylesheet" href="css/style.css">
-	<script src="https://cdn.jsdelivr.net/npm/echarts@5.1.2/dist/echarts.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/echarts@5.1.2/dist/echarts.min.js"></script>
 </head>
 
 <body>
 	<div class="wrapper">
 		<div class="grid1">
-			<div id="cn1"></div>
+			<span>Select Data Source</span>
+			<select id="data_selector">
+				<option>太陽光実績</option>
+				<option>地熱</option>
+				<option>水力</option>
+				<option>風力実績</option>
+				<option>原子力</option>
+				<option>火力</option>
+				<option>バイオマス</option>
+				<option>風力抑制量</option>
+				<option>太陽光抑制量</option>
+				<option>揚水</option>
+			</select>
 		</div>
 		<div class="grid2">
 			<div id="cn2"></div>
+		</div>
+		<div class="grid3">
+			<div id="cn3"></div>
 		</div>
 	</div>
 	<script src="src/native.js" type="module"></script>

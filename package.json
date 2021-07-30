@@ -1,12 +1,12 @@
 {
   "name": "babel-test",
   "version": "1.0.0",
-  "description": "",
+  "description": "No description",
   "main": "index.js",
   "scripts": {
     "webpack": "npx webpack",
     "pre-babel": "npx babel ./src/index.js --out-file ./pre-babel.js",
-    "post-babel": "npx babel ./dist/pack.js --out-file ./dist/pack-babel.js"
+    "babel": "npx babel ./dist/wpack.js --out-file ./dist/wpack-babel.js"
   },
   "keywords": [],
   "author": "",
@@ -23,7 +23,7 @@
     "babel-loader": "^8.2.2",
     "css-loader": "^6.2.0",
     "style-loader": "^3.2.1",
-    "webpack": "^5.46.0",
+    "webpack": "^5.47.0",
     "webpack-cli": "^4.7.2"
   }
 }
