@@ -2,18 +2,18 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-    mode: 'production', //production | development
-    entry: './src/index.js', //./src/index.js | ./pre-babel.js
+    mode: 'development', //production | development
+    entry: './src/native.js',
     output: {
-        filename: './dist/wpack.js', //./middle.js | ./script.js
+        filename: './dist/wpack.js',
         path: path.join(__dirname)
-    },/*
+    },
     plugins: [
         new webpack.ProvidePlugin({
             _: 'lodash',
             echarts: 'echarts'
         })
-    ],*/
+    ],
     performance: {
         maxEntrypointSize: 16.0 * 1000000,
         maxAssetSize: 16.0 * 1000000
@@ -27,5 +27,6 @@ module.exports = {
                 }
             ]
         }]
-    }
+    },
+    devtool: 'inline-source-map'
 }

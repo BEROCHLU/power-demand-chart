@@ -4,6 +4,8 @@ import {
     arrHsh
 } from './rowdata.js';
 
+//import '../css/style.css';
+
 // create echarts instance
 const echartsHeatmap = echarts.init(document.getElementById('cn2'));
 const echartsLine = echarts.init(document.getElementById('cn3'));
