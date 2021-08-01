@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 module.exports = {
     mode: 'development', //production | development
-    entry: './src/native.js',
+    entry: './src/index.js',
     output: {
         filename: './dist/wpack.js',
         path: path.join(__dirname)
