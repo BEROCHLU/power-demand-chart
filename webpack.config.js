@@ -1,8 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 
-module.exports = {
-    mode: 'development', //production | development
+const config = {
+    mode: 'production', //production | development
     entry: './src/index.js',
     output: {
         filename: './dist/wpack.js',
@@ -17,12 +17,20 @@ module.exports = {
     performance: {
         maxEntrypointSize: 16.0 * 1000000,
         maxAssetSize: 16.0 * 1000000
-    },/*
+    },
     module: {
         rules: [{
             test: /\.css$/,
             use: ["style-loader", "css-loader"]
         }]
-    },*/
-    devtool: 'source-map'
+    }
+}
+
+module.exports = (env, argv) => {
+    if (argv.mode === 'development') {
+        config.mode = 'development';
+        config.devtool = 'cheap-source-map';
+    }
+    console.log(config);
+    return config;
 }
