@@ -17,16 +17,12 @@ module.exports = {
     performance: {
         maxEntrypointSize: 16.0 * 1000000,
         maxAssetSize: 16.0 * 1000000
-    },
+    },/*
     module: {
         rules: [{
             test: /\.css$/,
-            use: ["style-loader",
-                {
-                    loader: "css-loader"
-                }
-            ]
+            use: ["style-loader", "css-loader"]
         }]
-    },
-    devtool: 'inline-source-map'
+    },*/
+    devtool: 'source-map'
 }

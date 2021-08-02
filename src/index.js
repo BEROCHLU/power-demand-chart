@@ -4,7 +4,7 @@ import {
     arrHsh
 } from './rowdata.js';
 
-import '../css/msstyle.css';
+//import '../css/style.css';
 
 // create echarts instance
 const echartsHeatmap = echarts.init(document.getElementById('cn2'));
