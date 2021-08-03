@@ -6,8 +6,8 @@
   "scripts": {
     "webpack": "npx webpack",
     "webpackd": "npx webpack --mode=development",
-    "babel": "npx babel ./dist/wpack.js --out-file ./dist/wpack-babel.js",
-    "ie11": "npx postcss -c postcss.config.js -o ./css/ms-style.css ./css/style.css"
+    "ie11": "npx postcss -c postcss.config.js -o ./css/ms-style.css ./css/style.css",
+    "babel": "npx babel ./dist/wpack.js --out-file ./dist/wpack-babel.js"
   },
   "keywords": [],
   "author": "",
