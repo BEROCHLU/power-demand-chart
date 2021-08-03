@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 const config = {
     mode: 'production', //production | development
-    entry: './src/index.js',
+    entry: './src/native.js',
     output: {
         filename: './dist/wpack.js',
         path: path.join(__dirname)

@@ -7,8 +7,9 @@ import {
 //import '../css/style.css';
 
 // create echarts instance
-const echartsHeatmap = echarts.init(document.getElementById('cn2'));
-const echartsLine = echarts.init(document.getElementById('cn3'));
+const echartsHeatmap = echarts.init(cn2);
+const echartsLine = echarts.init(cn3);
+const echartsStack = echarts.init(cn4);
 
 let arrAxisY = [];
 let arrAxisX = [];
@@ -32,6 +33,14 @@ let arrPlot = _.map(arrHsh, (hsh, i) => {
 
 const arrX = _.chain(arrHsh).map(hsh => hsh['月日']).uniq().value();
 const arrY = _.map(_.range(24), String);
+
+let hshPlot = {}
+let arrKeys = _.keys(arrHsh[0]);
+let arrLegend = _.pull(arrKeys, "月日", "時刻", "需要");
+// create plot data
+_.forEach(arrLegend, (legend) => {
+    hshPlot[legend] = _.map(arrHsh, hsh => parseInt(hsh[legend]));
+});
 
 const optionHeatmap = {
     tooltip: {
@@ -143,9 +152,167 @@ const optionLine = {
         type: 'line' //line | bar
     }]
 }
+
+
+const optionStack = {
+    title: {
+        text: ''
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            label: {
+                backgroundColor: '#6a7985'
+            }
+        }
+    },
+    legend: {
+        data: arrLegend
+    },
+    toolbox: {
+        feature: {
+            restore: {
+                title: 'restore'
+            },
+            saveAsImage: {
+                title: 'saveAsImage'
+            }
+        }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        data: arrAxisX
+    }],
+    yAxis: [{
+        type: 'value'
+    }],
+    animation: false,
+    dataZoom: [{
+        type: 'inside',
+        start: 0,
+        end: 100
+    }, {
+        show: true,
+        type: 'slider',
+        bottom: '1%',
+        throttle: 128,
+        start: 0,
+        end: 100
+    }],
+    series: [{
+            name: arrLegend[0],
+            type: 'line',
+            stack: 'stackA',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 1
+            },
+            data: hshPlot[arrLegend[0]]
+        },
+        {
+            name: arrLegend[1],
+            type: 'line',
+            stack: 'stackA',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 1
+            },
+            data: hshPlot[arrLegend[1]]
+        },
+        {
+            name: arrLegend[2],
+            type: 'line',
+            stack: 'stackA',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 1
+            },
+            data: hshPlot[arrLegend[2]]
+        },
+        {
+            name: arrLegend[3],
+            type: 'line',
+            stack: 'stackA',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 1
+            },
+            data: hshPlot[arrLegend[3]]
+        },
+        {
+            name: arrLegend[4],
+            type: 'line',
+            stack: 'stackA',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 1
+            },
+            data: hshPlot[arrLegend[4]]
+        },
+        {
+            name: arrLegend[5],
+            type: 'line',
+            stack: 'stackA',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 1
+            },
+            data: hshPlot[arrLegend[5]]
+        },
+        {
+            name: arrLegend[6],
+            type: 'line',
+            stack: 'stackA',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 1
+            },
+            data: hshPlot[arrLegend[6]]
+        },
+        {
+            name: arrLegend[7],
+            type: 'line',
+            stack: 'stackA',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 1
+            },
+            data: hshPlot[arrLegend[7]]
+        },
+        {
+            name: arrLegend[8],
+            type: 'line',
+            stack: 'stackA',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 1
+            },
+            data: hshPlot[arrLegend[8]]
+        }
+    ]
+}
+
 // draw a chart
 echartsHeatmap.setOption(optionHeatmap);
 echartsLine.setOption(optionLine);
+echartsStack.setOption(optionStack);
 
 data_selector.addEventListener('change', (event) => {
 
@@ -172,7 +339,7 @@ data_selector.addEventListener('change', (event) => {
 });
 
 const reDrawHeat = () => {
-    //echartsHeatmap.clear();
+    echartsHeatmap.clear();
     optionHeatmap.visualMap.min = _.min(arrAxisY);
     optionHeatmap.visualMap.max = _.max(arrAxisY);
     optionHeatmap.series[0].data = arrPlot;
@@ -181,7 +348,7 @@ const reDrawHeat = () => {
 }
 
 const reDrawLine = () => {
-    //echartsLine.clear();
+    echartsLine.clear();
     optionLine.xAxis.data = arrAxisX;
     optionLine.series[0].data = arrAxisY;
 
