@@ -15,8 +15,26 @@ const arrX = _.chain(arrHsh).map(hsh => hsh['月日']).uniq().value();
 const arrY = _.map(_.range(24), String);
 
 let hshPlot = {}
+let DATA_LEN;
 let arrKeys = _.keys(arrHsh[0]);
 let arrLegend = _.pull(arrKeys, "月日", "時刻", "需要");
+
+// create plot data
+_.forEach(arrLegend, (strLegend) => {
+    hshPlot[strLegend] = _.map(arrHsh, hsh => parseInt(hsh[strLegend]));
+    DATA_LEN = hshPlot[strLegend].length;
+});
+
+let arrSum = [];
+// append sum
+for (let i = 0; i < DATA_LEN; i++) {
+    let sum = 0;
+    _.forEach(arrLegend, (strLegend) => {
+        sum += hshPlot[strLegend][i];
+    });
+    arrSum.push(sum);
+}
+hshPlot["合計"] = arrSum;
 
 // create option innerText
 _.forEach(arrLegend, (strLegend) => {
@@ -24,11 +42,9 @@ _.forEach(arrLegend, (strLegend) => {
     elem.innerText = strLegend;
     data_selector.appendChild(elem);
 });
-
-// create plot data
-_.forEach(arrLegend, (strLegend) => {
-    hshPlot[strLegend] = _.map(arrHsh, hsh => parseInt(hsh[strLegend]));
-});
+const elem = document.createElement('option');
+elem.innerText = '合計';
+data_selector.appendChild(elem);
 
 // append series
 const arrSeries = _.map(arrLegend, (strLegend) => {
@@ -268,16 +284,21 @@ data_selector.addEventListener('change', (event) => {
     arrPlot = _.map(arrHsh, (hsh, i) => {
         const int_day = parseInt(i / 24);
         const int_hour = parseInt(hsh['時刻']);
-        const int_value = parseInt(hsh[strSelect]);
+        let int_value = parseInt(hsh[strSelect]);
         const str_day = hsh['月日'];
         const str_h = hsh['時刻'];
         const str_xAxis = `${str_day} ${str_h}:00`;
 
         arrAxisX.push(str_xAxis);
         arrAxisY.push(int_value);
-
+        if(strSelect==='合計'){
+            int_value = arrSum[i];
+        }
         return [int_day, int_hour, int_value || '-'];
     });
+    if(strSelect==='合計'){
+        arrAxisY = arrSum;
+    }
     //re-draw
     reDrawLine();
     reDrawHeat();
