@@ -22,7 +22,7 @@ grid4 {
 grid1 {
     grid-area: grid1;
     border-radius: 10px;
-    background-color: #e8e8e8;
+    background-color: #f5f5f5;
     text-align: center;
 }
 
@@ -33,7 +33,7 @@ grid2 {
 #cn2 {
     width: 100%;
     height: 100%;
-    background-color: #e8e8e8;
+    background-color: #f5f5f5;
     border-radius: 10px;
 }
 
@@ -44,7 +44,7 @@ grid3 {
 #cn3 {
     width: 100%;
     height: 100%;
-    background-color: #e8e8e8;
+    background-color: #f5f5f5;
     border-radius: 10px;
 }
 
@@ -55,6 +55,6 @@ grid4 {
 #cn4 {
     width: 100%;
     height: 100%;
-    background-color: #e8e8e8;
+    background-color: #f5f5f5;
     border-radius: 10px;
 }

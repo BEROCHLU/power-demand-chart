@@ -44,7 +44,6 @@ const arrSeries = _.map(arrLegend, (strLegend) => {
         data: hshPlot[strLegend]
     }
     return hshSeries;
-    //optionStack.series.push(hshSeries);
 });
 
 //1st value of option
@@ -189,10 +188,26 @@ const optionStack = {
             label: {
                 backgroundColor: '#6a7985'
             }
+        },
+        formatter: (arrParam) => {
+            let s = `<div style="width: 150px;"><div>${arrParam[0].name}</div>`;
+            let sum = 0;
+            _.forEach(arrParam, (param) => {
+                s += `<div style="overflow: hidden;">${param.marker}${param.seriesName}<span style="float: right;"><b>${param.value}</b></span></div>`;
+                sum += param.value;
+            });
+
+            s += `<div style="overflow: hidden;">合計<span style="float: right;"><b>${sum}</b></span></div></div>`;
+            //console.log(s);
+            return s;
         }
     },
     legend: {
-        data: arrLegend
+        data: arrLegend,
+        selector: true,
+        selected: {
+            '揚水': false
+        }
     },
     toolbox: {
         feature: {
@@ -210,9 +225,10 @@ const optionStack = {
         }
     },
     grid: {
+        top: '7%',
         left: '3%',
         right: '4%',
-        bottom: '3%',
+        bottom: '11%',
         containLabel: true
     },
     xAxis: [{
@@ -237,8 +253,6 @@ const optionStack = {
     }],
     series: arrSeries
 }
-
-
 
 // draw a chart
 echartsHeatmap.setOption(optionHeatmap);
