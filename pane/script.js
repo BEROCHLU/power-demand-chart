@@ -8,7 +8,24 @@ import {
 const echartsStack = echarts.init(echarts_stack);
 
 let hshPlot = {}
-let arrLegend = ['太陽光実績', '地熱', '水力', '風力実績', '原子力', '火力', 'バイオマス', '風力抑制量', '太陽光抑制量'];
+let arrKeys = _.keys(arrHsh[0]);
+let arrLegend = _.pull(arrKeys, "月日", "時刻", "需要");
+// append series
+const arrSeries = _.map(arrLegend, (strLegend) => {
+    const hshSeries = {
+        name: strLegend,
+        type: 'line',
+        stack: 'stackA',
+        areaStyle: {},
+        symbol: 'none',
+        lineStyle: {
+            width: 0.5
+        },
+        data: hshPlot[strLegend]
+    }
+    return hshSeries;
+    //optionStack.series.push(hshSeries);
+});
 
 const arrAxisX = _.map(arrHsh, (hsh) => {
     const str_day = hsh['月日'];
@@ -39,6 +56,11 @@ const option = {
     },
     toolbox: {
         feature: {
+            dataView: { // not work IE11
+                title: 'data view',
+                readOnly: true,
+                lang: ['data view', 'turn off', 'refresh']
+            },
             restore: {
                 title: 'restore'
             },
@@ -50,7 +72,7 @@ const option = {
     grid: {
         left: '3%',
         right: '4%',
-        bottom: '3%',
+        bottom: '8%',
         containLabel: true
     },
     xAxis: [{
@@ -69,8 +91,7 @@ const option = {
     }, {
         show: true,
         type: 'slider',
-        bottom: '1%',
-        throttle: 128,
+        throttle: 200,
         start: 0,
         end: 100
     }],
@@ -172,6 +193,17 @@ const option = {
                 width: 1
             },
             data: hshPlot[arrLegend[8]]
+        },
+        {
+            name: arrLegend[9],
+            type: 'line',
+            stack: 'stackA',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 1
+            },
+            data: hshPlot[arrLegend[9]]
         }
     ]
 }

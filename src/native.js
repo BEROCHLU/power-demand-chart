@@ -7,20 +7,58 @@ import {
 //import '../css/style.css';
 
 // create echarts instance
-const echartsHeatmap = echarts.init(cn2);
-const echartsLine = echarts.init(cn3);
-const echartsStack = echarts.init(cn4);
+let echartsHeatmap = echarts.init(cn2);
+let echartsLine = echarts.init(cn3);
+let echartsStack = echarts.init(cn4);
+
+const arrX = _.chain(arrHsh).map(hsh => hsh['月日']).uniq().value();
+const arrY = _.map(_.range(24), String);
+
+let hshPlot = {}
+let arrKeys = _.keys(arrHsh[0]);
+let arrLegend = _.pull(arrKeys, "月日", "時刻", "需要");
+
+// create option innerText
+_.forEach(arrLegend, (strLegend) => {
+    const elem = document.createElement('option');
+    elem.innerText = strLegend;
+    data_selector.appendChild(elem);
+});
+
+// create plot data
+_.forEach(arrLegend, (strLegend) => {
+    hshPlot[strLegend] = _.map(arrHsh, hsh => parseInt(hsh[strLegend]));
+});
+
+// append series
+const arrSeries = _.map(arrLegend, (strLegend) => {
+    const hshSeries = {
+        name: strLegend,
+        type: 'line',
+        stack: 'stackA',
+        areaStyle: {},
+        symbol: 'none',
+        lineStyle: {
+            width: 0.5
+        },
+        data: hshPlot[strLegend]
+    }
+    return hshSeries;
+    //optionStack.series.push(hshSeries);
+});
+
+//1st value of option
+const _str1st = document.querySelector('#data_selector > option').innerText;
 
 let arrAxisY = [];
 let arrAxisX = [];
-
 // [x, y, z]
 // [0-23, 0-30, value]
 let arrPlot = _.map(arrHsh, (hsh, i) => {
 
     const int_day = parseInt(i / 24);
     const int_hour = parseInt(hsh['時刻']);
-    const int_value = parseInt(hsh['太陽光実績']);
+    const int_value = parseInt(hsh[_str1st]);
     const str_day = hsh['月日'];
     const str_h = hsh['時刻'];
     const str_xAxis = `${str_day} ${str_h}:00`;
@@ -29,17 +67,6 @@ let arrPlot = _.map(arrHsh, (hsh, i) => {
     arrAxisY.push(int_value);
 
     return [int_day, int_hour, int_value || '-'];
-});
-
-const arrX = _.chain(arrHsh).map(hsh => hsh['月日']).uniq().value();
-const arrY = _.map(_.range(24), String);
-
-let hshPlot = {}
-let arrKeys = _.keys(arrHsh[0]);
-let arrLegend = _.pull(arrKeys, "月日", "時刻", "需要");
-// create plot data
-_.forEach(arrLegend, (legend) => {
-    hshPlot[legend] = _.map(arrHsh, hsh => parseInt(hsh[legend]));
 });
 
 const optionHeatmap = {
@@ -136,10 +163,9 @@ const optionLine = {
             end: 100
         },
         {
-            show: true,
             type: 'slider',
             bottom: '1%',
-            throttle: 128,
+            throttle: 200,
             start: 0,
             end: 100
         }
@@ -147,12 +173,10 @@ const optionLine = {
     animation: false,
     series: [{
         data: arrAxisY,
-        symbol: 'circle',
-        symbolSize: 4,
+        symbol: 'none',
         type: 'line' //line | bar
     }]
 }
-
 
 const optionStack = {
     title: {
@@ -172,6 +196,11 @@ const optionStack = {
     },
     toolbox: {
         feature: {
+            dataView: { // not work IE11
+                title: 'data view',
+                readOnly: true,
+                lang: ['data view', 'turn off', 'refresh']
+            },
             restore: {
                 title: 'restore'
             },
@@ -202,112 +231,14 @@ const optionStack = {
     }, {
         show: true,
         type: 'slider',
-        bottom: '1%',
-        throttle: 128,
+        throttle: 200,
         start: 0,
         end: 100
     }],
-    series: [{
-            name: arrLegend[0],
-            type: 'line',
-            stack: 'stackA',
-            areaStyle: {},
-            symbol: 'none',
-            lineStyle: {
-                width: 1
-            },
-            data: hshPlot[arrLegend[0]]
-        },
-        {
-            name: arrLegend[1],
-            type: 'line',
-            stack: 'stackA',
-            areaStyle: {},
-            symbol: 'none',
-            lineStyle: {
-                width: 1
-            },
-            data: hshPlot[arrLegend[1]]
-        },
-        {
-            name: arrLegend[2],
-            type: 'line',
-            stack: 'stackA',
-            areaStyle: {},
-            symbol: 'none',
-            lineStyle: {
-                width: 1
-            },
-            data: hshPlot[arrLegend[2]]
-        },
-        {
-            name: arrLegend[3],
-            type: 'line',
-            stack: 'stackA',
-            areaStyle: {},
-            symbol: 'none',
-            lineStyle: {
-                width: 1
-            },
-            data: hshPlot[arrLegend[3]]
-        },
-        {
-            name: arrLegend[4],
-            type: 'line',
-            stack: 'stackA',
-            areaStyle: {},
-            symbol: 'none',
-            lineStyle: {
-                width: 1
-            },
-            data: hshPlot[arrLegend[4]]
-        },
-        {
-            name: arrLegend[5],
-            type: 'line',
-            stack: 'stackA',
-            areaStyle: {},
-            symbol: 'none',
-            lineStyle: {
-                width: 1
-            },
-            data: hshPlot[arrLegend[5]]
-        },
-        {
-            name: arrLegend[6],
-            type: 'line',
-            stack: 'stackA',
-            areaStyle: {},
-            symbol: 'none',
-            lineStyle: {
-                width: 1
-            },
-            data: hshPlot[arrLegend[6]]
-        },
-        {
-            name: arrLegend[7],
-            type: 'line',
-            stack: 'stackA',
-            areaStyle: {},
-            symbol: 'none',
-            lineStyle: {
-                width: 1
-            },
-            data: hshPlot[arrLegend[7]]
-        },
-        {
-            name: arrLegend[8],
-            type: 'line',
-            stack: 'stackA',
-            areaStyle: {},
-            symbol: 'none',
-            lineStyle: {
-                width: 1
-            },
-            data: hshPlot[arrLegend[8]]
-        }
-    ]
+    series: arrSeries
 }
+
+
 
 // draw a chart
 echartsHeatmap.setOption(optionHeatmap);
@@ -352,5 +283,5 @@ const reDrawLine = () => {
     optionLine.xAxis.data = arrAxisX;
     optionLine.series[0].data = arrAxisY;
 
-    echartsLine.setOption(optionLine);
+    echartsLine.setOption(optionLine, true);
 }

@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch Chrome",
+            "request": "launch",
+            "type": "pwa-chrome",
+            "url": "http://localhost:5500/pane",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
             "type": "pwa-node",
             "request": "launch",
             "name": "debug nodejs",
