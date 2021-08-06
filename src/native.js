@@ -14,37 +14,24 @@ let echartsStack = echarts.init(cn4);
 const arrX = _.chain(arrHsh).map(hsh => hsh['月日']).uniq().value();
 const arrY = _.map(_.range(24), String);
 
-let hshPlot = {}
-let DATA_LEN;
+let hshStack = {}
 let arrKeys = _.keys(arrHsh[0]);
-let arrLegend = _.pull(arrKeys, "月日", "時刻", "需要");
+let arrOption = _.pull(arrKeys, "月日", "時刻", "需要");
+let arrLegend = _.cloneDeep(arrOption); //deep copy
+arrOption.push("需要");
 
-// create plot data
+// create stack data
 _.forEach(arrLegend, (strLegend) => {
-    hshPlot[strLegend] = _.map(arrHsh, hsh => parseInt(hsh[strLegend]));
-    DATA_LEN = hshPlot[strLegend].length;
+    hshStack[strLegend] = _.map(arrHsh, hsh => hsh[strLegend]);
 });
-
-let arrSum = [];
-// append sum
-for (let i = 0; i < DATA_LEN; i++) {
-    let sum = 0;
-    _.forEach(arrLegend, (strLegend) => {
-        sum += hshPlot[strLegend][i];
-    });
-    arrSum.push(sum);
-}
-hshPlot["合計"] = arrSum;
 
 // create option innerText
-_.forEach(arrLegend, (strLegend) => {
+_.forEach(arrOption, (strOption) => {
     const elem = document.createElement('option');
-    elem.innerText = strLegend;
+    elem.innerText = strOption;
+    elem.value = strOption;
     data_selector.appendChild(elem);
 });
-const elem = document.createElement('option');
-elem.innerText = '合計';
-data_selector.appendChild(elem);
 
 // append series
 const arrSeries = _.map(arrLegend, (strLegend) => {
@@ -57,23 +44,24 @@ const arrSeries = _.map(arrLegend, (strLegend) => {
         lineStyle: {
             width: 0.5
         },
-        data: hshPlot[strLegend]
+        data: hshStack[strLegend]
     }
     return hshSeries;
 });
 
 //1st value of option
-const _str1st = document.querySelector('#data_selector > option').innerText;
+const _str1st = document.querySelector('#data_selector > option').value;
 
 let arrAxisY = [];
 let arrAxisX = [];
-// [x, y, z]
-// [0-23, 0-30, value]
+
+// [x, y, z] = [0-30, 0-23, value]
 let arrPlot = _.map(arrHsh, (hsh, i) => {
 
     const int_day = parseInt(i / 24);
-    const int_hour = parseInt(hsh['時刻']);
-    const int_value = parseInt(hsh[_str1st]);
+    const int_hour = hsh['時刻'];
+    const int_value = hsh[_str1st];
+
     const str_day = hsh['月日'];
     const str_h = hsh['時刻'];
     const str_xAxis = `${str_day} ${str_h}:00`;
@@ -213,7 +201,7 @@ const optionStack = {
                 sum += param.value;
             });
 
-            s += `<div style="overflow: hidden;">合計<span style="float: right;"><b>${sum}</b></span></div></div>`;
+            s += `<div style="overflow: hidden;">合計<span style="float: right;"><b>${_.round(sum, 1)}</b></span></div></div>`;
             //console.log(s);
             return s;
         }
@@ -282,23 +270,20 @@ data_selector.addEventListener('change', (event) => {
     arrAxisY = [];
 
     arrPlot = _.map(arrHsh, (hsh, i) => {
+
         const int_day = parseInt(i / 24);
-        const int_hour = parseInt(hsh['時刻']);
-        let int_value = parseInt(hsh[strSelect]);
+        const int_hour = hsh['時刻'];
+        const int_value = hsh[strSelect];
+
         const str_day = hsh['月日'];
         const str_h = hsh['時刻'];
         const str_xAxis = `${str_day} ${str_h}:00`;
 
         arrAxisX.push(str_xAxis);
         arrAxisY.push(int_value);
-        if(strSelect==='合計'){
-            int_value = arrSum[i];
-        }
+
         return [int_day, int_hour, int_value || '-'];
     });
-    if(strSelect==='合計'){
-        arrAxisY = arrSum;
-    }
     //re-draw
     reDrawLine();
     reDrawHeat();

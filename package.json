@@ -13,8 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dayjs": "^1.10.6",
     "echarts": "^5.1.2",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "xlsx": "^0.17.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",

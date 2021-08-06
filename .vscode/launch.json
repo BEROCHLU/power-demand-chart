@@ -5,10 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Chrome",
+            "name": "Chrome pane",
             "request": "launch",
             "type": "pwa-chrome",
             "url": "http://localhost:5500/pane",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "name": "Chrome native",
+            "request": "launch",
+            "type": "pwa-chrome",
+            "url": "http://localhost:5500/native.html",
             "webRoot": "${workspaceFolder}"
         },
         {
