@@ -25,7 +25,7 @@ _.forEach(arrLegend, (strLegend) => {
     hshStack[strLegend] = _.map(arrHsh, hsh => hsh[strLegend]);
 });
 
-// create option innerText
+// create option innerText & value
 _.forEach(arrOption, (strOption) => {
     const elem = document.createElement('option');
     elem.innerText = strOption;
@@ -153,6 +153,13 @@ const optionLine = {
             }
         }
     },
+    grid: {
+        top: '7%',
+        left: '3%',
+        right: '4%',
+        bottom: '11%',
+        containLabel: true
+    },
     xAxis: {
         type: 'category',
         data: arrAxisX
@@ -167,7 +174,7 @@ const optionLine = {
         },
         {
             type: 'slider',
-            bottom: '1%',
+            bottom: '2%',
             throttle: 200,
             start: 0,
             end: 100
@@ -251,6 +258,7 @@ const optionStack = {
     }, {
         show: true,
         type: 'slider',
+        bottom: '2%',
         throttle: 200,
         start: 0,
         end: 100

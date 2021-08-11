@@ -5,7 +5,7 @@ const _ = require('lodash');
 const dayjs = require('dayjs');
 const fs = require("fs");
 
-const workbook = XLSX.readFile('../data/csv/202105_10エリア計.csv', {
+const workbook = XLSX.readFile('../data/csv/202106_10エリア計.csv', {
     codepage: 932 //shift-jis
 });
 
