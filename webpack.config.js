@@ -11,7 +11,9 @@ const config = {
     plugins: [
         new webpack.ProvidePlugin({
             _: 'lodash',
-            echarts: 'echarts'
+            echarts: 'echarts',
+            dayjs: 'dayjs',
+            isBetween: 'dayjs/plugin/isBetween.js'
         })
     ],
     performance: {

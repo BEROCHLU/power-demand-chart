@@ -2,7 +2,7 @@
 
 import {
     arrHsh
-} from './rowdata.js';
+} from './rowdata-all.js';
 
 //import '../css/style.css';
 
@@ -11,18 +11,28 @@ let echartsHeatmap = echarts.init(cn2);
 let echartsLine = echarts.init(cn3);
 let echartsStack = echarts.init(cn4);
 
-const arrX = _.chain(arrHsh).map(hsh => hsh['月日']).uniq().value();
+dayjs.extend(window.dayjs_plugin_isBetween); //install dayjs-plugin from browser
+//dayjs.extend(isBetween);
+
+const mMonth = dayjs('2020-07');
+const arrFilter = _.filter(arrHsh, hsh => {
+    const strDate = hsh['月日'];
+    const mTarget = dayjs(strDate);
+    return mTarget.isBetween(mMonth, mMonth, 'month', '[]');
+});
+
+const arrX = _.chain(arrFilter).map(hsh => hsh['月日']).uniq().value();
 const arrY = _.map(_.range(24), String);
 
 let hshStack = {}
-let arrKeys = _.keys(arrHsh[0]);
+let arrKeys = _.keys(arrFilter[0]);
 let arrOption = _.pull(arrKeys, "月日", "時刻", "需要");
 let arrLegend = _.cloneDeep(arrOption); //deep copy
 arrOption.push("需要");
 
 // create stack data
 _.forEach(arrLegend, (strLegend) => {
-    hshStack[strLegend] = _.map(arrHsh, hsh => hsh[strLegend]);
+    hshStack[strLegend] = _.map(arrFilter, hsh => hsh[strLegend]);
 });
 
 // create option innerText & value
@@ -56,7 +66,7 @@ let arrAxisY = [];
 let arrAxisX = [];
 
 // [x, y, z] = [0-30, 0-23, value]
-let arrPlot = _.map(arrHsh, (hsh, i) => {
+let arrPlot = _.map(arrFilter, (hsh, i) => {
 
     const int_day = parseInt(i / 24);
     const int_hour = hsh['時刻'];
@@ -277,7 +287,7 @@ data_selector.addEventListener('change', (event) => {
     arrAxisX = [];
     arrAxisY = [];
 
-    arrPlot = _.map(arrHsh, (hsh, i) => {
+    arrPlot = _.map(arrFilter, (hsh, i) => {
 
         const int_day = parseInt(i / 24);
         const int_hour = hsh['時刻'];
