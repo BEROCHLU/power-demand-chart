@@ -78,7 +78,7 @@ _.forEach(arrOption, (strOption) => {
 });
 
 // append series
-const arrSeries = _.map(arrLegend, (strLegend) => {
+let arrSeries = _.map(arrLegend, (strLegend) => {
     const hshSeries = {
         name: strLegend,
         type: 'line',
@@ -336,9 +336,28 @@ change_period.addEventListener('click', event => {
 
         return [int_day, int_hour, int_value || '-'];
     });
+
+    _.forEach(arrLegend, (strLegend) => {
+        hshStack[strLegend] = _.map(arrFilter, hsh => hsh[strLegend]);
+    });
+    arrSeries = _.map(arrLegend, (strLegend) => {
+        const hshSeries = {
+            name: strLegend,
+            type: 'line',
+            stack: 'stackA',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 0.5
+            },
+            data: hshStack[strLegend]
+        }
+        return hshSeries;
+    });
     //re-draw
     reDrawLine();
     reDrawHeat();
+    reDrawStack();
 });
 
 // change year or month
@@ -381,4 +400,13 @@ const reDrawLine = () => {
     optionLine.series[0].data = arrAxisY;
 
     echartsLine.setOption(optionLine, true);
+}
+
+const reDrawStack = () => {
+    echartsStack.clear();
+    optionStack.xAxis[0].data = arrAxisX;
+    optionStack.series = arrSeries;
+
+    echartsStack.setOption(optionStack, true);
+
 }
