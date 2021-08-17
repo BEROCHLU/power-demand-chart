@@ -1,4 +1,4 @@
-export var arrHsh = [{
+export default arrHsh = [{
         "月日": "2020/5/1",
         "時刻": "0",
         "需要": "67786.9",
