@@ -1,6 +1,6 @@
 'use strict';
 
-//findIndexを使うためにnodelistオブジェクトを配列に変換する
+//nodelistオブジェクトを配列に変換
 const lists = Array.from(document.querySelectorAll("li"));
 const arrElem = document.querySelectorAll('li');
 //要素liの全てについてクリックイベントを追加する

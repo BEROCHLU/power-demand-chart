@@ -1,12 +1,9 @@
-#fetch_form {
-    visibility: hidden;
-}
 
 #wrapper {
     width: 640px;
     margin: auto;
     padding: 10px;
-    background-color: #28729f;
+    background-color: #bbb;
     border-radius: 20px;
 }
 
@@ -22,27 +19,21 @@ ul::after {
 }
 
 li {
-    float: left;
     cursor: pointer;
-    margin-right: 0px;
-    font-size: 22px;
-    font-weight: bold;
 }
 
-li:nth-of-type(1) {
-    padding-left: 10px;
-    padding-right: 10px;
+li:first-of-type {
+    float: left;
     margin-left: -40px;
 }
 
-li:not(:nth-of-type(1)) {
-    padding-left: 10px;
-    padding-right: 10px;
+li:last-of-type {
+    float: right;
 }
 
 .active-tab {
-    font-weight: normal;
-    opacity: 0.25;
+    opacity: 0.2;
+    cursor: default;
 }
 
 .active-panel {
@@ -70,8 +61,4 @@ input#img_path {
 
 input[name="upimg"] {
     width: 110px;
-}
-
-#panel_group>div:nth-of-type(1)>a {
-    visibility: visible;
 }
