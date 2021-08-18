@@ -1,0 +1,77 @@
+#fetch_form {
+    visibility: hidden;
+}
+
+#wrapper {
+    width: 640px;
+    margin: auto;
+    padding: 10px;
+    background-color: #28729f;
+    border-radius: 20px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+}
+
+ul::after {
+    content: " ";
+    display: block;
+    clear: both;
+}
+
+li {
+    float: left;
+    cursor: pointer;
+    margin-right: 0px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+li:nth-of-type(1) {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-left: -40px;
+}
+
+li:not(:nth-of-type(1)) {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.active-tab {
+    font-weight: normal;
+    opacity: 0.25;
+}
+
+.active-panel {
+    border: 2px solid white;
+    border-radius: 0 0 20px 20px;
+    height: 150px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.active-panel>a {
+    color: white;
+    display: inline-block;
+    text-decoration: none;
+}
+
+#panel_group>div:not(.active-panel) {
+    display: none;
+}
+
+input#img_path {
+    background-color: #f0f5ff;
+    width: 360px;
+}
+
+input[name="upimg"] {
+    width: 110px;
+}
+
+#panel_group>div:nth-of-type(1)>a {
+    visibility: visible;
+}

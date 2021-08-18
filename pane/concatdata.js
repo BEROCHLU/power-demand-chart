@@ -6,14 +6,14 @@ const dayjs = require('dayjs');
 const fs = require('fs');
 const path = require('path');
 
-const CSV_PATH = '../data';
-const arrStrFile = fs.readdirSync(CSV_PATH);
+const DIR_PATH = path.join(__dirname, '../data');
+const arrStrFile = fs.readdirSync(DIR_PATH);
 
 let arrConcat = [];
 
 _.forEach(arrStrFile, strFile => {
-    const CSV_FILE = path.join(CSV_PATH, strFile);
-    const workbook = XLSX.readFile(CSV_FILE, {
+    const FILE_PATH = path.join(DIR_PATH, strFile);
+    const workbook = XLSX.readFile(FILE_PATH, {
         codepage: 932 //shift-jis
     });
 

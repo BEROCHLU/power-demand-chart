@@ -2,6 +2,7 @@
 
 import _ from 'lodash';
 import dayjs from 'dayjs';
+import fs from 'fs';
 import isBetween from 'dayjs/plugin/isBetween.js';
 
 dayjs.extend(isBetween);
@@ -10,7 +11,7 @@ import {
     arrHsh
 } from './rowdata-all.mjs';
 
-const mStart = dayjs('2020-01');
+const mStart = dayjs('2021-06');
 let arrFilter = _.filter(arrHsh, hsh => {
     const strDate = hsh['月日'];
     const mTarget = dayjs(strDate);
@@ -47,4 +48,4 @@ _.forEach(arrYear, strYear => {
     console.log(strYear.slice(-2));
 });
 
-//fs.writeFileSync('./checkdata.json', JSON.stringify(arrFilter, null, '\t'));
+fs.writeFileSync('./checkdata.json', JSON.stringify(arrFilter, null, '\t'));

@@ -17,42 +17,26 @@ if (window.dayjs_plugin_isBetween) {
     dayjs.extend(isBetween);
 }
 
-let arrStrDate = _.chain(arrHsh).map(hsh => hsh['月日']).uniq().value();
-
-let arrOptionYear = [];
-let arrOptionMonth = [];
-let arrStrYM = _.chain(arrStrDate).map(strDate => {
-    let y = dayjs(strDate).year();
-    let m = dayjs(strDate).month() + 1;
-    m = _.padStart(m, 2, '0');
-
-    arrOptionYear.push(y);
-    arrOptionMonth.push(m);
-
-    return `${y}-${m}`;
+const arrStrDateUniq = _.chain(arrHsh).map(hsh => {
+    return dayjs(hsh['月日']).format('YYYY-MM');
 }).uniq().value();
-arrOptionYear = _.uniq(arrOptionYear);
-arrOptionMonth = _.uniq(arrOptionMonth);
 
 // create option innerText & value
-_.forEach(arrOptionYear, (strOption) => {
+_.forEach(arrStrDateUniq, (strOption) => {
     const elem = document.createElement('option');
+
     elem.innerText = strOption;
     elem.value = strOption;
-    year_selector.appendChild(elem);
-});
-_.forEach(arrOptionMonth, (strOption) => {
-    const elem = document.createElement('option');
-    elem.innerText = strOption;
-    elem.value = strOption;
-    month_selector.appendChild(elem);
+
+    const elem2 = elem.cloneNode(true);
+
+    ym_selector.appendChild(elem);
+    ym_selector2.appendChild(elem2);
 });
 
-let strYear = year_selector.value;
-let strMonth = month_selector.value;
-let mMonth = dayjs(`${strYear}-${strMonth}`);
+const mStart = dayjs(ym_selector.value);
 let arrFilter = _.filter(arrHsh, hsh => {
-    return dayjs(hsh['月日']).isBetween(mMonth, mMonth, 'month', '[]');
+    return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
 });
 
 let arrX = _.chain(arrFilter).map(hsh => hsh['月日']).uniq().value();
@@ -95,6 +79,7 @@ let arrSeries = _.map(arrLegend, (strLegend) => {
 
 let arrAxisY = [];
 let arrAxisX = [];
+let arrAxisXX = [];
 // [x, y, z] = [0-30, 0-23, value]
 let arrPlot = _.map(arrFilter, (hsh, i) => {
     const int_day = parseInt(i / 24);
@@ -107,6 +92,7 @@ let arrPlot = _.map(arrFilter, (hsh, i) => {
 
     arrAxisX.push(str_xAxis);
     arrAxisY.push(int_value);
+    arrAxisXX.push(str_xAxis);
 
     return [int_day, int_hour, int_value || '-'];
 });
@@ -283,7 +269,7 @@ const optionStack = {
     xAxis: [{
         type: 'category',
         boundaryGap: false,
-        data: arrAxisX
+        data: arrAxisXX
     }],
     yAxis: [{
         type: 'value'
@@ -310,13 +296,10 @@ echartsLine.setOption(optionLine);
 echartsStack.setOption(optionStack);
 
 // button click
-change_period.addEventListener('click', event => {
-    strYear = year_selector.value;
-    strMonth = month_selector.value;
-    mMonth = dayjs(`${strYear}-${strMonth}`);
-
+change_period.addEventListener('click', () => {
+    const mStart = dayjs(ym_selector.value);
     arrFilter = _.filter(arrHsh, hsh => {
-        return dayjs(hsh['月日']).isBetween(mMonth, mMonth, 'month', '[]');
+        return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
     });
 
     arrAxisX = [];
@@ -337,6 +320,18 @@ change_period.addEventListener('click', event => {
         return [int_day, int_hour, int_value || '-'];
     });
 
+    //re-draw
+    reDrawLine();
+    reDrawHeat();
+});
+
+// button click
+change_period2.addEventListener('click', () => {
+    const mStart = dayjs(ym_selector2.value);
+    arrFilter = _.filter(arrHsh, hsh => {
+        return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
+    });
+    
     _.forEach(arrLegend, (strLegend) => {
         hshStack[strLegend] = _.map(arrFilter, hsh => hsh[strLegend]);
     });
@@ -354,34 +349,18 @@ change_period.addEventListener('click', event => {
         }
         return hshSeries;
     });
+
+    arrAxisXX = [];
+
+    _.forEach(arrFilter, hsh => {
+        const str_day = hsh['月日'];
+        const str_h = hsh['時刻'];
+        const str_xAxis = `${str_day} ${str_h}:00`;
+
+        arrAxisXX.push(str_xAxis);
+    });
     //re-draw
-    reDrawLine();
-    reDrawHeat();
     reDrawStack();
-});
-
-// change year or month
-year_selector.addEventListener('change', event => {
-
-    const mYear = dayjs(event.target.value);
-
-    let arrYear = _.filter(arrStrYM, strYM => {
-        return dayjs(strYM).isBetween(mYear, mYear, 'year', '[]');
-    });
-
-    // remove elements
-    const NdlistElem = document.querySelectorAll('#month_selector>option');
-    _.forEach(NdlistElem, elem => {
-        elem.remove();
-    });
-
-    _.forEach(arrYear, strYear => {
-        const strOption = strYear.slice(-2);
-        const elem = document.createElement('option');
-        elem.innerText = strOption;
-        elem.value = strOption;
-        month_selector.appendChild(elem);
-    });
 });
 
 const reDrawHeat = () => {
@@ -404,9 +383,8 @@ const reDrawLine = () => {
 
 const reDrawStack = () => {
     echartsStack.clear();
-    optionStack.xAxis[0].data = arrAxisX;
+    optionStack.xAxis[0].data = arrAxisXX;
     optionStack.series = arrSeries;
 
     echartsStack.setOption(optionStack, true);
-
 }
