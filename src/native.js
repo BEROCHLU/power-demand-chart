@@ -9,7 +9,7 @@ import {
 // create echarts instance
 let echartsHeatmap = echarts.init(cn2);
 let echartsLine = echarts.init(cn3);
-let echartsStack = echarts.init(cn4);
+let echartsStack = echarts.init(cn5);
 
 if (window.dayjs_plugin_isBetween) {
     dayjs.extend(window.dayjs_plugin_isBetween); //install dayjs-plugin from browser
@@ -153,7 +153,10 @@ const optionHeatmap = {
 const optionLine = {
     tooltip: {
         trigger: 'axis', // item | axis
-        position: 'top'
+        position: 'top',
+        axisPointer: {
+            type: 'cross'
+        }
     },
     toolbox: {
         show: true,
@@ -296,7 +299,7 @@ echartsLine.setOption(optionLine);
 echartsStack.setOption(optionStack);
 
 // button click
-change_period.addEventListener('click', () => {
+period_button.addEventListener('click', () => {
     const mStart = dayjs(ym_selector.value);
     arrFilter = _.filter(arrHsh, hsh => {
         return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
@@ -326,7 +329,7 @@ change_period.addEventListener('click', () => {
 });
 
 // button click
-change_period2.addEventListener('click', () => {
+period_button2.addEventListener('click', () => {
     const mStart = dayjs(ym_selector2.value);
     arrFilter = _.filter(arrHsh, hsh => {
         return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');

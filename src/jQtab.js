@@ -7,8 +7,8 @@ $('li:first-of-type,li:last-of-type').click(function () {
     $('#panel_group>div').removeClass('active-panel');
     //クリックした要素liにアクティブを追加
     //$(this).addClass('active-tab');
-    $('grid5 li').eq(INDEX).addClass('active-tab');
-    $('grid5 li').eq(INDEX+3).addClass('active-tab');
+    $('li').eq(INDEX).addClass('active-tab');
+    $('li').eq(INDEX+3).addClass('active-tab');
     $('#panel_group>div').eq(INDEX).addClass('active-panel');
     //$(`#panel_group>div:nth-of-type(${INDEX+1})`).addClass('active-panel');
     //console.log(INDEX);
