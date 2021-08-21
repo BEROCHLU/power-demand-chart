@@ -10,6 +10,7 @@
 ul {
     list-style-type: none;
     margin: 0;
+    position: relative;
 }
 
 ul::after {
@@ -29,6 +30,13 @@ li:first-of-type {
 
 li:last-of-type {
     float: right;
+}
+
+li:nth-of-type(2) {
+    float: left;
+    position: absolute;
+    left: calc(50% - 16px);
+    cursor: default;
 }
 
 .active-tab {

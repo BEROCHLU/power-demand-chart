@@ -10,31 +10,62 @@
 	<script src="https://cdn.jsdelivr.net/npm/echarts@5.1.2/dist/echarts.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.6/dayjs.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.6/plugin/isBetween.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 </head>
 
 <body>
 	<div class="wrapper">
-		<grid1>
-			<select id="ym_selector">
-			</select>
-			<select id="data_selector">
-			</select>
-			<button id="change_period" type="button">データ変更</button>
-			<select id="ym_selector2">
-			</select>
-			<button id="change_period2" type="button">データ変更2</button>
-		</grid1>
-		<grid2>
-			<div id="cn2"></div>
-		</grid2>
-		<grid3>
-			<div id="cn3"></div>
-		</grid3>
-		<grid4>
-			<div id="cn4"></div>
-		</grid4>
+		<div id="panel_group">
+			<div class="active-panel">
+				<grid1>
+					<select id="ym_selector">
+					</select>
+					<select id="data_selector">
+					</select>
+					<button id="change_period" type="button">データ変更</button>
+					<select id="ym_selector2">
+					</select>
+					<button id="change_period2" type="button">データ変更2</button>
+				</grid1>
+				<grid2>
+					<div id="cn2"></div>
+				</grid2>
+				<grid3>
+					<div id="cn3"></div>
+				</grid3>
+				<grid4>
+					<div id="cn4"></div>
+				</grid4>
+				<grid5>
+					<ul>
+						<li class="active-tab"><img src="./img/left.png" width="20" height="20" alt=""></li>
+						<li>1/2</li>
+						<li><img src="./img/right.png" width="20" height="20" alt=""></li>
+					</ul>
+				</grid5>
+			</div>
+			<div class="axis"></div>
+			<div>
+				<grid1>
+				</grid1>
+				<grid2>
+				</grid2>
+				<grid3>
+				</grid3>
+				<grid4>
+				</grid4>
+				<grid5>
+					<ul>
+						<li><img src="./img/left.png" width="20" height="20" alt=""></li>
+						<li>1/2</li>
+						<li><img src="./img/right.png" width="20" height="20" alt=""></li>
+					</ul>
+				</grid5>
+			</div>
+		</div>
 	</div>
 	<script src="src/native.js" type="module"></script>
+	<script src="./src/jQtab.js"></script>
 </body>
 
 </html>
