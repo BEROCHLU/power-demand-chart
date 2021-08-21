@@ -18,7 +18,7 @@ grid6 {
     height: inherit;
 }
 
-.active-panel {
+.first-panel.active-panel {
     height: inherit;
     display: grid;
     gap: 4px;
@@ -28,7 +28,15 @@ grid6 {
         "grid6 grid6 grid6"28px
         / 100px 1fr 1fr;
 }
-
+.last-panel.active-panel {
+    height: inherit;
+    display: grid;
+    gap: 4px;
+    grid-template:
+        "grid1 grid2"1fr
+        "grid6 grid6"28px
+        / 100px 1fr;
+}
 grid1 {
     grid-area: grid1;
     border-radius: 10px;
