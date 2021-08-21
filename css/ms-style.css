@@ -13,13 +13,13 @@ grid4, grid5 {
 }
 
 #panel_group {
-    width: 100%;
-    height: 100%;
+    /* width: inherit; */
+    height: inherit;
 }
 
 .active-panel {
-    width: 100%;
-    height: 100%;
+    /* width: inherit; */
+    height: inherit;
     display: -ms-grid;
     display: grid;
     gap: 4px;
