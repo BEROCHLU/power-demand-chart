@@ -10,6 +10,7 @@ import {
 let echartsHeatmap = echarts.init(cn2);
 let echartsLine = echarts.init(cn3);
 let echartsStack = echarts.init(cn5);
+let echartsLineA = echarts.init(cn22);
 
 if (window.dayjs_plugin_isBetween) {
     dayjs.extend(window.dayjs_plugin_isBetween); //install dayjs-plugin from browser
@@ -80,6 +81,8 @@ let arrSeries = _.map(arrLegend, (strLegend) => {
 let arrAxisY = [];
 let arrAxisX = [];
 let arrAxisXX = [];
+let arrAxisX2 = [];
+let arrAxisY2 = [];
 // [x, y, z] = [0-30, 0-23, value]
 let arrPlot = _.map(arrFilter, (hsh, i) => {
     const int_day = parseInt(i / 24);
@@ -96,6 +99,19 @@ let arrPlot = _.map(arrFilter, (hsh, i) => {
 
     return [int_day, int_hour, int_value || '-'];
 });
+
+
+_.forEach(arrHsh, hsh => {
+    const int_yAxis = hsh["需要"];
+
+    const str_day = hsh['月日'];
+    const str_h = hsh['時刻'];
+    const str_xAxis = `${str_day} ${str_h}:00`;
+
+    arrAxisX2.push(str_xAxis);
+    arrAxisY2.push(int_yAxis);
+});
+
 
 const optionHeatmap = {
     tooltip: {
@@ -293,10 +309,76 @@ const optionStack = {
     series: arrSeries
 }
 
+const optionLineA = {
+    tooltip: {
+        trigger: 'axis', // item | axis
+        position: 'top',
+        axisPointer: {
+            type: 'cross'
+        }
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataView: { // not work IE11
+                title: 'data view',
+                readOnly: true,
+                lang: ['data view', 'turn off', 'refresh']
+            },
+            magicType: {
+                title: {
+                    line: 'for line charts',
+                    bar: 'for bar charts'
+                },
+                type: ["line", "bar"]
+            },
+            restore: {
+                title: 'restore'
+            },
+            saveAsImage: {
+                title: 'save as image'
+            }
+        }
+    },
+    grid: {
+        top: '7%',
+        left: '3%',
+        right: '4%',
+        bottom: '11%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'category',
+        data: arrAxisX2
+    },
+    yAxis: {
+        type: 'value'
+    },
+    dataZoom: [{
+            type: 'inside',
+            start: 0,
+            end: 100
+        },
+        {
+            type: 'slider',
+            bottom: '2%',
+            throttle: 200,
+            start: 0,
+            end: 100
+        }
+    ],
+    animation: false,
+    series: [{
+        data: arrAxisY2,
+        symbol: 'none',
+        type: 'line' //line | bar
+    }]
+}
 // draw a chart
 echartsHeatmap.setOption(optionHeatmap);
 echartsLine.setOption(optionLine);
 echartsStack.setOption(optionStack);
+echartsLineA.setOption(optionLineA);
 
 // button click
 period_button.addEventListener('click', () => {
