@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 const config = {
     mode: 'production', //production | development
-    entry: './src/native.js',
+    entry: ['./src/native.js', './src/jqtab.js'],
     output: {
         filename: './dist/wpack.js',
         path: path.join(__dirname)
@@ -13,7 +13,8 @@ const config = {
             _: 'lodash',
             echarts: 'echarts',
             dayjs: 'dayjs',
-            isBetween: 'dayjs/plugin/isBetween.js'
+            isBetween: 'dayjs/plugin/isBetween.js',
+            $: 'jquery'
         })
     ],
     performance: {
