@@ -18,90 +18,97 @@ const echartsLine = echarts.init(cn3);
 const echartsStack = echarts.init(cn5);
 const echartsLineA = echarts.init(cn22);
 
-const arrStrDateUniq = _.chain(arrHsh).map(hsh => {
-    return dayjs(hsh['月日']).format('YYYY-MM');
-}).uniq().value();
+class SetupChart {
+    constructor() {
+        const arrStrDateUniq = _.chain(arrHsh).map(hsh => {
+            return dayjs(hsh['月日']).format('YYYY-MM');
+        }).uniq().value();
 
-// create option innerText & value
-_.forEach(arrStrDateUniq, (strOption) => {
-    const elem = document.createElement('option');
-    elem.innerText = strOption;
-    elem.value = strOption;
+        // create option innerText & value
+        _.forEach(arrStrDateUniq, (strOption) => {
+            const elem = document.createElement('option');
+            elem.innerText = strOption;
+            elem.value = strOption;
 
-    const elem2 = elem.cloneNode(true);
-    ym_selector.appendChild(elem);
-    ym_selector2.appendChild(elem2);
-});
+            const elem2 = elem.cloneNode(true);
+            ym_selector.appendChild(elem);
+            ym_selector2.appendChild(elem2);
+        });
 
-const mStart = dayjs(ym_selector.value);
-let arrFilter = _.filter(arrHsh, hsh => {
-    return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
-});
+        _.forEach(arrHsh, hsh => {
+            const int_yAxis = hsh["需要"];
+            const str_day = hsh['月日'];
+            const str_h = hsh['時刻'];
+            const str_xAxis = `${str_day} ${str_h}:00`;
 
-const arrAxisXHeat = _.chain(arrFilter).map(hsh => hsh['月日']).uniq().value();
-const arrAxisYHeat = _.map(_.range(24), String);
+            arrAxisX2.push(str_xAxis);
+            arrAxisY2.push(int_yAxis);
+        });
 
-// create option innerText & value
-let arrKeys = _.keys(arrFilter[0]);
-let arrOption = _.pull(arrKeys, "月日", "時刻", "需要");
-let arrLegend = _.cloneDeep(arrOption); //deep copy
-arrOption.push("需要");
-_.forEach(arrOption, (strOption) => {
-    const elem = document.createElement('option');
-    elem.innerText = strOption;
-    elem.value = strOption;
-    data_selector.appendChild(elem);
-});
+        const mStart = dayjs(ym_selector.value);
+        this.arrFilter = _.filter(arrHsh, hsh => {
+            return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
+        });
 
-// append series
-let hshStack = {}
-let arrSeriesStack = _.map(arrLegend, (strLegend) => {
-    hshStack[strLegend] = _.map(arrFilter, hsh => hsh[strLegend]);
-    const hshSeries = {
-        name: strLegend,
-        type: 'line',
-        stack: 'stackA',
-        areaStyle: {},
-        symbol: 'none',
-        lineStyle: {
-            width: 0.5
-        },
-        data: hshStack[strLegend]
+        // create option innerText & value
+        const arrKeys = _.keys(this.arrFilter[0]);
+        let arrOption = _.pull(arrKeys, "月日", "時刻", "需要");
+        this.arrLegend = _.cloneDeep(arrOption); //deep copy
+        arrOption.push("需要");
+        _.forEach(arrOption, (strOption) => {
+            const elem = document.createElement('option');
+            elem.innerText = strOption;
+            elem.value = strOption;
+            data_selector.appendChild(elem);
+        });
+
+        // append series
+        this.hshStack = {}
+        this.arrSeriesStack = _.map(this.arrLegend, (strLegend) => {
+            this.hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
+            const hshSeries = {
+                name: strLegend,
+                type: 'line',
+                stack: 'stackA',
+                areaStyle: {},
+                symbol: 'none',
+                lineStyle: {
+                    width: 0.5
+                },
+                data: this.hshStack[strLegend]
+            }
+            return hshSeries;
+        });
+
+        // [x, y, z] = [0-30, 0-23, value]
+        this.arrPlotHeat = _.map(this.arrFilter, (hsh, i) => {
+            const int_day = parseInt(i / 24);
+            const int_hour = hsh['時刻'];
+            const int_value = hsh[data_selector.value]; //1st value of option
+
+            const str_day = hsh['月日'];
+            const str_h = hsh['時刻'];
+            const str_xAxis = `${str_day} ${str_h}:00`;
+
+            arrAxisX.push(str_xAxis);
+            arrAxisY.push(int_value);
+            arrAxisXStack.push(str_xAxis);
+
+            return [int_day, int_hour, int_value || '-'];
+        });
     }
-    return hshSeries;
-});
+}
 
 let arrAxisX = [];
 let arrAxisY = [];
 let arrAxisXStack = [];
 let arrAxisX2 = [];
 let arrAxisY2 = [];
-// [x, y, z] = [0-30, 0-23, value]
-let arrPlotHeat = _.map(arrFilter, (hsh, i) => {
-    const int_day = parseInt(i / 24);
-    const int_hour = hsh['時刻'];
-    const int_value = hsh[data_selector.value]; //1st value of option
 
-    const str_day = hsh['月日'];
-    const str_h = hsh['時刻'];
-    const str_xAxis = `${str_day} ${str_h}:00`;
+const setupchart = new SetupChart();
 
-    arrAxisX.push(str_xAxis);
-    arrAxisY.push(int_value);
-    arrAxisXStack.push(str_xAxis);
-
-    return [int_day, int_hour, int_value || '-'];
-});
-
-_.forEach(arrHsh, hsh => {
-    const int_yAxis = hsh["需要"];
-    const str_day = hsh['月日'];
-    const str_h = hsh['時刻'];
-    const str_xAxis = `${str_day} ${str_h}:00`;
-
-    arrAxisX2.push(str_xAxis);
-    arrAxisY2.push(int_yAxis);
-});
+const arrAxisXHeat = _.chain(setupchart.arrFilter).map(hsh => hsh['月日']).uniq().value();
+const arrAxisYHeat = _.map(_.range(24), String);
 
 const optionHeatmap = {
     tooltip: {
@@ -143,7 +150,7 @@ const optionHeatmap = {
     series: [{
         name: 'power',
         type: 'heatmap',
-        data: arrPlotHeat,
+        data: setupchart.arrPlotHeat,
         label: {
             show: false
         },
@@ -247,7 +254,7 @@ const optionStack = {
         }
     },
     legend: {
-        data: arrLegend,
+        data: setupchart.arrLegend,
         selector: true,
         selected: {
             '揚水': false
@@ -296,7 +303,7 @@ const optionStack = {
         start: 0,
         end: 100
     }],
-    series: arrSeriesStack
+    series: setupchart.arrSeriesStack
 }
 
 const optionLineA = {
@@ -373,14 +380,14 @@ echartsLineA.setOption(optionLineA);
 // button click
 period_button.addEventListener('click', () => {
     const mStart = dayjs(ym_selector.value);
-    arrFilter = _.filter(arrHsh, hsh => {
+    setupchart.arrFilter = _.filter(arrHsh, hsh => {
         return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
     });
 
     arrAxisX = [];
     arrAxisY = [];
 
-    arrPlotHeat = _.map(arrFilter, (hsh, i) => {
+    setupchart.arrPlotHeat = _.map(setupchart.arrFilter, (hsh, i) => {
         const int_day = parseInt(i / 24);
         const int_hour = hsh['時刻'];
         const int_value = hsh[data_selector.value];
@@ -403,14 +410,14 @@ period_button.addEventListener('click', () => {
 // button click
 period_button2.addEventListener('click', () => {
     const mStart = dayjs(ym_selector2.value);
-    arrFilter = _.filter(arrHsh, hsh => {
+    setupchart.arrFilter = _.filter(arrHsh, hsh => {
         return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
     });
 
-    _.forEach(arrLegend, (strLegend) => {
-        hshStack[strLegend] = _.map(arrFilter, hsh => hsh[strLegend]);
+    _.forEach(setupchart.arrLegend, (strLegend) => {
+        setupchart.hshStack[strLegend] = _.map(setupchart.arrFilter, hsh => hsh[strLegend]);
     });
-    arrSeriesStack = _.map(arrLegend, (strLegend) => {
+    setupchart.arrSeriesStack = _.map(setupchart.arrLegend, (strLegend) => {
         const hshSeries = {
             name: strLegend,
             type: 'line',
@@ -420,14 +427,14 @@ period_button2.addEventListener('click', () => {
             lineStyle: {
                 width: 0.5
             },
-            data: hshStack[strLegend]
+            data: setupchart.hshStack[strLegend]
         }
         return hshSeries;
     });
 
     arrAxisXStack = [];
 
-    _.forEach(arrFilter, hsh => {
+    _.forEach(setupchart.arrFilter, hsh => {
         const str_day = hsh['月日'];
         const str_h = hsh['時刻'];
         const str_xAxis = `${str_day} ${str_h}:00`;
@@ -442,8 +449,8 @@ const reDrawHeat = () => {
     echartsHeatmap.clear();
     optionHeatmap.visualMap.min = _.min(arrAxisY);
     optionHeatmap.visualMap.max = _.max(arrAxisY);
-    optionHeatmap.series[0].data = arrPlotHeat;
-    optionHeatmap.xAxis.data = _.chain(arrFilter).map(hsh => hsh['月日']).uniq().value();
+    optionHeatmap.series[0].data = setupchart.arrPlotHeat;
+    optionHeatmap.xAxis.data = _.chain(setupchart.arrFilter).map(hsh => hsh['月日']).uniq().value();
 
     echartsHeatmap.setOption(optionHeatmap);
 }
@@ -459,7 +466,7 @@ const reDrawLine = () => {
 const reDrawStack = () => {
     echartsStack.clear();
     optionStack.xAxis[0].data = arrAxisXStack;
-    optionStack.series = arrSeriesStack;
+    optionStack.series = setupchart.arrSeriesStack;
 
     echartsStack.setOption(optionStack, true);
 }
