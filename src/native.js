@@ -6,17 +6,17 @@ import {
 
 //import '../css/style.css';
 
-// create echarts instance
-let echartsHeatmap = echarts.init(cn2);
-let echartsLine = echarts.init(cn3);
-let echartsStack = echarts.init(cn5);
-let echartsLineA = echarts.init(cn22);
-
 if (window.dayjs_plugin_isBetween) {
     dayjs.extend(window.dayjs_plugin_isBetween); //install dayjs-plugin from browser
 } else {
     dayjs.extend(isBetween);
 }
+
+// create echarts instance
+const echartsHeatmap = echarts.init(cn2);
+const echartsLine = echarts.init(cn3);
+const echartsStack = echarts.init(cn5);
+const echartsLineA = echarts.init(cn22);
 
 const arrStrDateUniq = _.chain(arrHsh).map(hsh => {
     return dayjs(hsh['月日']).format('YYYY-MM');
@@ -25,12 +25,10 @@ const arrStrDateUniq = _.chain(arrHsh).map(hsh => {
 // create option innerText & value
 _.forEach(arrStrDateUniq, (strOption) => {
     const elem = document.createElement('option');
-
     elem.innerText = strOption;
     elem.value = strOption;
 
     const elem2 = elem.cloneNode(true);
-
     ym_selector.appendChild(elem);
     ym_selector2.appendChild(elem2);
 });
@@ -40,21 +38,14 @@ let arrFilter = _.filter(arrHsh, hsh => {
     return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
 });
 
-let arrX = _.chain(arrFilter).map(hsh => hsh['月日']).uniq().value();
-let arrY = _.map(_.range(24), String);
+const arrAxisXHeat = _.chain(arrFilter).map(hsh => hsh['月日']).uniq().value();
+const arrAxisYHeat = _.map(_.range(24), String);
 
-let hshStack = {}
+// create option innerText & value
 let arrKeys = _.keys(arrFilter[0]);
 let arrOption = _.pull(arrKeys, "月日", "時刻", "需要");
 let arrLegend = _.cloneDeep(arrOption); //deep copy
 arrOption.push("需要");
-
-// create stack data
-_.forEach(arrLegend, (strLegend) => {
-    hshStack[strLegend] = _.map(arrFilter, hsh => hsh[strLegend]);
-});
-
-// create option innerText & value
 _.forEach(arrOption, (strOption) => {
     const elem = document.createElement('option');
     elem.innerText = strOption;
@@ -63,7 +54,9 @@ _.forEach(arrOption, (strOption) => {
 });
 
 // append series
-let arrSeries = _.map(arrLegend, (strLegend) => {
+let hshStack = {}
+let arrSeriesStack = _.map(arrLegend, (strLegend) => {
+    hshStack[strLegend] = _.map(arrFilter, hsh => hsh[strLegend]);
     const hshSeries = {
         name: strLegend,
         type: 'line',
@@ -78,13 +71,13 @@ let arrSeries = _.map(arrLegend, (strLegend) => {
     return hshSeries;
 });
 
-let arrAxisY = [];
 let arrAxisX = [];
-let arrAxisXX = [];
+let arrAxisY = [];
+let arrAxisXStack = [];
 let arrAxisX2 = [];
 let arrAxisY2 = [];
 // [x, y, z] = [0-30, 0-23, value]
-let arrPlot = _.map(arrFilter, (hsh, i) => {
+let arrPlotHeat = _.map(arrFilter, (hsh, i) => {
     const int_day = parseInt(i / 24);
     const int_hour = hsh['時刻'];
     const int_value = hsh[data_selector.value]; //1st value of option
@@ -95,15 +88,13 @@ let arrPlot = _.map(arrFilter, (hsh, i) => {
 
     arrAxisX.push(str_xAxis);
     arrAxisY.push(int_value);
-    arrAxisXX.push(str_xAxis);
+    arrAxisXStack.push(str_xAxis);
 
     return [int_day, int_hour, int_value || '-'];
 });
 
-
 _.forEach(arrHsh, hsh => {
     const int_yAxis = hsh["需要"];
-
     const str_day = hsh['月日'];
     const str_h = hsh['時刻'];
     const str_xAxis = `${str_day} ${str_h}:00`;
@@ -111,7 +102,6 @@ _.forEach(arrHsh, hsh => {
     arrAxisX2.push(str_xAxis);
     arrAxisY2.push(int_yAxis);
 });
-
 
 const optionHeatmap = {
     tooltip: {
@@ -128,14 +118,14 @@ const optionHeatmap = {
     },
     xAxis: {
         type: 'category',
-        data: arrX,
+        data: arrAxisXHeat,
         splitArea: {
             show: true
         }
     },
     yAxis: {
         type: 'category',
-        data: arrY,
+        data: arrAxisYHeat,
         splitArea: {
             show: true
         }
@@ -153,7 +143,7 @@ const optionHeatmap = {
     series: [{
         name: 'power',
         type: 'heatmap',
-        data: arrPlot,
+        data: arrPlotHeat,
         label: {
             show: false
         },
@@ -288,7 +278,7 @@ const optionStack = {
     xAxis: [{
         type: 'category',
         boundaryGap: false,
-        data: arrAxisXX
+        data: arrAxisXStack
     }],
     yAxis: [{
         type: 'value'
@@ -306,7 +296,7 @@ const optionStack = {
         start: 0,
         end: 100
     }],
-    series: arrSeries
+    series: arrSeriesStack
 }
 
 const optionLineA = {
@@ -390,7 +380,7 @@ period_button.addEventListener('click', () => {
     arrAxisX = [];
     arrAxisY = [];
 
-    arrPlot = _.map(arrFilter, (hsh, i) => {
+    arrPlotHeat = _.map(arrFilter, (hsh, i) => {
         const int_day = parseInt(i / 24);
         const int_hour = hsh['時刻'];
         const int_value = hsh[data_selector.value];
@@ -416,11 +406,11 @@ period_button2.addEventListener('click', () => {
     arrFilter = _.filter(arrHsh, hsh => {
         return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
     });
-    
+
     _.forEach(arrLegend, (strLegend) => {
         hshStack[strLegend] = _.map(arrFilter, hsh => hsh[strLegend]);
     });
-    arrSeries = _.map(arrLegend, (strLegend) => {
+    arrSeriesStack = _.map(arrLegend, (strLegend) => {
         const hshSeries = {
             name: strLegend,
             type: 'line',
@@ -435,14 +425,14 @@ period_button2.addEventListener('click', () => {
         return hshSeries;
     });
 
-    arrAxisXX = [];
+    arrAxisXStack = [];
 
     _.forEach(arrFilter, hsh => {
         const str_day = hsh['月日'];
         const str_h = hsh['時刻'];
         const str_xAxis = `${str_day} ${str_h}:00`;
 
-        arrAxisXX.push(str_xAxis);
+        arrAxisXStack.push(str_xAxis);
     });
     //re-draw
     reDrawStack();
@@ -452,7 +442,7 @@ const reDrawHeat = () => {
     echartsHeatmap.clear();
     optionHeatmap.visualMap.min = _.min(arrAxisY);
     optionHeatmap.visualMap.max = _.max(arrAxisY);
-    optionHeatmap.series[0].data = arrPlot;
+    optionHeatmap.series[0].data = arrPlotHeat;
     optionHeatmap.xAxis.data = _.chain(arrFilter).map(hsh => hsh['月日']).uniq().value();
 
     echartsHeatmap.setOption(optionHeatmap);
@@ -468,8 +458,8 @@ const reDrawLine = () => {
 
 const reDrawStack = () => {
     echartsStack.clear();
-    optionStack.xAxis[0].data = arrAxisXX;
-    optionStack.series = arrSeries;
+    optionStack.xAxis[0].data = arrAxisXStack;
+    optionStack.series = arrSeriesStack;
 
     echartsStack.setOption(optionStack, true);
 }
