@@ -41,8 +41,8 @@ class SetupChart {
             const str_h = hsh['時刻'];
             const str_xAxis = `${str_day} ${str_h}:00`;
 
-            arrAxisX2.push(str_xAxis);
-            arrAxisY2.push(int_yAxis);
+            hshLineA.arrAxisX.push(str_xAxis);
+            hshLineA.arrAxisY.push(int_yAxis);
         });
     }
 
@@ -63,7 +63,10 @@ class SetupChart {
             const elem = document.createElement('option');
             elem.innerText = strOption;
             elem.value = strOption;
+
+            const elem2 = elem.cloneNode(true);
             data_selector.appendChild(elem);
+            data_selector2.appendChild(elem2);
         });
     }
 
@@ -136,8 +139,10 @@ class SetupChart {
 let arrAxisX = [];
 let arrAxisY = [];
 let arrAxisXStack = [];
-let arrAxisX2 = [];
-let arrAxisY2 = [];
+let hshLineA = {
+    arrAxisX: [],
+    arrAxisY: []
+}
 
 const setupchart = new SetupChart();
 setupchart.setarrFilter();
@@ -384,7 +389,7 @@ const optionLineA = {
     },
     xAxis: {
         type: 'category',
-        data: arrAxisX2
+        data: hshLineA.arrAxisX
     },
     yAxis: {
         type: 'value'
@@ -404,7 +409,7 @@ const optionLineA = {
     ],
     animation: false,
     series: [{
-        data: arrAxisY2,
+        data: hshLineA.arrAxisY,
         symbol: 'none',
         type: 'line' //line | bar
     }]
