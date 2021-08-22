@@ -105,6 +105,32 @@ class SetupChart {
             return hshSeries;
         });
     }
+
+    reDrawHeat() {
+        echartsHeatmap.clear();
+        optionHeatmap.visualMap.min = _.min(arrAxisY);
+        optionHeatmap.visualMap.max = _.max(arrAxisY);
+        optionHeatmap.series[0].data = this.arrPlotHeat;
+        optionHeatmap.xAxis.data = _.chain(this.arrFilter).map(hsh => hsh['月日']).uniq().value();
+
+        echartsHeatmap.setOption(optionHeatmap);
+    }
+
+    reDrawLine() {
+        echartsLine.clear();
+        optionLine.xAxis.data = arrAxisX;
+        optionLine.series[0].data = arrAxisY;
+
+        echartsLine.setOption(optionLine, true);
+    }
+
+    reDrawStack() {
+        echartsStack.clear();
+        optionStack.xAxis[0].data = arrAxisXStack;
+        optionStack.series = this.arrSeriesStack;
+
+        echartsStack.setOption(optionStack, true);
+    }
 }
 
 let arrAxisX = [];
@@ -415,8 +441,8 @@ period_button.addEventListener('click', () => {
     });
 
     //re-draw
-    reDrawLine();
-    reDrawHeat();
+    setupchart.reDrawLine();
+    setupchart.reDrawHeat();
 });
 
 // button click
@@ -454,31 +480,5 @@ period_button2.addEventListener('click', () => {
         arrAxisXStack.push(str_xAxis);
     });
     //re-draw
-    reDrawStack();
+    setupchart.reDrawStack();
 });
-
-const reDrawHeat = () => {
-    echartsHeatmap.clear();
-    optionHeatmap.visualMap.min = _.min(arrAxisY);
-    optionHeatmap.visualMap.max = _.max(arrAxisY);
-    optionHeatmap.series[0].data = setupchart.arrPlotHeat;
-    optionHeatmap.xAxis.data = _.chain(setupchart.arrFilter).map(hsh => hsh['月日']).uniq().value();
-
-    echartsHeatmap.setOption(optionHeatmap);
-}
-
-const reDrawLine = () => {
-    echartsLine.clear();
-    optionLine.xAxis.data = arrAxisX;
-    optionLine.series[0].data = arrAxisY;
-
-    echartsLine.setOption(optionLine, true);
-}
-
-const reDrawStack = () => {
-    echartsStack.clear();
-    optionStack.xAxis[0].data = arrAxisXStack;
-    optionStack.series = setupchart.arrSeriesStack;
-
-    echartsStack.setOption(optionStack, true);
-}
