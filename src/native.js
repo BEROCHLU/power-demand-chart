@@ -34,7 +34,7 @@ class SetupChart {
             ym_selector.appendChild(elem);
             ym_selector2.appendChild(elem2);
         });
-
+        //set LineA
         _.forEach(arrHsh, hsh => {
             const int_yAxis = hsh["需要"];
             const str_day = hsh['月日'];
@@ -44,12 +44,16 @@ class SetupChart {
             arrAxisX2.push(str_xAxis);
             arrAxisY2.push(int_yAxis);
         });
+    }
 
+    setarrFilter() {
         const mStart = dayjs(ym_selector.value);
         this.arrFilter = _.filter(arrHsh, hsh => {
             return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
         });
+    }
 
+    setarrLegend() {
         // create option innerText & value
         const arrKeys = _.keys(this.arrFilter[0]);
         let arrOption = _.pull(arrKeys, "月日", "時刻", "需要");
@@ -61,25 +65,9 @@ class SetupChart {
             elem.value = strOption;
             data_selector.appendChild(elem);
         });
+    }
 
-        // append series
-        this.hshStack = {}
-        this.arrSeriesStack = _.map(this.arrLegend, (strLegend) => {
-            this.hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
-            const hshSeries = {
-                name: strLegend,
-                type: 'line',
-                stack: 'stackA',
-                areaStyle: {},
-                symbol: 'none',
-                lineStyle: {
-                    width: 0.5
-                },
-                data: this.hshStack[strLegend]
-            }
-            return hshSeries;
-        });
-
+    setarrPlotHeat() {
         // [x, y, z] = [0-30, 0-23, value]
         this.arrPlotHeat = _.map(this.arrFilter, (hsh, i) => {
             const int_day = parseInt(i / 24);
@@ -97,6 +85,26 @@ class SetupChart {
             return [int_day, int_hour, int_value || '-'];
         });
     }
+
+    setStack() {
+        // append series
+        this.hshStack = {}
+        this.arrSeriesStack = _.map(this.arrLegend, (strLegend) => {
+            this.hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
+            const hshSeries = {
+                name: strLegend,
+                type: 'line',
+                stack: 'stackA',
+                areaStyle: {},
+                symbol: 'none',
+                lineStyle: {
+                    width: 0.5
+                },
+                data: this.hshStack[strLegend]
+            }
+            return hshSeries;
+        });
+    }
 }
 
 let arrAxisX = [];
@@ -106,6 +114,10 @@ let arrAxisX2 = [];
 let arrAxisY2 = [];
 
 const setupchart = new SetupChart();
+setupchart.setarrFilter();
+setupchart.setarrLegend();
+setupchart.setarrPlotHeat();
+setupchart.setStack();
 
 const arrAxisXHeat = _.chain(setupchart.arrFilter).map(hsh => hsh['月日']).uniq().value();
 const arrAxisYHeat = _.map(_.range(24), String);
