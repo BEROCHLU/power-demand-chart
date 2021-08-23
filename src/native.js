@@ -18,6 +18,215 @@ const echartsLine = echarts.init(cn3);
 const echartsStack = echarts.init(cn5);
 const echartsLineA = echarts.init(cn22);
 
+const optionLineA = {
+    tooltip: {
+        trigger: 'axis', // item | axis
+        position: 'top',
+        axisPointer: {
+            type: 'cross'
+        }
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataView: { // not work IE11
+                title: 'data view',
+                readOnly: true,
+                lang: ['data view', 'turn off', 'refresh']
+            },
+            magicType: {
+                title: {
+                    line: 'for line charts',
+                    bar: 'for bar charts'
+                },
+                type: ["line", "bar"]
+            },
+            restore: {
+                title: 'restore'
+            },
+            saveAsImage: {
+                title: 'save as image'
+            }
+        }
+    },
+    grid: {
+        top: '7%',
+        left: '3%',
+        right: '4%',
+        bottom: '11%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'category',
+        data: null
+    },
+    yAxis: {
+        type: 'value'
+    },
+    dataZoom: [{
+            type: 'inside',
+            start: 0,
+            end: 100
+        },
+        {
+            type: 'slider',
+            bottom: '2%',
+            throttle: 200,
+            start: 0,
+            end: 100
+        }
+    ],
+    animation: false,
+    series: [{
+        data: null,
+        symbol: 'none',
+        type: 'line' //line | bar
+    }]
+}
+
+const optionLine = {
+    tooltip: {
+        trigger: 'axis', // item | axis
+        position: 'top',
+        axisPointer: {
+            type: 'cross'
+        }
+    },
+    toolbox: {
+        show: true,
+        feature: {
+            dataView: { // not work IE11
+                title: 'data view',
+                readOnly: true,
+                lang: ['data view', 'turn off', 'refresh']
+            },
+            magicType: {
+                title: {
+                    line: 'for line charts',
+                    bar: 'for bar charts'
+                },
+                type: ["line", "bar"]
+            },
+            restore: {
+                title: 'restore'
+            },
+            saveAsImage: {
+                title: 'save as image'
+            }
+        }
+    },
+    grid: {
+        top: '7%',
+        left: '3%',
+        right: '4%',
+        bottom: '11%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'category',
+        data: null
+    },
+    yAxis: {
+        type: 'value'
+    },
+    dataZoom: [{
+            type: 'inside',
+            start: 0,
+            end: 100
+        },
+        {
+            type: 'slider',
+            bottom: '2%',
+            throttle: 200,
+            start: 0,
+            end: 100
+        }
+    ],
+    animation: false,
+    series: [{
+        data: null,
+        symbol: 'none',
+        type: 'line' //line | bar
+    }]
+}
+
+const optionStack = {
+    title: {
+        text: ''
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            label: {
+                backgroundColor: '#6a7985'
+            }
+        },
+        formatter: (arrParam) => {
+            let s = `<div style="width: 150px;"><div>${arrParam[0].name}</div>`;
+            let sum = 0;
+            _.forEach(arrParam, (param) => {
+                s += `<div style="overflow: hidden;">${param.marker}${param.seriesName}<span style="float: right;"><b>${param.value}</b></span></div>`;
+                sum += param.value;
+            });
+
+            s += `<div style="overflow: hidden;">合計<span style="float: right;"><b>${_.round(sum, 1)}</b></span></div></div>`;
+            return s;
+        }
+    },
+    legend: {
+        data: null, //setupchart.arrLegend,
+        selector: true,
+        selected: {
+            '揚水': false
+        }
+    },
+    toolbox: {
+        feature: {
+            dataView: { // not work IE11
+                title: 'data view',
+                readOnly: true,
+                lang: ['data view', 'turn off', 'refresh']
+            },
+            restore: {
+                title: 'restore'
+            },
+            saveAsImage: {
+                title: 'saveAsImage'
+            }
+        }
+    },
+    grid: {
+        top: '7%',
+        left: '3%',
+        right: '4%',
+        bottom: '11%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        data: null
+    }],
+    yAxis: [{
+        type: 'value'
+    }],
+    animation: false,
+    dataZoom: [{
+        type: 'inside',
+        start: 0,
+        end: 100
+    }, {
+        show: true,
+        type: 'slider',
+        bottom: '2%',
+        throttle: 200,
+        start: 0,
+        end: 100
+    }],
+    series: null //setupchart.arrSeriesStack
+}
+
 class SetupChart {
     constructor() {
         const arrStrDateUniq = _.chain(arrHsh).map(hsh => {
@@ -29,20 +238,14 @@ class SetupChart {
             const elem = document.createElement('option');
             elem.innerText = strOption;
             elem.value = strOption;
-
+            //イテレーターを使ってもっとスマートに
             const elem2 = elem.cloneNode(true);
+            const elem3 = elem.cloneNode(true);
+            const elem4 = elem.cloneNode(true);
             ym_selector.appendChild(elem);
             ym_selector2.appendChild(elem2);
-        });
-        //set LineA
-        _.forEach(arrHsh, hsh => {
-            const int_yAxis = hsh["需要"];
-            const str_day = hsh['月日'];
-            const str_h = hsh['時刻'];
-            const str_xAxis = `${str_day} ${str_h}:00`;
-
-            hshLineA.arrAxisX.push(str_xAxis);
-            hshLineA.arrAxisY.push(int_yAxis);
+            ym_selector3.appendChild(elem3);
+            ym_selector4.appendChild(elem4);
         });
     }
 
@@ -71,6 +274,10 @@ class SetupChart {
     }
 
     setarrPlotHeat() {
+        let hshAxis = {
+            arrAxisX: [],
+            arrAxisY: []
+        }
         // [x, y, z] = [0-30, 0-23, value]
         this.arrPlotHeat = _.map(this.arrFilter, (hsh, i) => {
             const int_day = parseInt(i / 24);
@@ -81,16 +288,28 @@ class SetupChart {
             const str_h = hsh['時刻'];
             const str_xAxis = `${str_day} ${str_h}:00`;
 
-            arrAxisX.push(str_xAxis);
-            arrAxisY.push(int_value);
-            arrAxisXStack.push(str_xAxis);
+            hshAxis.arrAxisX.push(str_xAxis);
+            hshAxis.arrAxisY.push(int_value);
 
             return [int_day, int_hour, int_value || '-'];
         });
+
+        optionLine.xAxis.data = hshAxis.arrAxisX;
+        optionLine.series[0].data = hshAxis.arrAxisY;
+        arrAxisY = hshAxis.arrAxisY;
     }
 
     setStack() {
-        // append series
+        let arrAxisXStack = [];
+
+        _.forEach(setupchart.arrFilter, hsh => {
+            const str_day = hsh['月日'];
+            const str_h = hsh['時刻'];
+            const str_xAxis = `${str_day} ${str_h}:00`;
+
+            arrAxisXStack.push(str_xAxis);
+        });
+
         this.hshStack = {}
         this.arrSeriesStack = _.map(this.arrLegend, (strLegend) => {
             this.hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
@@ -107,6 +326,30 @@ class SetupChart {
             }
             return hshSeries;
         });
+
+        optionStack.xAxis[0].data = arrAxisXStack;
+        optionStack.series = this.arrSeriesStack;
+        optionStack.legend.data = this.arrLegend;
+    }
+
+    setLineA() {
+        let hshAxis = {
+            arrAxisX: [],
+            arrAxisY: []
+        }
+
+        _.forEach(arrHsh, hsh => {
+            const int_yAxis = hsh[data_selector2.value];
+            const str_day = hsh['月日'];
+            const str_h = hsh['時刻'];
+            const str_xAxis = `${str_day} ${str_h}:00`;
+
+            hshAxis.arrAxisX.push(str_xAxis);
+            hshAxis.arrAxisY.push(int_yAxis);
+        });
+
+        optionLineA.xAxis.data = hshAxis.arrAxisX;
+        optionLineA.series[0].data = hshAxis.arrAxisY;
     }
 
     reDrawHeat() {
@@ -119,36 +362,41 @@ class SetupChart {
         echartsHeatmap.setOption(optionHeatmap);
     }
 
-    reDrawLine() {
+    reDrawLine(hshAxis) {
         echartsLine.clear();
-        optionLine.xAxis.data = arrAxisX;
-        optionLine.series[0].data = arrAxisY;
+        optionLine.xAxis.data = hshAxis.arrAxisX;
+        optionLine.series[0].data = hshAxis.arrAxisY;
 
         echartsLine.setOption(optionLine, true);
     }
 
-    reDrawStack() {
+    reDrawStack(arrAxisXStack) {
         echartsStack.clear();
         optionStack.xAxis[0].data = arrAxisXStack;
         optionStack.series = this.arrSeriesStack;
 
         echartsStack.setOption(optionStack, true);
     }
+
+    reDrawLineA(hshAxis) {
+        echartsLineA.clear();
+        optionLineA.xAxis.data = hshAxis.arrAxisX;
+        optionLineA.series[0].data = hshAxis.arrAxisY;
+
+        echartsLineA.setOption(optionLineA, true);
+    }
 }
 
-let arrAxisX = [];
+//let arrAxisX = [];
 let arrAxisY = [];
-let arrAxisXStack = [];
-let hshLineA = {
-    arrAxisX: [],
-    arrAxisY: []
-}
+//let arrAxisXStack = [];
 
 const setupchart = new SetupChart();
 setupchart.setarrFilter();
 setupchart.setarrLegend();
 setupchart.setarrPlotHeat();
 setupchart.setStack();
+setupchart.setLineA();
 
 const arrAxisXHeat = _.chain(setupchart.arrFilter).map(hsh => hsh['月日']).uniq().value();
 const arrAxisYHeat = _.map(_.range(24), String);
@@ -206,214 +454,6 @@ const optionHeatmap = {
     }]
 }
 
-const optionLine = {
-    tooltip: {
-        trigger: 'axis', // item | axis
-        position: 'top',
-        axisPointer: {
-            type: 'cross'
-        }
-    },
-    toolbox: {
-        show: true,
-        feature: {
-            dataView: { // not work IE11
-                title: 'data view',
-                readOnly: true,
-                lang: ['data view', 'turn off', 'refresh']
-            },
-            magicType: {
-                title: {
-                    line: 'for line charts',
-                    bar: 'for bar charts'
-                },
-                type: ["line", "bar"]
-            },
-            restore: {
-                title: 'restore'
-            },
-            saveAsImage: {
-                title: 'save as image'
-            }
-        }
-    },
-    grid: {
-        top: '7%',
-        left: '3%',
-        right: '4%',
-        bottom: '11%',
-        containLabel: true
-    },
-    xAxis: {
-        type: 'category',
-        data: arrAxisX
-    },
-    yAxis: {
-        type: 'value'
-    },
-    dataZoom: [{
-            type: 'inside',
-            start: 0,
-            end: 100
-        },
-        {
-            type: 'slider',
-            bottom: '2%',
-            throttle: 200,
-            start: 0,
-            end: 100
-        }
-    ],
-    animation: false,
-    series: [{
-        data: arrAxisY,
-        symbol: 'none',
-        type: 'line' //line | bar
-    }]
-}
-
-const optionStack = {
-    title: {
-        text: ''
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'cross',
-            label: {
-                backgroundColor: '#6a7985'
-            }
-        },
-        formatter: (arrParam) => {
-            let s = `<div style="width: 150px;"><div>${arrParam[0].name}</div>`;
-            let sum = 0;
-            _.forEach(arrParam, (param) => {
-                s += `<div style="overflow: hidden;">${param.marker}${param.seriesName}<span style="float: right;"><b>${param.value}</b></span></div>`;
-                sum += param.value;
-            });
-
-            s += `<div style="overflow: hidden;">合計<span style="float: right;"><b>${_.round(sum, 1)}</b></span></div></div>`;
-            return s;
-        }
-    },
-    legend: {
-        data: setupchart.arrLegend,
-        selector: true,
-        selected: {
-            '揚水': false
-        }
-    },
-    toolbox: {
-        feature: {
-            dataView: { // not work IE11
-                title: 'data view',
-                readOnly: true,
-                lang: ['data view', 'turn off', 'refresh']
-            },
-            restore: {
-                title: 'restore'
-            },
-            saveAsImage: {
-                title: 'saveAsImage'
-            }
-        }
-    },
-    grid: {
-        top: '7%',
-        left: '3%',
-        right: '4%',
-        bottom: '11%',
-        containLabel: true
-    },
-    xAxis: [{
-        type: 'category',
-        boundaryGap: false,
-        data: arrAxisXStack
-    }],
-    yAxis: [{
-        type: 'value'
-    }],
-    animation: false,
-    dataZoom: [{
-        type: 'inside',
-        start: 0,
-        end: 100
-    }, {
-        show: true,
-        type: 'slider',
-        bottom: '2%',
-        throttle: 200,
-        start: 0,
-        end: 100
-    }],
-    series: setupchart.arrSeriesStack
-}
-
-const optionLineA = {
-    tooltip: {
-        trigger: 'axis', // item | axis
-        position: 'top',
-        axisPointer: {
-            type: 'cross'
-        }
-    },
-    toolbox: {
-        show: true,
-        feature: {
-            dataView: { // not work IE11
-                title: 'data view',
-                readOnly: true,
-                lang: ['data view', 'turn off', 'refresh']
-            },
-            magicType: {
-                title: {
-                    line: 'for line charts',
-                    bar: 'for bar charts'
-                },
-                type: ["line", "bar"]
-            },
-            restore: {
-                title: 'restore'
-            },
-            saveAsImage: {
-                title: 'save as image'
-            }
-        }
-    },
-    grid: {
-        top: '7%',
-        left: '3%',
-        right: '4%',
-        bottom: '11%',
-        containLabel: true
-    },
-    xAxis: {
-        type: 'category',
-        data: hshLineA.arrAxisX
-    },
-    yAxis: {
-        type: 'value'
-    },
-    dataZoom: [{
-            type: 'inside',
-            start: 0,
-            end: 100
-        },
-        {
-            type: 'slider',
-            bottom: '2%',
-            throttle: 200,
-            start: 0,
-            end: 100
-        }
-    ],
-    animation: false,
-    series: [{
-        data: hshLineA.arrAxisY,
-        symbol: 'none',
-        type: 'line' //line | bar
-    }]
-}
 // draw a chart
 echartsHeatmap.setOption(optionHeatmap);
 echartsLine.setOption(optionLine);
@@ -427,8 +467,13 @@ period_button.addEventListener('click', () => {
         return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
     });
 
-    arrAxisX = [];
+    //arrAxisX = [];
     arrAxisY = [];
+
+    let hshAxis = {
+        arrAxisX: [],
+        arrAxisY: []
+    }
 
     setupchart.arrPlotHeat = _.map(setupchart.arrFilter, (hsh, i) => {
         const int_day = parseInt(i / 24);
@@ -439,14 +484,16 @@ period_button.addEventListener('click', () => {
         const str_h = hsh['時刻'];
         const str_xAxis = `${str_day} ${str_h}:00`;
 
-        arrAxisX.push(str_xAxis);
+        //arrAxisX.push(str_xAxis);
         arrAxisY.push(int_value);
+        hshAxis.arrAxisX.push(str_xAxis);
+        hshAxis.arrAxisY.push(int_value);
 
         return [int_day, int_hour, int_value || '-'];
     });
 
     //re-draw
-    setupchart.reDrawLine();
+    setupchart.reDrawLine(hshAxis);
     setupchart.reDrawHeat();
 });
 
@@ -475,7 +522,7 @@ period_button2.addEventListener('click', () => {
         return hshSeries;
     });
 
-    arrAxisXStack = [];
+    let arrAxisXStack = [];
 
     _.forEach(setupchart.arrFilter, hsh => {
         const str_day = hsh['月日'];
@@ -485,5 +532,32 @@ period_button2.addEventListener('click', () => {
         arrAxisXStack.push(str_xAxis);
     });
     //re-draw
-    setupchart.reDrawStack();
+    setupchart.reDrawStack(arrAxisXStack);
+});
+
+// button click
+period_button3.addEventListener('click', () => {
+    const mStart = dayjs(ym_selector3.value);
+    const mEnd = dayjs(ym_selector4.value);
+    setupchart.arrFilter = _.filter(arrHsh, hsh => {
+        return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+    });
+
+    let hshAxis = {
+        arrAxisX: [],
+        arrAxisY: []
+    }
+
+    _.forEach(setupchart.arrFilter, hsh => {
+        const int_yAxis = hsh[data_selector2.value];
+        const str_day = hsh['月日'];
+        const str_h = hsh['時刻'];
+        const str_xAxis = `${str_day} ${str_h}:00`;
+
+        hshAxis.arrAxisX.push(str_xAxis);
+        hshAxis.arrAxisY.push(int_yAxis);
+    });
+
+    //re-draw
+    setupchart.reDrawLineA(hshAxis);
 });
