@@ -175,7 +175,7 @@ const optionStack = {
         }
     },
     legend: {
-        data: null, //setupchart.arrLegend,
+        data: null,
         selector: true,
         selected: {
             '揚水': false
@@ -224,7 +224,60 @@ const optionStack = {
         start: 0,
         end: 100
     }],
-    series: null //setupchart.arrSeriesStack
+    series: null
+}
+
+const optionHeatmap = {
+    tooltip: {
+        formatter: (p) => {
+            return `${p.name} ${p.value[1]}:00 <br> ${p.value[2]}`;
+        },
+        position: 'top'
+    },
+    animation: false,
+    grid: {
+        height: '90%',
+        width: '70%',
+        top: '5%'
+    },
+    xAxis: {
+        type: 'category',
+        data: null,
+        splitArea: {
+            show: true
+        }
+    },
+    yAxis: {
+        type: 'category',
+        data: null,
+        splitArea: {
+            show: true
+        }
+    },
+    visualMap: {
+        min: null,
+        max: null,
+        calculable: true,
+        orient: 'vertical', //horizontal | vertical
+        //left: '10%',
+        right: '5%',
+        bottom: '5%',
+        padding: 0
+    },
+    series: [{
+        name: 'power',
+        type: 'heatmap',
+        data: null,
+        label: {
+            show: false
+        },
+        emphasis: {
+            itemStyle: {
+                shadowBlur: 10,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        }
+    }]
 }
 
 class SetupChart {
@@ -296,7 +349,12 @@ class SetupChart {
 
         optionLine.xAxis.data = hshAxis.arrAxisX;
         optionLine.series[0].data = hshAxis.arrAxisY;
-        arrAxisY = hshAxis.arrAxisY;
+
+        optionHeatmap.xAxis.data = _.chain(this.arrFilter).map(hsh => hsh['月日']).uniq().value();
+        optionHeatmap.yAxis.data = _.map(_.range(24), String);
+        optionHeatmap.visualMap.min = _.min(hshAxis.arrAxisY);
+        optionHeatmap.visualMap.max = _.max(hshAxis.arrAxisY);
+        optionHeatmap.series[0].data = this.arrPlotHeat;
     }
 
     setStack() {
@@ -352,10 +410,10 @@ class SetupChart {
         optionLineA.series[0].data = hshAxis.arrAxisY;
     }
 
-    reDrawHeat() {
+    reDrawHeat(hshAxis) {
         echartsHeatmap.clear();
-        optionHeatmap.visualMap.min = _.min(arrAxisY);
-        optionHeatmap.visualMap.max = _.max(arrAxisY);
+        optionHeatmap.visualMap.min = _.min(hshAxis.arrAxisY);
+        optionHeatmap.visualMap.max = _.max(hshAxis.arrAxisY);
         optionHeatmap.series[0].data = this.arrPlotHeat;
         optionHeatmap.xAxis.data = _.chain(this.arrFilter).map(hsh => hsh['月日']).uniq().value();
 
@@ -387,72 +445,12 @@ class SetupChart {
     }
 }
 
-//let arrAxisX = [];
-let arrAxisY = [];
-//let arrAxisXStack = [];
-
 const setupchart = new SetupChart();
 setupchart.setarrFilter();
 setupchart.setarrLegend();
 setupchart.setarrPlotHeat();
 setupchart.setStack();
 setupchart.setLineA();
-
-const arrAxisXHeat = _.chain(setupchart.arrFilter).map(hsh => hsh['月日']).uniq().value();
-const arrAxisYHeat = _.map(_.range(24), String);
-
-const optionHeatmap = {
-    tooltip: {
-        formatter: (p) => {
-            return `${p.name} ${p.value[1]}:00 <br> ${p.value[2]}`;
-        },
-        position: 'top'
-    },
-    animation: false,
-    grid: {
-        height: '90%',
-        width: '70%',
-        top: '5%'
-    },
-    xAxis: {
-        type: 'category',
-        data: arrAxisXHeat,
-        splitArea: {
-            show: true
-        }
-    },
-    yAxis: {
-        type: 'category',
-        data: arrAxisYHeat,
-        splitArea: {
-            show: true
-        }
-    },
-    visualMap: {
-        min: _.min(arrAxisY),
-        max: _.max(arrAxisY),
-        calculable: true,
-        orient: 'vertical', //horizontal | vertical
-        //left: '10%',
-        right: '5%',
-        bottom: '5%',
-        padding: 0
-    },
-    series: [{
-        name: 'power',
-        type: 'heatmap',
-        data: setupchart.arrPlotHeat,
-        label: {
-            show: false
-        },
-        emphasis: {
-            itemStyle: {
-                shadowBlur: 10,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-        }
-    }]
-}
 
 // draw a chart
 echartsHeatmap.setOption(optionHeatmap);
@@ -466,9 +464,6 @@ period_button.addEventListener('click', () => {
     setupchart.arrFilter = _.filter(arrHsh, hsh => {
         return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
     });
-
-    //arrAxisX = [];
-    arrAxisY = [];
 
     let hshAxis = {
         arrAxisX: [],
@@ -484,8 +479,6 @@ period_button.addEventListener('click', () => {
         const str_h = hsh['時刻'];
         const str_xAxis = `${str_day} ${str_h}:00`;
 
-        //arrAxisX.push(str_xAxis);
-        arrAxisY.push(int_value);
         hshAxis.arrAxisX.push(str_xAxis);
         hshAxis.arrAxisY.push(int_value);
 
@@ -494,7 +487,7 @@ period_button.addEventListener('click', () => {
 
     //re-draw
     setupchart.reDrawLine(hshAxis);
-    setupchart.reDrawHeat();
+    setupchart.reDrawHeat(hshAxis);
 });
 
 // button click
