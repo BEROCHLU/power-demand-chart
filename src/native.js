@@ -291,14 +291,11 @@ class SetupChart {
             const elem = document.createElement('option');
             elem.innerText = strOption;
             elem.value = strOption;
-            //イテレーターを使ってもっとスマートに
-            const elem2 = elem.cloneNode(true);
-            const elem3 = elem.cloneNode(true);
-            const elem4 = elem.cloneNode(true);
-            ym_selector.appendChild(elem);
-            ym_selector2.appendChild(elem2);
-            ym_selector3.appendChild(elem3);
-            ym_selector4.appendChild(elem4);
+
+            const arrDom = [ym_selector, ym_selector2, ym_selector3, ym_selector4];
+            _.forEach(arrDom, dom => {
+                dom.appendChild(elem.cloneNode(true));
+            });
         });
     }
 
