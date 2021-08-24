@@ -4,12 +4,12 @@ import {
     arrHsh
 } from './rowdata-all.mjs';
 
-//import '../css/style.css';
+//import '../css/ms-style.css';
 
 if (window.dayjs_plugin_isBetween) {
     dayjs.extend(window.dayjs_plugin_isBetween); //install dayjs-plugin from browser
 } else {
-    dayjs.extend(isBetween);
+    dayjs.extend(isBetween); //node.js
 }
 
 // create echarts instance
