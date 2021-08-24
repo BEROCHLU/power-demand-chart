@@ -18,69 +18,56 @@ const echartsLine = echarts.init(cn3);
 const echartsStack = echarts.init(cn5);
 const echartsLineA = echarts.init(cn22);
 
-const optionLineA = {
+const optionHeatmap = {
     tooltip: {
-        trigger: 'axis', // item | axis
-        position: 'top',
-        axisPointer: {
-            type: 'cross'
-        }
+        formatter: (p) => {
+            return `${p.name} ${p.value[1]}:00 <br> ${p.value[2]}`;
+        },
+        position: 'right'
     },
-    toolbox: {
-        show: true,
-        feature: {
-            dataView: { // not work IE11
-                title: 'data view',
-                readOnly: true,
-                lang: ['data view', 'turn off', 'refresh']
-            },
-            magicType: {
-                title: {
-                    line: 'for line charts',
-                    bar: 'for bar charts'
-                },
-                type: ["line", "bar"]
-            },
-            restore: {
-                title: 'restore'
-            },
-            saveAsImage: {
-                title: 'save as image'
-            }
-        }
-    },
+    animation: false,
     grid: {
-        top: '7%',
-        left: '3%',
-        right: '4%',
-        bottom: '11%',
-        containLabel: true
+        height: '90%',
+        width: '70%',
+        top: '3%'
     },
     xAxis: {
         type: 'category',
-        data: null
+        data: null,
+        splitArea: {
+            show: true
+        }
     },
     yAxis: {
-        type: 'value'
-    },
-    dataZoom: [{
-            type: 'inside',
-            start: 0,
-            end: 100
-        },
-        {
-            type: 'slider',
-            bottom: '2%',
-            throttle: 200,
-            start: 0,
-            end: 100
-        }
-    ],
-    animation: false,
-    series: [{
+        type: 'category',
         data: null,
-        symbol: 'none',
-        type: 'line' //line | bar
+        splitArea: {
+            show: true
+        }
+    },
+    visualMap: {
+        min: null,
+        max: null,
+        calculable: true,
+        orient: 'vertical', //horizontal | vertical
+        //left: '10%',
+        right: '5%',
+        bottom: '5%',
+        padding: 0
+    },
+    series: [{
+        name: 'power',
+        type: 'heatmap',
+        data: null,
+        label: {
+            show: false
+        },
+        emphasis: {
+            itemStyle: {
+                shadowBlur: 10,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        }
     }]
 }
 
@@ -227,56 +214,69 @@ const optionStack = {
     series: null
 }
 
-const optionHeatmap = {
+const optionLineA = {
     tooltip: {
-        formatter: (p) => {
-            return `${p.name} ${p.value[1]}:00 <br> ${p.value[2]}`;
-        },
-        position: 'top'
+        trigger: 'axis', // item | axis
+        position: 'top',
+        axisPointer: {
+            type: 'cross'
+        }
     },
-    animation: false,
+    toolbox: {
+        show: true,
+        feature: {
+            dataView: { // not work IE11
+                title: 'data view',
+                readOnly: true,
+                lang: ['data view', 'turn off', 'refresh']
+            },
+            magicType: {
+                title: {
+                    line: 'for line charts',
+                    bar: 'for bar charts'
+                },
+                type: ["line", "bar"]
+            },
+            restore: {
+                title: 'restore'
+            },
+            saveAsImage: {
+                title: 'save as image'
+            }
+        }
+    },
     grid: {
-        height: '90%',
-        width: '70%',
-        top: '5%'
+        top: '7%',
+        left: '3%',
+        right: '4%',
+        bottom: '11%',
+        containLabel: true
     },
     xAxis: {
         type: 'category',
-        data: null,
-        splitArea: {
-            show: true
-        }
+        data: null
     },
     yAxis: {
-        type: 'category',
-        data: null,
-        splitArea: {
-            show: true
-        }
+        type: 'value'
     },
-    visualMap: {
-        min: null,
-        max: null,
-        calculable: true,
-        orient: 'vertical', //horizontal | vertical
-        //left: '10%',
-        right: '5%',
-        bottom: '5%',
-        padding: 0
-    },
-    series: [{
-        name: 'power',
-        type: 'heatmap',
-        data: null,
-        label: {
-            show: false
+    dataZoom: [{
+            type: 'inside',
+            start: 0,
+            end: 100
         },
-        emphasis: {
-            itemStyle: {
-                shadowBlur: 10,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
+        {
+            type: 'slider',
+            bottom: '2%',
+            throttle: 200,
+            start: 0,
+            end: 100
         }
+    ],
+    animation: false,
+    series: [{
+        data: null,
+        symbol: 'none',
+        type: 'line' //line | bar
     }]
 }
 
