@@ -119,3 +119,11 @@ li:nth-of-type(2) {
 #panel_group>div:not(.active-panel) {
     display: none;
 }
+
+.total-view {
+    text-align: center;
+}
+
+.numeric {
+    color: rgb(245, 12, 12);
+}

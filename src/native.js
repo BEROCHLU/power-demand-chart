@@ -354,6 +354,9 @@ class SetupChart {
         optionHeatmap.visualMap.min = _.min(hshAxis.arrAxisY);
         optionHeatmap.visualMap.max = _.max(hshAxis.arrAxisY);
         optionHeatmap.series[0].data = this.arrPlotHeat;
+
+        let fSum = _.sum(hshAxis.arrAxisY);
+        document.querySelector('.numeric').innerText = Number.parseFloat(fSum).toPrecision(3);
     }
 
     setStack() {
@@ -425,6 +428,8 @@ class SetupChart {
         optionLine.series[0].data = hshAxis.arrAxisY;
 
         echartsLine.setOption(optionLine, true);
+        let fSum = _.sum(hshAxis.arrAxisY);
+        document.querySelector('.numeric').innerText = Number.parseFloat(fSum).toPrecision(3);
     }
 
     reDrawStack(arrAxisXStack) {
