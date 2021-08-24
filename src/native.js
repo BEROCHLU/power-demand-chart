@@ -309,8 +309,7 @@ class SetupChart {
         });
     }
 
-    setarrLegend() {
-        // create option innerText & value
+    setarrLegend() {// create option innerText & value
         const arrKeys = _.keys(this.arrFilter[0]);
         let arrOption = _.pull(arrKeys, "月日", "時刻", "需要");
         this.arrLegend = _.cloneDeep(arrOption); //deep copy
