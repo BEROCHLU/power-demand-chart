@@ -292,7 +292,7 @@ class SetupChart {
             elem.innerText = strOption;
             elem.value = strOption;
 
-            const arrDom = [ym_selector, ym_selector2, ym_selector3, ym_selector4];
+            const arrDom = [ym_selector1, ym_selector2, ym_selector3, ym_selector4];
             _.forEach(arrDom, dom => {
                 dom.appendChild(elem.cloneNode(true));
             });
@@ -300,7 +300,7 @@ class SetupChart {
     }
 
     setarrFilter() {
-        const mStart = dayjs(ym_selector.value);
+        const mStart = dayjs(ym_selector1.value);
         this.arrFilter = _.filter(arrHsh, hsh => {
             return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
         });
@@ -317,7 +317,7 @@ class SetupChart {
             elem.value = strOption;
 
             const elem2 = elem.cloneNode(true);
-            data_selector.appendChild(elem);
+            data_selector1.appendChild(elem);
             data_selector2.appendChild(elem2);
         });
     }
@@ -331,7 +331,7 @@ class SetupChart {
         this.arrPlotHeat = _.map(this.arrFilter, (hsh, i) => {
             const int_day = parseInt(i / 24);
             const int_hour = hsh['時刻'];
-            const int_value = hsh[data_selector.value]; //1st value of option
+            const int_value = hsh[data_selector1.value]; //1st value of option
 
             const str_day = hsh['月日'];
             const str_h = hsh['時刻'];
@@ -456,7 +456,7 @@ echartsLineA.setOption(optionLineA);
 
 // button click
 period_button.addEventListener('click', () => {
-    const mStart = dayjs(ym_selector.value);
+    const mStart = dayjs(ym_selector1.value);
     setupchart.arrFilter = _.filter(arrHsh, hsh => {
         return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
     });
@@ -469,7 +469,7 @@ period_button.addEventListener('click', () => {
     setupchart.arrPlotHeat = _.map(setupchart.arrFilter, (hsh, i) => {
         const int_day = parseInt(i / 24);
         const int_hour = hsh['時刻'];
-        const int_value = hsh[data_selector.value];
+        const int_value = hsh[data_selector1.value];
 
         const str_day = hsh['月日'];
         const str_h = hsh['時刻'];
