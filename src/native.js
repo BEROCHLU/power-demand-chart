@@ -165,6 +165,7 @@ const optionStack = {
         data: null,
         selector: true,
         selected: {
+            '需要': false,
             '揚水': false
         }
     },
@@ -292,11 +293,13 @@ class SetupChart {
             elem.innerText = strOption;
             elem.value = strOption;
 
-            const arrDom = [ym_selector1, ym_selector2, ym_selector3, ym_selector4];
+            const arrDom = [ym_selector1, ym_selector2, ym_selector3, ym_selector4, ym_selector5];
             _.forEach(arrDom, dom => {
                 dom.appendChild(elem.cloneNode(true));
             });
         });
+
+        this.hshLegendSelect = {} //selected legends
     }
 
     setarrFilter() {
@@ -306,11 +309,11 @@ class SetupChart {
         });
     }
 
-    setarrLegend() {// create option innerText & value
+    setarrLegend() { // create option innerText & value
         const arrKeys = _.keys(this.arrFilter[0]);
-        let arrOption = _.pull(arrKeys, "月日", "時刻", "需要");
+        let arrOption = _.pull(arrKeys, "月日", "時刻");
         this.arrLegend = _.cloneDeep(arrOption); //deep copy
-        arrOption.push("需要");
+        //arrOption.push("需要");
         _.forEach(arrOption, (strOption) => {
             const elem = document.createElement('option');
             elem.innerText = strOption;
@@ -428,6 +431,7 @@ class SetupChart {
         echartsStack.clear();
         optionStack.xAxis[0].data = arrAxisXStack;
         optionStack.series = this.arrSeriesStack;
+        optionStack.legend.selected = this.hshLegendSelect;
 
         echartsStack.setOption(optionStack, true);
     }
@@ -454,6 +458,17 @@ echartsLine.setOption(optionLine);
 echartsStack.setOption(optionStack);
 echartsLineA.setOption(optionLineA);
 
+//let hshLegendSelect = {}
+echartsStack.on('legendselectchanged', params => {
+    //console.log(params);
+    setupchart.hshLegendSelect = params.selected;
+});
+echartsStack.on('legendselectall', params => {
+    setupchart.hshLegendSelect = params.selected;
+});
+echartsStack.on('legendinverseselect', params => {
+    setupchart.hshLegendSelect = params.selected;
+});
 // button click
 period_button.addEventListener('click', () => {
     const mStart = dayjs(ym_selector1.value);
@@ -489,8 +504,9 @@ period_button.addEventListener('click', () => {
 // button click
 period_button2.addEventListener('click', () => {
     const mStart = dayjs(ym_selector2.value);
+    const mEnd = dayjs(ym_selector5.value);
     setupchart.arrFilter = _.filter(arrHsh, hsh => {
-        return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
+        return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
     });
 
     _.forEach(setupchart.arrLegend, (strLegend) => {

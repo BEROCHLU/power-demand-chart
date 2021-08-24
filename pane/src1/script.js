@@ -2,7 +2,7 @@
 
 import {
     arrHsh
-} from '../src/rowdata.js';
+} from '../rowdata-all.mjs';
 
 // create echarts instance
 const echartsStack = echarts.init(echarts_stack);
@@ -120,3 +120,7 @@ const option = {
 
 // draw a chart
 echartsStack.setOption(option);
+
+echartsStack.on('click', p => {
+    console.log(p);
+})
