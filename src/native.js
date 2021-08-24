@@ -298,8 +298,6 @@ class SetupChart {
                 dom.appendChild(elem.cloneNode(true));
             });
         });
-
-        this.hshLegendSelect = {} //selected legends
     }
 
     setarrFilter() {
@@ -362,6 +360,7 @@ class SetupChart {
     }
 
     setStack() {
+        this.hshLegendSelect = optionStack.legend.selected //selected legends
         let arrAxisXStack = [];
 
         _.forEach(setupchart.arrFilter, hsh => {
@@ -466,9 +465,7 @@ echartsLine.setOption(optionLine);
 echartsStack.setOption(optionStack);
 echartsLineA.setOption(optionLineA);
 
-//let hshLegendSelect = {}
 echartsStack.on('legendselectchanged', params => {
-    //console.log(params);
     setupchart.hshLegendSelect = params.selected;
 });
 echartsStack.on('legendselectall', params => {
