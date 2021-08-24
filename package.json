@@ -1,0 +1,41 @@
+{
+  "name": "babel-test",
+  "version": "1.0.0",
+  "description": "No description",
+  "main": "index.js",
+  "scripts": {
+    "webpack": "npx webpack",
+    "webpackd": "npx webpack --mode=development",
+    "ie11": "npx postcss -c postcss.config.js -o ./css/ms-style.css ./css/style.css",
+    "babel": "npx babel ./dist/wpack.js --out-file ./dist/wpack-babel.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dayjs": "^1.10.6",
+    "echarts": "^5.1.2",
+    "jquery": "^3.6.0",
+    "lodash": "^4.17.21",
+    "xlsx": "^0.17.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.15.0",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.15.0",
+    "autoprefixer": "^10.3.2",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^6.2.0",
+    "postcss": "^8.3.6",
+    "postcss-cli": "^8.3.1",
+    "postcss-loader": "^6.1.1",
+    "style-loader": "^3.2.1",
+    "webpack": "^5.51.1",
+    "webpack-cli": "^4.8.0"
+  },
+  "browserslist": [
+    "last 2 version",
+    "ie >= 11"
+  ]
+}
