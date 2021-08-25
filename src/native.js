@@ -5,6 +5,7 @@ import {
 } from './rowdata-all.mjs';
 
 //import '../css/ms-style.css';
+import "@babel/polyfill";
 
 if (window.dayjs_plugin_isBetween) {
     dayjs.extend(window.dayjs_plugin_isBetween); //install dayjs-plugin from browser
