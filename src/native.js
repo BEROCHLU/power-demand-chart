@@ -5,7 +5,6 @@ import {
 } from './rowdata-all.mjs';
 
 //import '../css/ms-style.css';
-import "@babel/polyfill";
 
 if (window.dayjs_plugin_isBetween) {
     dayjs.extend(window.dayjs_plugin_isBetween); //install dayjs-plugin from browser
@@ -289,7 +288,7 @@ class SetupChart {
             return dayjs(hsh['月日']).format('YYYY-MM');
         }).uniq().value();
 
-        _.forEach(arrStrDateUniq, (strOption) => {// create option innerText & value
+        _.forEach(arrStrDateUniq, (strOption) => { // create option innerText & value
             const elem = document.createElement('option');
             elem.innerText = strOption;
             elem.value = strOption;

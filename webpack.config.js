@@ -3,7 +3,7 @@ const webpack = require('webpack');
 
 const config = {
     mode: 'production', //production | development
-    entry: ['./src/native.js', './src/jqtab.js'],
+    entry: ['@babel/polyfill', './src/native.js', './src/jqtab.js'],
     output: {
         filename: './dist/wpack.js',
         path: path.join(__dirname)
