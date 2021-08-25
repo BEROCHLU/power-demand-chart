@@ -14,7 +14,8 @@ const config = {
             echarts: 'echarts',
             dayjs: 'dayjs',
             isBetween: 'dayjs/plugin/isBetween.js',
-            $: 'jquery'
+            $: 'jquery',
+            math: 'mathjs'
         })
     ],
     performance: {

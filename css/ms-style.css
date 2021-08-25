@@ -26,10 +26,7 @@ grid6 {
     -ms-grid-rows: 1fr 4px 1fr 4px 28px;
     -ms-grid-columns: 100px 4px 1fr 4px 1fr;
         grid-template:
-        "grid1 grid2 grid3"1fr
-        "grid4 grid5 grid5"1fr
-        "grid6 grid6 grid6"28px
-        / 100px 1fr 1fr;
+        "grid1 grid2 grid3"1fr "grid4 grid5 grid5"1fr "grid6 grid6 grid6"28px / 100px 1fr 1fr;
 }
 
 .last-panel.active-panel {
@@ -40,9 +37,7 @@ grid6 {
     -ms-grid-rows: 1fr 4px 28px;
     -ms-grid-columns: 100px 4px 1fr;
         grid-template:
-        "grid1 grid2"1fr
-        "grid6 grid6"28px
-        / 100px 1fr;
+        "grid1 grid2"1fr "grid6 grid6"28px / 100px 1fr;
 }
 
 grid1 {
@@ -143,6 +138,14 @@ button {
     margin: 5px;
 }
 
+button {
+    height: 18px;
+    line-height: 0;
+    background: #638de7;
+    color: #FFF;
+    border-radius: 5px;
+}
+
 li:first-of-type {
     margin-left: -40px;
 }
@@ -158,4 +161,12 @@ li:nth-of-type(2) {
 
 #panel_group>div:not(.active-panel) {
     display: none;
+}
+
+.total-view {
+    text-align: center;
+}
+
+.numeric {
+    font-size: 14px;
 }

@@ -352,9 +352,8 @@ class SetupChart {
         optionHeatmap.visualMap.max = _.max(hshAxis.arrAxisY);
         optionHeatmap.series[0].data = this.arrPlotHeat;
 
-        let fSum = _.sum(hshAxis.arrAxisY);
-        let mth = math.unit(fSum, 'MWh').format(3);
-        document.querySelector('.numeric').innerText = mth;
+        const n = _.sum(hshAxis.arrAxisY);
+        document.querySelector('.numeric').innerText = math.unit(n, 'MWh').format(3);
     }
 
     setStack() {
@@ -428,9 +427,8 @@ class SetupChart {
         optionLine.series[0].data = hshAxis.arrAxisY;
 
         echartsLine.setOption(optionLine, true);
-        let fSum = _.sum(hshAxis.arrAxisY);
-        let mth = math.unit(fSum, 'MWh').format(3);
-        document.querySelector('.numeric').innerText = mth;
+        const n = _.sum(hshAxis.arrAxisY);
+        document.querySelector('.numeric').innerText = math.unit(n, 'MWh').format(3);
     }
 
     reDrawStack(arrAxisXStack) {

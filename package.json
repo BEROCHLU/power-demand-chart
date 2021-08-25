@@ -17,6 +17,7 @@
     "echarts": "^5.1.2",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
+    "mathjs": "^9.4.4",
     "xlsx": "^0.17.1"
   },
   "devDependencies": {
