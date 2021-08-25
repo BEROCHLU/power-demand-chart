@@ -154,10 +154,11 @@ const optionStack = {
             let sum = 0;
             _.forEach(arrParam, (param) => {
                 s += `<div style="overflow: hidden;">${param.marker}${param.seriesName}<span style="float: right;"><b>${param.value}</b></span></div>`;
+                if (param.seriesName === '需要') return;
                 sum += param.value;
             });
 
-            s += `<div style="overflow: hidden;">合計<span style="float: right;"><b>${_.round(sum, 1)}</b></span></div></div>`;
+            s += `<div style="overflow: hidden;"><div>合計（需要除く）</div><span style="float: right;"><b>${_.round(sum, 1)}</b></span></div></div>`;
             return s;
         }
     },
@@ -287,8 +288,7 @@ class SetupChart {
             return dayjs(hsh['月日']).format('YYYY-MM');
         }).uniq().value();
 
-        // create option innerText & value
-        _.forEach(arrStrDateUniq, (strOption) => {
+        _.forEach(arrStrDateUniq, (strOption) => {// create option innerText & value
             const elem = document.createElement('option');
             elem.innerText = strOption;
             elem.value = strOption;
@@ -311,7 +311,6 @@ class SetupChart {
         const arrKeys = _.keys(this.arrFilter[0]);
         let arrOption = _.pull(arrKeys, "月日", "時刻");
         this.arrLegend = _.cloneDeep(arrOption); //deep copy
-        //arrOption.push("需要");
         _.forEach(arrOption, (strOption) => {
             const elem = document.createElement('option');
             elem.innerText = strOption;
@@ -356,7 +355,6 @@ class SetupChart {
         let fSum = _.sum(hshAxis.arrAxisY);
         let mth = math.unit(fSum, 'MWh').format(3);
         document.querySelector('.numeric').innerText = mth;
-        //document.querySelector('.numeric').innerText = Number.parseFloat(fSum).toPrecision(3);
     }
 
     setStack() {
@@ -373,11 +371,12 @@ class SetupChart {
 
         this.hshStack = {}
         this.arrSeriesStack = _.map(this.arrLegend, (strLegend) => {
+            let strStack = (strLegend === '需要') ? 'stackB' : 'stackA';
             this.hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
             const hshSeries = {
                 name: strLegend,
                 type: 'line',
-                stack: 'stackA',
+                stack: strStack,
                 areaStyle: {},
                 symbol: 'none',
                 lineStyle: {
