@@ -13,6 +13,7 @@ if (window.dayjs_plugin_isBetween) {
 
 // create echarts instance
 const echartsStack = echarts.init(cn5);
+const echartsPercent = echarts.init(cn2);
 
 const optionStack = {
     title: {
@@ -36,6 +37,84 @@ const optionStack = {
             });
 
             s += `<div style="overflow: hidden;"><div>合計（需要除く）</div><span style="float: right;"><b>${_.round(sum, 1)}</b></span></div></div>`;
+            return s;
+        }
+    },
+    legend: {
+        data: null,
+        selector: true,
+        selected: {
+            '需要': false,
+            '揚水': false
+        }
+    },
+    toolbox: {
+        feature: {
+            dataView: { // not work IE11
+                title: 'data view',
+                readOnly: true,
+                lang: ['data view', 'turn off', 'refresh']
+            },
+            restore: {
+                title: 'restore'
+            },
+            saveAsImage: {
+                title: 'saveAsImage'
+            }
+        }
+    },
+    grid: {
+        top: '7%',
+        left: '3%',
+        right: '4%',
+        bottom: '11%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        data: null
+    }],
+    yAxis: [{
+        type: 'value'
+    }],
+    animation: false,
+    dataZoom: [{
+        type: 'inside',
+        start: 0,
+        end: 100
+    }, {
+        show: true,
+        type: 'slider',
+        bottom: '2%',
+        throttle: 200,
+        start: 0,
+        end: 100
+    }],
+    series: null
+}
+const optionPercent = {
+    title: {
+        text: ''
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            label: {
+                backgroundColor: '#6a7985'
+            }
+        },
+        formatter: (arrParam) => {
+            let s = `<div style="width: 150px;"><div>${arrParam[0].name}</div>`;
+            let sum = 0;
+            _.forEach(arrParam, (param) => {
+                s += `<div style="overflow: hidden;">${param.marker}${param.seriesName}<span style="float: right;"><b>${param.value}</b></span></div>`;
+                if (param.seriesName === '需要') return;
+                sum += param.value;
+            });
+
+            s += `<div style="overflow: hidden;"><div>合計</div><span style="float: right;"><b>${_.floor(sum, 1)}</b></span></div></div>`;
             return s;
         }
     },
@@ -137,7 +216,7 @@ class SetupChart {
         this.hshLegendSelect = optionStack.legend.selected //selected legends
         let arrAxisXStack = [];
 
-        _.forEach(setupchart.arrFilter, hsh => {
+        _.forEach(this.arrFilter, hsh => {
             const str_day = hsh['月日'];
             const str_h = hsh['時刻'];
             const str_xAxis = `${str_day} ${str_h}:00`;
@@ -169,9 +248,68 @@ class SetupChart {
     }
 
     setTest() {
-        let arr = _.map(this.arrFilter, hsh => {
-
+        const arrHshPercent = _.cloneDeep(this.arrFilter); //deep copy
+        _.forEach(arrHshPercent, hsh => {
+            delete hsh["需要"];
+            delete hsh["揚水"];
         });
+
+        this.arrMap = _.map(arrHshPercent, hsh => {
+            let sum = 0;
+            _.forEach(hsh, (value, key) => {
+                if (key === '月日' || key === '時刻') {
+                    sum += 0;
+                } else {
+                    sum += value;
+                }
+            });
+
+            let hsh2 = _.mapValues(hsh, (value, key, object) => {
+                let result;
+                if (key === '月日' || key === '時刻') {
+                    result = value;
+                } else {
+                    result = value / sum * 100;
+                    result = _.round(result, 1)
+                }
+                return result;
+            });
+            return hsh2;
+        });
+    }
+
+    setStackPercent() {
+        let arrAxisXStack = [];
+        const arrLegend2 = ['原子力', '地熱', '水力', '火力', 'バイオマス', '風力実績', '風力抑制量', '太陽光実績', '太陽光抑制量'];
+
+        _.forEach(this.arrMap, hsh => {
+            const str_day = hsh['月日'];
+            const str_h = hsh['時刻'];
+            const str_xAxis = `${str_day} ${str_h}:00`;
+
+            arrAxisXStack.push(str_xAxis);
+        });
+
+        this.hshStack2 = {}
+        this.arrHshSeries2 = _.map(arrLegend2, (strLegend) => {
+            this.hshStack2[strLegend] = _.map(this.arrMap, hsh => hsh[strLegend]);
+            const hshSeries = {
+                name: strLegend,
+                type: 'line',
+                stack: 'stackC',
+                areaStyle: {},
+                symbol: 'none',
+                lineStyle: {
+                    width: 0.5
+                },
+                data: this.hshStack2[strLegend]
+            }
+            return hshSeries;
+        });
+
+        optionPercent.xAxis[0].data = arrAxisXStack;
+        optionPercent.series = this.arrHshSeries2;
+        optionPercent.legend.data = arrLegend2;
     }
 
     reDrawStack(arrAxisXStack) {
@@ -190,9 +328,11 @@ setupchart.setarrFilter();
 setupchart.setarrLegend();
 setupchart.setStack();
 setupchart.setTest();
+setupchart.setStackPercent();
 
 // draw a chart
 echartsStack.setOption(optionStack);
+echartsPercent.setOption(optionPercent);
 
 echartsStack.on('legendselectchanged', params => {
     setupchart.hshLegendSelect = params.selected;

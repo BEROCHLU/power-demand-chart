@@ -15,15 +15,14 @@ const arrFilter = _.filter(arrHsh, hsh => {
     return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
 });
 
-const arrHshFilter = _.cloneDeep(arrFilter); //deep copy
+const arrHshPercent = _.cloneDeep(arrFilter); //deep copy
 
-_.forEach(arrHshFilter, hsh => {
+_.forEach(arrHshPercent, hsh => {
     delete hsh["需要"];
     delete hsh["揚水"];
 });
 
-
-const arrMap = _.map(arrHshFilter, hsh => {
+const arrMap = _.map(arrHshPercent, hsh => {
     let sum = 0;
     _.forEach(hsh, (value, key) => {
         if (key === '月日' || key === '時刻') {
