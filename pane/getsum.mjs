@@ -19,21 +19,34 @@ const arrHshFilter = _.cloneDeep(arrFilter); //deep copy
 
 _.forEach(arrHshFilter, hsh => {
     delete hsh["需要"];
-    delete hsh["月日"];
-    delete hsh["時刻"];
     delete hsh["揚水"];
-
-    return hsh;
 });
 
-_.forEach(arrHshFilter, hsh => {
-    const sum = _.reduce(hsh, (presum, current) => {
-        //console.log(presum, current);
-        return presum + current;
+
+const arrMap = _.map(arrHshFilter, hsh => {
+    let sum = 0;
+    _.forEach(hsh, (value, key) => {
+        if (key === '月日' || key === '時刻') {
+            sum += 0;
+        } else {
+            sum += value;
+        }
+        //console.log(sum);
     });
-    //console.log(sum);
 
-    hsh["小計"] = sum;
+    let hsh2 = _.mapValues(hsh, (value, key, object) => {
+        let result;
+        if (key === '月日' || key === '時刻') {
+            result = value;
+        } else {
+            result = value / sum * 100;
+            result = _.round(result, 1)
+        }
+        return result;
+    });
+    //console.log(hsh2);
+    //hsh["小計"] = sum;
+    return hsh2;
 });
 
-console.log(arrHshFilter);
+console.log(arrMap);
