@@ -1,12 +1,47 @@
 'use strict';
 
-// 基于准备好的dom，初始化ECharts实例
 const myChart = echarts.init(cn1);
 
-// 指定图表的配置项和数据
+let arrData = [
+    [120, 132, 101, 134, 90, 230, 210],
+    [220, 182, 191, 234, 290, 330, 310],
+    [150, 232, 201, 154, 190, 330, 410],
+    [320, 332, 301, 334, 390, 330, 320]
+];
+
+const arraysSum = (arr1, arr2) => {
+    return _.map(arr1, (data, i) => {
+        return data + arr2[i];
+    });
+}
+
+const arraysNom = (arr1, arr2) => {
+    return _.map(arr1, (data, i) => {
+        let f100 = (data / arr2[i]) * 100;
+        let f = _.round(f100, 1);
+        return f;
+    });
+}
+
+let arrSum = [0, 0, 0, 0, 0, 0, 0];
+
+_.forEach(arrData, arr => {
+    arrSum = arraysSum(arrSum, arr);
+});
+
+//let arrNom = [];
+
+let arrNom = _.map(arrData, arr => {
+    return  arraysNom(arr, arrSum);
+});
+
+
+//let a = arraysSum(arrData[0], []);
+console.log(arrNom);
+
 const option = {
     title: {
-        text: '堆叠区域图'
+        text: ''
     },
     tooltip: {
         trigger: 'axis',
@@ -44,61 +79,37 @@ const option = {
             type: 'line',
             stack: '总量',
             areaStyle: {},
-            emphasis: {
-                focus: 'series'
-            },
-            data: [120, 132, 101, 134, 90, 230, 210]
+            data: arrNom[0]
         },
         {
             name: '联盟广告',
             type: 'line',
             stack: '总量',
             areaStyle: {},
-            emphasis: {
-                focus: 'series'
-            },
-            data: [220, 182, 191, 234, 290, 330, 310]
+
+            data: arrNom[1]
         },
         {
             name: '视频广告',
             type: 'line',
             stack: '总量',
             areaStyle: {},
-            emphasis: {
-                focus: 'series'
-            },
-            data: [150, 232, 201, 154, 190, 330, 410]
+
+            data: arrNom[2]
         },
         {
             name: '直接访问',
             type: 'line',
             stack: '总量',
             areaStyle: {},
-            emphasis: {
-                focus: 'series'
-            },
-            data: [320, 332, 301, 334, 390, 330, 320]
-        },
-        {
-            name: '搜索引擎',
-            type: 'line',
-            stack: '总量',
-            label: {
-                show: true,
-                position: 'top'
-            },
-            areaStyle: {},
-            emphasis: {
-                focus: 'series'
-            },
-            data: [820, 932, 901, 934, 1290, 1330, 1320]
+
+            data: arrNom[3]
         }
     ]
 };
 
-// 使用刚指定的配置项和数据显示图表。
 myChart.setOption(option);
-// 处理点击事件并且弹出数据名称
+
 myChart.on('legendselectchanged', params => {
     console.log(params.selected);
 });
