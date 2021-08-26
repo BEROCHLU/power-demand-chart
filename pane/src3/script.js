@@ -23,7 +23,7 @@ const arraysNom = (arr1, arr2) => {
     });
 }
 
-let arrSum = [0, 0, 0, 0, 0, 0, 0];
+let arrSum = _.fill(Array(arrData[0].length), 0);
 
 _.forEach(arrData, arr => {
     arrSum = arraysSum(arrSum, arr);

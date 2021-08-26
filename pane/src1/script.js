@@ -146,7 +146,7 @@ class SetupChart {
         });
 
         this.hshStack = {}
-        this.arrSeriesStack = _.map(this.arrLegend, (strLegend) => {
+        this.arrHshSeries = _.map(this.arrLegend, (strLegend) => {
             let strStack = (strLegend === '需要') ? 'stackB' : 'stackA';
             this.hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
             const hshSeries = {
@@ -164,14 +164,20 @@ class SetupChart {
         });
 
         optionStack.xAxis[0].data = arrAxisXStack;
-        optionStack.series = this.arrSeriesStack;
+        optionStack.series = this.arrHshSeries;
         optionStack.legend.data = this.arrLegend;
+    }
+
+    setTest() {
+        let arr = _.map(this.arrFilter, hsh => {
+
+        });
     }
 
     reDrawStack(arrAxisXStack) {
         echartsStack.clear();
         optionStack.xAxis[0].data = arrAxisXStack;
-        optionStack.series = this.arrSeriesStack;
+        optionStack.series = this.arrHshSeries;
         optionStack.legend.selected = this.hshLegendSelect;
 
         echartsStack.setOption(optionStack, true);
@@ -183,6 +189,7 @@ const setupchart = new SetupChart();
 setupchart.setarrFilter();
 setupchart.setarrLegend();
 setupchart.setStack();
+setupchart.setTest();
 
 // draw a chart
 echartsStack.setOption(optionStack);
@@ -208,7 +215,7 @@ period_button2.addEventListener('click', () => {
     _.forEach(setupchart.arrLegend, (strLegend) => {
         setupchart.hshStack[strLegend] = _.map(setupchart.arrFilter, hsh => hsh[strLegend]);
     });
-    setupchart.arrSeriesStack = _.map(setupchart.arrLegend, (strLegend) => {
+    setupchart.arrHshSeries = _.map(setupchart.arrLegend, (strLegend) => {
         const hshSeries = {
             name: strLegend,
             type: 'line',
