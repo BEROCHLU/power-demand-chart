@@ -48,6 +48,7 @@ const optionStack = {
             '揚水': false
         }
     },
+    color: ['#ea7ccc', '#fac858', '#734e30', '#5470c6', '#ee6666', '#91cc75', '#73c0de', '#C0C0C0', '#fc8452', '#E6D2C9', '#3ba272'],
     toolbox: {
         feature: {
             dataView: { // not work IE11
@@ -109,14 +110,14 @@ const optionPercent = {
             let s = `<div style="width: 150px;"><div>${arrParam[0].name}</div>`;
             let sum = 0;
             _.forEach(arrParam, (param) => {
-                s += `<div style="overflow: hidden;">${param.marker}${param.seriesName}<span style="float: right;"><b>${param.value}</b></span></div>`;
-                if (param.seriesName === '需要') return;
+                s += `<div style="overflow: hidden;">${param.marker}${param.seriesName}<span style="float: right;"><b>${param.value}%</b></span></div>`;
                 sum += param.value;
             });
-
-            s += `<div style="overflow: hidden;"><div>合計</div><span style="float: right;"><b>${_.floor(sum, 1)}</b></span></div></div>`;
+            //sum = _.min([100, sum]);
+            s += `<div style="overflow: hidden;"><div>合計</div><span style="float: right;"><b>${_.round(sum, 1)}%</b></span></div></div>`;
             return s;
-        }
+        },
+        position: 'bottom'
     },
     legend: {
         data: null,
@@ -126,6 +127,7 @@ const optionPercent = {
             '揚水': false
         }
     },
+    color: ['#fac858', '#734e30', '#5470c6', '#ee6666', '#91cc75', '#73c0de', '#C0C0C0', '#fc8452', '#E6D2C9'],
     toolbox: {
         feature: {
             dataView: { // not work IE11
@@ -154,7 +156,8 @@ const optionPercent = {
         data: null
     }],
     yAxis: [{
-        type: 'value'
+        type: 'value',
+        max: 100
     }],
     animation: false,
     dataZoom: [{
@@ -272,7 +275,6 @@ class SetupChart {
         let arrAxisXStack = [];
         const arrKeys = _.keys(this.arrFilter[0]);
         const arrLegend2 = _.pull(arrKeys, '月日', '時刻', '需要', '揚水');
-        //const arrLegend2 = ['原子力', '地熱', '水力', '火力', 'バイオマス', '風力実績', '風力抑制量', '太陽光実績', '太陽光抑制量'];
 
         _.forEach(this.arrHshPercent, hsh => {
             const str_day = hsh['月日'];
@@ -287,7 +289,7 @@ class SetupChart {
             this.hshStack2[strLegend] = _.map(this.arrHshPercent, hsh => hsh[strLegend]);
             const hshSeries = {
                 name: strLegend,
-                type: 'line',
+                type: 'bar',
                 stack: 'stackC',
                 areaStyle: {},
                 symbol: 'none',
