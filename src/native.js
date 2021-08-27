@@ -360,7 +360,7 @@ class SetupChart {
         this.hshLegendSelect = optionStack.legend.selected //selected legends
         let arrAxisXStack = [];
 
-        _.forEach(setupchart.arrFilter, hsh => {
+        _.forEach(this.arrFilter, hsh => {
             const str_day = hsh['月日'];
             const str_h = hsh['時刻'];
             const str_xAxis = `${str_day} ${str_h}:00`;
