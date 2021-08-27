@@ -199,17 +199,8 @@ class SetupChart {
 
     setarrLegend() { // create option innerText & value
         const arrKeys = _.keys(this.arrFilter[0]);
-        let arrOption = _.pull(arrKeys, "月日", "時刻");
+        const arrOption = _.pull(arrKeys, "月日", "時刻");
         this.arrLegend = _.cloneDeep(arrOption); //deep copy
-        _.forEach(arrOption, (strOption) => {
-            const elem = document.createElement('option');
-            elem.innerText = strOption;
-            elem.value = strOption;
-
-            const elem2 = elem.cloneNode(true);
-            data_selector1.appendChild(elem);
-            data_selector2.appendChild(elem2);
-        });
     }
 
     setStack() {
@@ -247,14 +238,14 @@ class SetupChart {
         optionStack.legend.data = this.arrLegend;
     }
 
-    setTest() {
-        const arrHshPercent = _.cloneDeep(this.arrFilter); //deep copy
-        _.forEach(arrHshPercent, hsh => {
+    setHshPercent() {
+        const arrHshFilterCD = _.cloneDeep(this.arrFilter); //deep copy
+        _.forEach(arrHshFilterCD, hsh => {
             delete hsh["需要"];
             delete hsh["揚水"];
         });
 
-        this.arrMap = _.map(arrHshPercent, hsh => {
+        this.arrHshPercent = _.map(arrHshFilterCD, hsh => {
             let sum = 0;
             _.forEach(hsh, (value, key) => {
                 if (key === '月日' || key === '時刻') {
@@ -264,7 +255,7 @@ class SetupChart {
                 }
             });
 
-            let hsh2 = _.mapValues(hsh, (value, key, object) => {
+            return _.mapValues(hsh, (value, key, object) => {
                 let result;
                 if (key === '月日' || key === '時刻') {
                     result = value;
@@ -274,15 +265,16 @@ class SetupChart {
                 }
                 return result;
             });
-            return hsh2;
         });
     }
 
     setStackPercent() {
         let arrAxisXStack = [];
-        const arrLegend2 = ['原子力', '地熱', '水力', '火力', 'バイオマス', '風力実績', '風力抑制量', '太陽光実績', '太陽光抑制量'];
+        const arrKeys = _.keys(this.arrFilter[0]);
+        const arrLegend2 = _.pull(arrKeys, '月日', '時刻', '需要', '揚水');
+        //const arrLegend2 = ['原子力', '地熱', '水力', '火力', 'バイオマス', '風力実績', '風力抑制量', '太陽光実績', '太陽光抑制量'];
 
-        _.forEach(this.arrMap, hsh => {
+        _.forEach(this.arrHshPercent, hsh => {
             const str_day = hsh['月日'];
             const str_h = hsh['時刻'];
             const str_xAxis = `${str_day} ${str_h}:00`;
@@ -292,7 +284,7 @@ class SetupChart {
 
         this.hshStack2 = {}
         this.arrHshSeries2 = _.map(arrLegend2, (strLegend) => {
-            this.hshStack2[strLegend] = _.map(this.arrMap, hsh => hsh[strLegend]);
+            this.hshStack2[strLegend] = _.map(this.arrHshPercent, hsh => hsh[strLegend]);
             const hshSeries = {
                 name: strLegend,
                 type: 'line',
@@ -320,14 +312,13 @@ class SetupChart {
 
         echartsStack.setOption(optionStack, true);
     }
-
 }
 
 const setupchart = new SetupChart();
 setupchart.setarrFilter();
 setupchart.setarrLegend();
 setupchart.setStack();
-setupchart.setTest();
+setupchart.setHshPercent();
 setupchart.setStackPercent();
 
 // draw a chart
