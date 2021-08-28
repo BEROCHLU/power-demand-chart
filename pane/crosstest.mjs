@@ -11,24 +11,42 @@ import crossfilter from 'crossfilter2';
 
 dayjs.extend(isBetween);
 
-const arrKeysOfHsh = _.pull(_.keys(arrHsh[0]), "時刻");
+const arrKeysOfHsh = _.pull(_.keys(arrHsh[0]), '月日', '時刻');
 const arrStrUniqDay = _.chain(arrHsh).map(hsh => hsh['月日']).uniq().value();
 
 const cf2 = crossfilter(arrHsh);
 const myDimension = cf2.dimension(d => {
     return dayjs(d['月日']).format('YYYY-MM-DD');
+    //return d['月日'];
 });
-const j = myDimension.group().reduceSum(d => d["需要"]);
-const g = myDimension.group().reduceSum(d => d["原子力"]);
 
-console.log(j.all());
-console.log(g.all());
+_.forEach(arrKeysOfHsh, strKey => {
+    const arrHshDim = myDimension.group().reduceSum(d => d[strKey]).all();
+
+    let arrMap = _.map(arrHshDim, hshDim => {
+        let hsh = _.mapKeys(hshDim, (v, k) => {
+            if (k === 'key') {
+                return '月日';
+            } else if (k === 'value') {
+                return strKey;
+            }
+        });
+        
+        return hsh;
+    });
+
+    console.log(arrMap);
+
+});
+
+//console.log(arrMap);
 
 /*
-_.forEach(arrStrUniqDay, strUniqDay => {
-    myDimension.filter(strUniqDay);
-    let n = cf2.groupAll().reduceSum(d => d["需要"]).value();
-    console.log(strUniqDay, n);
+_.forEach(arrKeysOfHsh, strKey => {
+    const dim = myDimension.group().reduceSum(d => d[strKey]);
+    const arrHshDim = dim.all();
+    _.merge(hshMerge, arrHshDim);
+
 });*/
 
 /*
@@ -40,13 +58,10 @@ const arrHshDay = _.map(arrStrUniqDay, strUniqDay => {
             hshDay["月日"] = strUniqDay;
             return;
         }
-
-        myDimension.filter(strUniqDay);
+        
         let sum = cf2.groupAll().reduceSum(d => d[strKey]).value();
         hshDay[strKey] = _.round(sum, 1);
     });
 
     return hshDay;
-});
-
-console.log(arrHshDay);*/
+});*/
