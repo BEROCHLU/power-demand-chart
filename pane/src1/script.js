@@ -180,11 +180,11 @@ const optionStack = {
 
 class SetupChart {
     constructor() {
-        const arrStrDateUniq = _.chain(arrHsh).map(hsh => {
+        const arrStrUniqMonth = _.chain(arrHsh).map(hsh => {
             return dayjs(hsh['月日']).format('YYYY-MM');
         }).uniq().value();
 
-        _.forEach(arrStrDateUniq, (strOption) => { // create option innerText & value
+        _.forEach(arrStrUniqMonth, (strOption) => { // create option innerText & value
             const elem = document.createElement('option');
             elem.innerText = strOption;
             elem.value = strOption;

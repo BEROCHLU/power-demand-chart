@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "crossfilter2": "^1.5.4",
     "dayjs": "^1.10.6",
     "echarts": "^5.1.2",
     "jquery": "^3.6.0",
