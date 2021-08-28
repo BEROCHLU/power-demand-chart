@@ -15,6 +15,89 @@ if (window.dayjs_plugin_isBetween) {
 const echartsStack = echarts.init(cn5);
 const echartsPercent = echarts.init(cn2);
 
+const optionPercent = {
+    title: {
+        text: ''
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'line',
+            label: {
+                backgroundColor: '#6a7985'
+            }
+        },
+        formatter: (arrParam) => {
+            let s = `<div style="width: 150px;"><div>${arrParam[0].name}</div>`;
+            let sum = 0;
+            _.forEach(arrParam, (param) => {
+                s += `<div style="overflow: hidden;">${param.marker}${param.seriesName}<span style="float: right;"><b>${param.value}%</b></span></div>`;
+                sum += param.value;
+            });
+            sum = _.min([100, sum]);
+            s += `<div style="overflow: hidden;"><div>合計</div><span style="float: right;"><b>${_.round(sum, 1)}%</b></span></div></div>`;
+            return s;
+        },
+        position: 'bottom'
+    },
+    legend: {
+        data: null,
+        selector: true,
+        selected: {
+            '需要': false,
+            '揚水': false
+        }
+    },
+    color: ['#ffff00', '#a0522d', '#0000ff', '#ff4500', '#90ee90', '#87cefa', '#C0C0C0', '#ffa500', '#E6D2C9'],
+    toolbox: {
+        feature: {
+            dataView: { // not work IE11
+                title: 'data view',
+                readOnly: true,
+                lang: ['data view', 'turn off', 'refresh']
+            },
+            restore: {
+                title: 'restore'
+            },
+            saveAsImage: {
+                title: 'saveAsImage'
+            }
+        }
+    },
+    grid: {
+        top: '7%',
+        left: '3%',
+        right: '4%',
+        bottom: '11%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        data: null
+    }],
+    yAxis: [{
+        type: 'value',
+        max: 100,
+        axisLabel: {
+            formatter: '{value}%'
+        }
+    }],
+    animation: false,
+    dataZoom: [{
+        type: 'inside',
+        start: 0,
+        end: 100
+    }, {
+        show: true,
+        type: 'slider',
+        bottom: '2%',
+        throttle: 200,
+        start: 0,
+        end: 100
+    }],
+    series: null
+}
 const optionStack = {
     title: {
         text: ''
@@ -48,7 +131,7 @@ const optionStack = {
             '揚水': false
         }
     },
-    color: ['#ea7ccc', '#fac858', '#734e30', '#5470c6', '#ee6666', '#91cc75', '#73c0de', '#C0C0C0', '#fc8452', '#E6D2C9', '#3ba272'],
+    color: ['#800080', '#ffff00', '#a0522d', '#0000ff', '#ff4500', '#90ee90', '#87cefa', '#C0C0C0', '#ffa500', '#E6D2C9', '#008000'],
     toolbox: {
         feature: {
             dataView: { // not work IE11
@@ -94,86 +177,6 @@ const optionStack = {
     }],
     series: null
 }
-const optionPercent = {
-    title: {
-        text: ''
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'cross',
-            label: {
-                backgroundColor: '#6a7985'
-            }
-        },
-        formatter: (arrParam) => {
-            let s = `<div style="width: 150px;"><div>${arrParam[0].name}</div>`;
-            let sum = 0;
-            _.forEach(arrParam, (param) => {
-                s += `<div style="overflow: hidden;">${param.marker}${param.seriesName}<span style="float: right;"><b>${param.value}%</b></span></div>`;
-                sum += param.value;
-            });
-            //sum = _.min([100, sum]);
-            s += `<div style="overflow: hidden;"><div>合計</div><span style="float: right;"><b>${_.round(sum, 1)}%</b></span></div></div>`;
-            return s;
-        },
-        position: 'bottom'
-    },
-    legend: {
-        data: null,
-        selector: true,
-        selected: {
-            '需要': false,
-            '揚水': false
-        }
-    },
-    color: ['#fac858', '#734e30', '#5470c6', '#ee6666', '#91cc75', '#73c0de', '#C0C0C0', '#fc8452', '#E6D2C9'],
-    toolbox: {
-        feature: {
-            dataView: { // not work IE11
-                title: 'data view',
-                readOnly: true,
-                lang: ['data view', 'turn off', 'refresh']
-            },
-            restore: {
-                title: 'restore'
-            },
-            saveAsImage: {
-                title: 'saveAsImage'
-            }
-        }
-    },
-    grid: {
-        top: '7%',
-        left: '3%',
-        right: '4%',
-        bottom: '11%',
-        containLabel: true
-    },
-    xAxis: [{
-        type: 'category',
-        boundaryGap: false,
-        data: null
-    }],
-    yAxis: [{
-        type: 'value',
-        max: 100
-    }],
-    animation: false,
-    dataZoom: [{
-        type: 'inside',
-        start: 0,
-        end: 100
-    }, {
-        show: true,
-        type: 'slider',
-        bottom: '2%',
-        throttle: 200,
-        start: 0,
-        end: 100
-    }],
-    series: null
-}
 
 class SetupChart {
     constructor() {
@@ -186,7 +189,7 @@ class SetupChart {
             elem.innerText = strOption;
             elem.value = strOption;
 
-            const arrDom = [ym_selector1, ym_selector2, ym_selector3, ym_selector4, ym_selector5];
+            const arrDom = [ym_selector1, ym_selector2];
             _.forEach(arrDom, dom => {
                 dom.appendChild(elem.cloneNode(true));
             });
@@ -289,7 +292,7 @@ class SetupChart {
             this.hshStack2[strLegend] = _.map(this.arrHshPercent, hsh => hsh[strLegend]);
             const hshSeries = {
                 name: strLegend,
-                type: 'bar',
+                type: 'line',
                 stack: 'stackC',
                 areaStyle: {},
                 symbol: 'none',
@@ -338,7 +341,7 @@ echartsStack.on('legendinverseselect', params => {
 });
 
 // button click
-period_button2.addEventListener('click', () => {
+period_button.addEventListener('click', () => {
     const mStart = dayjs(ym_selector2.value);
     const mEnd = dayjs(ym_selector5.value);
     setupchart.arrFilter = _.filter(arrHsh, hsh => {

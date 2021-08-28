@@ -24,7 +24,7 @@ grid6 {
     gap: 4px;
     grid-template:
         "grid1 grid2 grid2"1fr
-        "grid4 grid5 grid5"1fr 
+        "grid1 grid5 grid5"1fr 
         "grid6 grid6 grid6"28px 
         / 100px 1fr 1fr;
 }
@@ -48,7 +48,6 @@ grid2 {
 }
 
 #cn2,
-#cn3,
 #cn5 {
     width: 100%;
     height: 100%;
@@ -61,16 +60,6 @@ grid2 {
     height: calc(100vh - 48px);
     background-color: #f0f0f0;
     border-radius: 10px;
-}
-
-grid3 {
-    grid-area: grid3;
-}
-
-grid4 {
-    grid-area: grid4;
-    border-radius: 10px;
-    background-color: #f0f0f0;
 }
 
 grid5 {
