@@ -196,62 +196,14 @@ class SetupChart {
         });
     }
 
-    setarrFilter() {
-        const mStart = dayjs(ym_selector1.value);
-        this.arrFilter = _.filter(arrHsh, hsh => {
-            return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
-        });
-    }
-
-    setarrLegend() { // create option innerText & value
-        const arrKeys = _.keys(this.arrFilter[0]);
-        const arrOption = _.pull(arrKeys, "月日", "時刻");
-        this.arrLegend = _.cloneDeep(arrOption); //deep copy
-    }
-
-    setStack() {
-        this.hshLegendSelect = optionStack.legend.selected //selected legends
-        let arrAxisXStack = [];
-
-        _.forEach(this.arrFilter, hsh => {
-            const str_day = hsh['月日'];
-            const str_h = hsh['時刻'];
-            const str_xAxis = `${str_day} ${str_h}:00`;
-
-            arrAxisXStack.push(str_xAxis);
-        });
-
-        this.hshStack = {}
-        this.arrHshSeries = _.map(this.arrLegend, (strLegend) => {
-            let strStack = (strLegend === '需要') ? 'stackB' : 'stackA';
-            this.hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
-            const hshSeries = {
-                name: strLegend,
-                type: 'line',
-                stack: strStack,
-                areaStyle: {},
-                symbol: 'none',
-                lineStyle: {
-                    width: 0.5
-                },
-                data: this.hshStack[strLegend]
-            }
-            return hshSeries;
-        });
-
-        optionStack.xAxis[0].data = arrAxisXStack;
-        optionStack.series = this.arrHshSeries;
-        optionStack.legend.data = this.arrLegend;
-    }
-
     setHshPercent() {
-        const arrHshFilterCD = _.cloneDeep(this.arrFilter); //deep copy
-        _.forEach(arrHshFilterCD, hsh => {
+        const arrHshCD = _.cloneDeep(arrHsh); //deep copy
+        _.forEach(arrHshCD, hsh => {
             delete hsh["需要"];
             delete hsh["揚水"];
         });
 
-        this.arrHshPercent = _.map(arrHshFilterCD, hsh => {
+        this.arrHshPercent = _.map(arrHshCD, hsh => {
             let sum = 0;
             _.forEach(hsh, (value, key) => {
                 if (key === '月日' || key === '時刻') {
@@ -274,12 +226,30 @@ class SetupChart {
         });
     }
 
-    setStackPercent() {
-        let arrAxisXStack = [];
-        const arrKeys = _.keys(this.arrFilter[0]);
-        const arrLegend2 = _.pull(arrKeys, '月日', '時刻', '需要', '揚水');
+    setarrFilter() {
+        const mStart = dayjs(ym_selector1.value);
+        this.arrFilter = _.filter(arrHsh, hsh => {
+            return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
+        });
+        this.arrHshFilterPercent = _.filter(this.arrHshPercent, hsh => {
+            return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
+        });
+    }
 
-        _.forEach(this.arrHshPercent, hsh => {
+    setarrLegend() { // create option innerText & value
+        const arrKeys = _.keys(this.arrFilter[0]);
+        const arrOption = _.pull(arrKeys, "月日", "時刻");
+        this.arrLegend = _.cloneDeep(arrOption); //deep copy
+
+        const arrKeys2 = _.keys(this.arrHshFilterPercent[0]);
+        this.arrLegend2 = _.pull(arrKeys2, '月日', '時刻', '需要', '揚水');
+    }
+
+    setStack() {
+        this.hshLegendSelect = optionStack.legend.selected //selected legends
+        let arrAxisXStack = [];
+
+        _.forEach(this.arrFilter, hsh => {
             const str_day = hsh['月日'];
             const str_h = hsh['時刻'];
             const str_xAxis = `${str_day} ${str_h}:00`;
@@ -287,9 +257,43 @@ class SetupChart {
             arrAxisXStack.push(str_xAxis);
         });
 
-        this.hshStack2 = {}
-        this.arrHshSeries2 = _.map(arrLegend2, (strLegend) => {
-            this.hshStack2[strLegend] = _.map(this.arrHshPercent, hsh => hsh[strLegend]);
+        let hshStack = {}
+        this.arrHshSeries = _.map(this.arrLegend, (strLegend) => {
+            let strStack = (strLegend === '需要') ? 'stackB' : 'stackA';
+            hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
+            const hshSeries = {
+                name: strLegend,
+                type: 'line',
+                stack: strStack,
+                areaStyle: {},
+                symbol: 'none',
+                lineStyle: {
+                    width: 0.5
+                },
+                data: hshStack[strLegend]
+            }
+            return hshSeries;
+        });
+
+        optionStack.xAxis[0].data = arrAxisXStack;
+        optionStack.series = this.arrHshSeries;
+        optionStack.legend.data = this.arrLegend;
+    }
+
+    setStackPercent() {
+        let arrAxisXStack = [];
+
+        _.forEach(this.arrHshFilterPercent, hsh => {
+            const str_day = hsh['月日'];
+            const str_h = hsh['時刻'];
+            const str_xAxis = `${str_day} ${str_h}:00`;
+
+            arrAxisXStack.push(str_xAxis);
+        });
+
+        let hshStack = {}
+        this.arrHshSeries2 = _.map(this.arrLegend2, strLegend => {
+            hshStack[strLegend] = _.map(this.arrHshFilterPercent, hsh => hsh[strLegend]);
             const hshSeries = {
                 name: strLegend,
                 type: 'line',
@@ -299,14 +303,14 @@ class SetupChart {
                 lineStyle: {
                     width: 0.5
                 },
-                data: this.hshStack2[strLegend]
+                data: hshStack[strLegend]
             }
             return hshSeries;
         });
 
         optionPercent.xAxis[0].data = arrAxisXStack;
         optionPercent.series = this.arrHshSeries2;
-        optionPercent.legend.data = arrLegend2;
+        optionPercent.legend.data = this.arrLegend2;
     }
 
     reDrawStack(arrAxisXStack) {
@@ -317,13 +321,21 @@ class SetupChart {
 
         echartsStack.setOption(optionStack, true);
     }
+
+    reDrawPercent(arrAxisXStack) {
+        echartsPercent.clear();
+        optionPercent.xAxis[0].data = arrAxisXStack;
+        optionPercent.series = this.arrHshSeries2;
+
+        echartsPercent.setOption(optionPercent, true);
+    }
 }
 
 const setupchart = new SetupChart();
+setupchart.setHshPercent();
 setupchart.setarrFilter();
 setupchart.setarrLegend();
 setupchart.setStack();
-setupchart.setHshPercent();
 setupchart.setStackPercent();
 
 // draw a chart
@@ -342,26 +354,29 @@ echartsStack.on('legendinverseselect', params => {
 
 // button click
 period_button.addEventListener('click', () => {
-    const mStart = dayjs(ym_selector2.value);
-    const mEnd = dayjs(ym_selector5.value);
+    const mStart = dayjs(ym_selector1.value);
+    const mEnd = dayjs(ym_selector2.value);
     setupchart.arrFilter = _.filter(arrHsh, hsh => {
         return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
     });
 
+    let hshStack = {}
     _.forEach(setupchart.arrLegend, (strLegend) => {
-        setupchart.hshStack[strLegend] = _.map(setupchart.arrFilter, hsh => hsh[strLegend]);
+        hshStack[strLegend] = _.map(setupchart.arrFilter, hsh => hsh[strLegend]);
     });
     setupchart.arrHshSeries = _.map(setupchart.arrLegend, (strLegend) => {
+        const strStack = (strLegend === '需要') ? 'stackB' : 'stackA';
+        hshStack[strLegend] = _.map(setupchart.arrFilter, hsh => hsh[strLegend]);
         const hshSeries = {
             name: strLegend,
             type: 'line',
-            stack: 'stackA',
+            stack: strStack,
             areaStyle: {},
             symbol: 'none',
             lineStyle: {
                 width: 0.5
             },
-            data: setupchart.hshStack[strLegend]
+            data: hshStack[strLegend]
         }
         return hshSeries;
     });
@@ -375,6 +390,29 @@ period_button.addEventListener('click', () => {
 
         arrAxisXStack.push(str_xAxis);
     });
+
+    const arrHshDataPercent = _.filter(setupchart.arrHshPercent, hsh => {
+        return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+    });
+
+    hshStack = {}
+    setupchart.arrHshSeries2 = _.map(setupchart.arrLegend2, strLegend => {
+        hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
+        const hshSeries = {
+            name: strLegend,
+            type: 'line',
+            stack: 'stackC',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 0.5
+            },
+            data: hshStack[strLegend]
+        }
+        return hshSeries;
+    });
+
     //re-draw
     setupchart.reDrawStack(arrAxisXStack);
+    setupchart.reDrawPercent(arrAxisXStack);
 });
