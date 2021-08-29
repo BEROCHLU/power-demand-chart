@@ -12,7 +12,7 @@ import crossfilter from 'crossfilter2';
 dayjs.extend(isBetween);
 
 const arrKeysOfHsh = _.pull(_.keys(arrHsh[0]), '月日', '時刻');
-const arrStrUniqDay = _.chain(arrHsh).map(hsh => hsh['月日']).uniq().value();
+//const arrStrUniqDay = _.chain(arrHsh).map(hsh => hsh['月日']).uniq().value();
 
 const cf2 = crossfilter(arrHsh);
 const myDimension = cf2.dimension(d => {
@@ -20,10 +20,10 @@ const myDimension = cf2.dimension(d => {
     //return d['月日'];
 });
 
-_.forEach(arrKeysOfHsh, strKey => {
+const arrMap = _.map(arrKeysOfHsh, strKey => {
     const arrHshDim = myDimension.group().reduceSum(d => d[strKey]).all();
 
-    let arrMap = _.map(arrHshDim, hshDim => {
+    let arr = _.map(arrHshDim, hshDim => {
         let hsh = _.mapKeys(hshDim, (v, k) => {
             if (k === 'key') {
                 return '月日';
@@ -35,12 +35,17 @@ _.forEach(arrKeysOfHsh, strKey => {
         return hsh;
     });
 
-    console.log(arrMap);
-
+    //console.log(arr);
+    return arr;
 });
 
-//console.log(arrMap);
+let arrZip = _.zipWith(...arrMap, (...args) => {
+    let m = _.merge(...args);
+    //console.log(m);
+    return m;
+});
 
+console.log(arrZip);
 /*
 _.forEach(arrKeysOfHsh, strKey => {
     const dim = myDimension.group().reduceSum(d => d[strKey]);
