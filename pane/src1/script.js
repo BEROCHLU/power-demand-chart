@@ -226,6 +226,39 @@ class SetupChart {
         });
     }
 
+    setCrossfilter() {
+        const cf2 = crossfilter(arrHsh);
+        const myDimension = cf2.dimension(d => {
+            return dayjs(d['月日']).format('YYYY-MM-DD');
+        });
+
+        const arrKeysOfHsh = _.pull(_.keys(arrHsh[0]), '月日', '時刻');
+        const arrMap = _.map(arrKeysOfHsh, strKey => {
+            const arrHshDim = myDimension.group().reduceSum(d => d[strKey]).all();
+
+            let arr = _.map(arrHshDim, hshDim => {
+                let hsh = _.mapKeys(hshDim, (v, k) => {
+                    if (k === 'key') {
+                        return '月日';
+                    } else if (k === 'value') {
+                        return strKey;
+                    }
+                });
+
+                return hsh;
+            });
+
+            //console.log(arr);
+            return arr;
+        });
+
+        this.arrZip = _.zipWith(...arrMap, (...args) => {
+            let m = _.merge(...args);
+            //console.log(m);
+            return m;
+        });
+    }
+
     setarrFilter() {
         const mStart = dayjs(ym_selector1.value);
         this.arrFilter = _.filter(arrHsh, hsh => {
@@ -313,6 +346,39 @@ class SetupChart {
         optionPercent.legend.data = this.arrLegend2;
     }
 
+    setDayChart() {
+        this.hshLegendSelect = optionStack.legend.selected //selected legends
+        let arrAxisXStack = [];
+
+        _.forEach(this.arrZip, hsh => {
+            arrAxisXStack.push(hsh['月日']);
+        });
+
+        let hshStack = {}
+        this.arrHshSeries = _.map(this.arrLegend, strLegend => {
+            let strStack = (strLegend === '需要') ? 'stackB' : 'stackA';
+            hshStack[strLegend] = _.map(this.arrZip, hsh => hsh[strLegend]);
+            const hshSeries = {
+                name: strLegend,
+                type: 'line',
+                stack: strStack,
+                areaStyle: {},
+                symbol: 'none',
+                lineStyle: {
+                    width: 0.5
+                },
+                data: hshStack[strLegend]
+            }
+            return hshSeries;
+        });
+
+        optionStack.xAxis[0].data = arrAxisXStack;
+        optionStack.series = this.arrHshSeries;
+        optionStack.legend.data = this.arrLegend;
+
+        echartsStack.setOption(optionStack, true);
+    }
+
     reDrawStack(arrAxisXStack) {
         echartsStack.clear();
         optionStack.xAxis[0].data = arrAxisXStack;
@@ -329,10 +395,15 @@ class SetupChart {
 
         echartsPercent.setOption(optionPercent, true);
     }
+
+    changeTick() {
+
+    }
 }
 
 const setupchart = new SetupChart();
 setupchart.setHshPercent();
+setupchart.setCrossfilter();
 setupchart.setarrFilter();
 setupchart.setarrLegend();
 setupchart.setStack();
@@ -412,7 +483,16 @@ period_button.addEventListener('click', () => {
         return hshSeries;
     });
 
-    //re-draw
-    setupchart.reDrawStack(arrAxisXStack);
-    setupchart.reDrawPercent(arrAxisXStack);
+    if (tick_selector.value === '1h') {
+        //re-draw
+        setupchart.reDrawStack(arrAxisXStack);
+        setupchart.reDrawPercent(arrAxisXStack);
+    } else if (tick_selector.value === '1day') {
+
+    }
+});
+
+// button click
+tick_button.addEventListener('click', () => {
+    setupchart.setDayChart();
 });

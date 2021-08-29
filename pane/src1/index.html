@@ -12,6 +12,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.6/plugin/isBetween.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/mathjs@9.4.4/lib/browser/math.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/crossfilter2@1.5.4/crossfilter.min.js"></script>
 </head>
 
 <body>
@@ -23,7 +24,12 @@
 					</select>
 					<select id="ym_selector2">
 					</select>
+					<select id="tick_selector">
+						<option value="1h">1時間足</option>
+						<option value="1day">日足</option>
+					</select>
 					<button id="period_button" type="button">変更</button>
+					<button id="tick_button" type="button">日足</button>
 					<div class="total-view"><span class="numeric"></span></div>
 				</grid1>
 				<grid2>
