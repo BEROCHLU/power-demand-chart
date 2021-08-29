@@ -236,20 +236,29 @@ class SetupChart {
         const arrMap = _.map(arrKeysOfHsh, strKey => {
             const arrHshDim = myDimension.group().reduceSum(d => d[strKey]).all();
 
-            let arr = _.map(arrHshDim, hshDim => {
-                let hsh = _.mapKeys(hshDim, (v, k) => {
+            let arrReturn = _.map(arrHshDim, hshDim => {
+                return _.mapKeys(hshDim, (v, k) => {
                     if (k === 'key') {
                         return '月日';
                     } else if (k === 'value') {
                         return strKey;
                     }
                 });
-
-                return hsh;
             });
 
-            //console.log(arr);
-            return arr;
+            arrReturn = _.map(arrReturn, hsh => {
+                return _.mapValues(hsh, (value, key) => {
+                    let result;
+                    if (key === '月日') {
+                        result = value;
+                    } else {
+                        result = _.round(value, 1);
+                    }
+                    return result;
+                });
+            });
+
+            return arrReturn;
         });
 
         this.arrZip = _.zipWith(...arrMap, (...args) => {
