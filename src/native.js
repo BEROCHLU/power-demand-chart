@@ -486,15 +486,6 @@ class SetupChart {
 
     setStack() {
         this.hshLegendSelect = optionStack.legend.selected //selected legends
-        let arrAxisXStack = [];
-
-        _.forEach(this.arrFilter, hsh => {
-            const str_day = hsh['月日'];
-            const str_h = hsh['時刻'];
-            const str_xAxis = `${str_day} ${str_h}:00`;
-
-            arrAxisXStack.push(str_xAxis);
-        });
 
         let hshStack = {}
         this.arrSeriesStack = _.map(this.arrLegend, strLegend => {
@@ -513,7 +504,7 @@ class SetupChart {
             }
         });
 
-        optionStack.xAxis[0].data = arrAxisXStack;
+        optionStack.xAxis[0].data = _.map(this.arrFilter, hsh => `${hsh['月日']} ${hsh['時刻']}:00`);
         optionStack.series = this.arrSeriesStack;
         optionStack.legend.data = this.arrLegend;
     }
@@ -639,6 +630,7 @@ echartsStack.on('legendselectall', params => {
 echartsStack.on('legendinverseselect', params => {
     setupchart.hshLegendSelect = params.selected;
 });
+
 // button click
 period_button.addEventListener('click', () => {
     const mStart = dayjs(ym_selector1.value);

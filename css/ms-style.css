@@ -83,7 +83,7 @@ grid2 {
 #cn2a,
 #cn3a {
     width: calc(100vw - 120px);
-    height: calc(50vh - 24px);
+    height: calc(50vh - 26px);
     background-color: #f0f0f0;
     border-radius: 10px;
 }
@@ -135,9 +135,9 @@ ul {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
 }
 
 li {
@@ -165,6 +165,8 @@ li:first-of-type {
 
 li:nth-of-type(2) {
     cursor: default;
+    font-weight: bold;
+    margin: 0 20px;
 }
 
 .active-tab {
