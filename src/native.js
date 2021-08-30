@@ -421,6 +421,46 @@ class SetupChart {
         });
     }
 
+    setCrossfilter() {
+        const cf2 = crossfilter(arrHsh);
+        const myDimension = cf2.dimension(d => {
+            return dayjs(d['月日']).format('YYYY-MM-DD');
+        });
+
+        const arrKeysOfHsh = _.pull(_.keys(arrHsh[0]), '月日', '時刻');
+        const arrMap = _.map(arrKeysOfHsh, strKey => {
+            const arrHshDim = myDimension.group().reduceSum(d => d[strKey]).all();
+
+            let arrReturn = _.map(arrHshDim, hshDim => {
+                return _.mapKeys(hshDim, (v, k) => {
+                    if (k === 'key') {
+                        return '月日';
+                    } else if (k === 'value') {
+                        return strKey;
+                    }
+                });
+            });
+
+            arrReturn = _.map(arrReturn, hsh => {
+                return _.mapValues(hsh, (value, key) => {
+                    let result;
+                    if (key === '月日') {
+                        result = value;
+                    } else {
+                        result = _.round(value, 1);
+                    }
+                    return result;
+                });
+            });
+
+            return arrReturn;
+        });
+
+        this.arrZip = _.zipWith(...arrMap, (...args) => {
+            return _.merge(...args);
+        });
+    }
+
     setarrFilter() {
         const mStart = dayjs(ym_selector1.value);
         this.arrFilter = _.filter(arrHsh, hsh => {
@@ -432,7 +472,7 @@ class SetupChart {
         });
     }
 
-    setarrLegend() { // create option innerText & value
+    setLegend() { // create option innerText & value
         const arrKeys = _.keys(this.arrFilter[0]);
         let arrOption = _.pull(arrKeys, "月日", "時刻");
         this.arrLegend = _.cloneDeep(arrOption); //deep copy
@@ -448,6 +488,8 @@ class SetupChart {
 
         const arrKeys2 = _.keys(this.arrHshFilterPercent[0]);
         this.arrLegend2 = _.pull(arrKeys2, '月日', '時刻', '需要', '揚水');
+
+        this.hshLegendSelect = optionStack.legend.selected //initial selected legends
     }
 
     setarrPlotHeat() {
@@ -485,8 +527,6 @@ class SetupChart {
     }
 
     setStack() {
-        this.hshLegendSelect = optionStack.legend.selected //selected legends
-
         let hshStack = {}
         this.arrSeriesStack = _.map(this.arrLegend, strLegend => {
             hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
@@ -603,12 +643,33 @@ class SetupChart {
         const n = _.sum(hshAxis.arrAxisY);
         document.querySelector('#powersum2').innerText = math.unit(n, 'MW').format(3);
     }
+
+    changeTick(arrHshFilterDay) {
+        let hshAxis = {
+            arrAxisX: [],
+            arrAxisY: []
+        }
+
+        _.forEach(arrHshFilterDay, hsh => {
+            const int_yAxis = hsh[data_selector2.value];
+            const str_xAxis = hsh['月日'];
+
+            hshAxis.arrAxisX.push(str_xAxis);
+            hshAxis.arrAxisY.push(int_yAxis);
+        });
+
+        optionLineA.xAxis.data = hshAxis.arrAxisX;
+        optionLineA.series[0].data = hshAxis.arrAxisY;
+
+        echartsLineA.setOption(optionLineA, true);
+    }
 }
 
 const setupchart = new SetupChart();
 setupchart.setHshPercent();
+setupchart.setCrossfilter();
 setupchart.setarrFilter();
-setupchart.setarrLegend();
+setupchart.setLegend();
 setupchart.setarrPlotHeat();
 setupchart.setStack();
 setupchart.setStackPercent();
@@ -676,13 +737,21 @@ period_button2.addEventListener('click', () => {
         arrAxisY: []
     }
 
-    _.forEach(setupchart.arrFilter, hsh => {
-        const int_yAxis = hsh[data_selector2.value];
-        const str_xAxis = `${hsh['月日']} ${hsh['時刻']}:00`;
+    if (tick_selector.value === '1h') {
+        _.forEach(setupchart.arrFilter, hsh => {
+            const int_yAxis = hsh[data_selector2.value];
+            const str_xAxis = `${hsh['月日']} ${hsh['時刻']}:00`;
 
-        hshAxis.arrAxisX.push(str_xAxis);
-        hshAxis.arrAxisY.push(int_yAxis);
-    });
+            hshAxis.arrAxisX.push(str_xAxis);
+            hshAxis.arrAxisY.push(int_yAxis);
+        });
+    } else if (tick_selector.value === '1day') {
+        const arrHshFilterDay = _.filter(setupchart.arrZip, hsh => {
+            return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+        });
+
+        setupchart.changeTick(arrHshFilterDay);
+    }
 
     //re-draw
     setupchart.reDrawLineA(hshAxis);

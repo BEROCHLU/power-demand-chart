@@ -308,26 +308,27 @@ class SetupChart {
         });
     }
 
-    setarrLegend() { // create option innerText & value
+    setLegend() { // create option innerText & value
         const arrKeys = _.keys(this.arrFilter[0]);
         const arrOption = _.pull(arrKeys, "月日", "時刻");
         this.arrLegend = _.cloneDeep(arrOption); //deep copy
 
         const arrKeys2 = _.keys(this.arrHshFilterPercent[0]);
         this.arrLegend2 = _.pull(arrKeys2, '月日', '時刻', '需要', '揚水');
+
+        this.hshLegendSelect = optionStack.legend.selected //initial selected legends
     }
 
     setStack() {
-        this.hshLegendSelect = optionStack.legend.selected //selected legends
-
         const arrAxisXStack = _.map(this.arrFilter, hsh => {
             return `${hsh['月日']} ${hsh['時刻']}:00`;
         });
 
         let hshStack = {}
-        this.arrHshSeries = _.map(this.arrLegend, (strLegend) => {
+        this.arrHshSeries = _.map(this.arrLegend, strLegend => {
             hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
-            const hshSeries = {
+
+            return {
                 name: strLegend,
                 type: 'line',
                 stack: (strLegend === '需要') ? 'stackB' : 'stackA',
@@ -338,7 +339,6 @@ class SetupChart {
                 },
                 data: hshStack[strLegend]
             }
-            return hshSeries;
         });
 
         optionStack.xAxis[0].data = arrAxisXStack;
@@ -391,10 +391,8 @@ class SetupChart {
     }
 
     changeTick(arrHshFilterDay) {
-        this.hshLegendSelect = optionStack.legend.selected //selected legends
-
         let hshStack = {}
-        this.arrHshSeries = _.map(this.arrLegend, strLegend => {
+        let arrHshSeriesDay = _.map(this.arrLegend, strLegend => {
             hshStack[strLegend] = _.map(arrHshFilterDay, hsh => hsh[strLegend]);
 
             return {
@@ -411,7 +409,7 @@ class SetupChart {
         });
 
         optionStack.xAxis[0].data = _.map(arrHshFilterDay, hsh => hsh['月日']);
-        optionStack.series = this.arrHshSeries;
+        optionStack.series = arrHshSeriesDay;
         optionStack.legend.data = this.arrLegend;
         optionStack.legend.selected = this.hshLegendSelect;
 
@@ -423,7 +421,7 @@ const setupchart = new SetupChart();
 setupchart.setHshPercent();
 setupchart.setCrossfilter();
 setupchart.setarrFilter();
-setupchart.setarrLegend();
+setupchart.setLegend();
 setupchart.setStack();
 setupchart.setStackPercent();
 setupchart.setHshPercentDay();
@@ -434,6 +432,7 @@ echartsPercent.setOption(optionPercent);
 
 echartsStack.on('legendselectchanged', params => {
     setupchart.hshLegendSelect = params.selected;
+    console.log(setupchart.hshLegendSelect);
 });
 echartsStack.on('legendselectall', params => {
     setupchart.hshLegendSelect = params.selected;
