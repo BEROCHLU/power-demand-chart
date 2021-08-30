@@ -426,7 +426,7 @@ class SetupChart {
         this.arrFilter = _.filter(arrHsh, hsh => {
             return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
         });
-        
+
         this.arrHshFilterPercent = _.filter(this.arrHshPercent, hsh => {
             return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
         });
@@ -481,7 +481,7 @@ class SetupChart {
         optionHeatmap.series[0].data = this.arrPlotHeat;
 
         const n = _.sum(hshAxis.arrAxisY);
-        document.querySelector('.numeric').innerText = math.unit(n, 'MWh').format(3);
+        document.querySelector('#powersum1').innerText = math.unit(n, 'MWh').format(3);
     }
 
     setStack() {
@@ -561,6 +561,9 @@ class SetupChart {
 
         optionLineA.xAxis.data = hshAxis.arrAxisX;
         optionLineA.series[0].data = hshAxis.arrAxisY;
+
+        const n = _.sum(hshAxis.arrAxisY);
+        document.querySelector('#powersum2').innerText = math.unit(n, 'MWh').format(3);
     }
 
     reDrawHeat(hshAxis) {
@@ -580,7 +583,7 @@ class SetupChart {
 
         echartsLine.setOption(optionLine, true);
         const n = _.sum(hshAxis.arrAxisY);
-        document.querySelector('.numeric').innerText = math.unit(n, 'MWh').format(3);
+        document.querySelector('#powersum1').innerText = math.unit(n, 'MWh').format(3);
     }
 
     reDrawStack(arrAxisXStack) {
@@ -606,6 +609,8 @@ class SetupChart {
         optionLineA.series[0].data = hshAxis.arrAxisY;
 
         echartsLineA.setOption(optionLineA, true);
+        const n = _.sum(hshAxis.arrAxisY);
+        document.querySelector('#powersum2').innerText = math.unit(n, 'MWh').format(3);
     }
 }
 
