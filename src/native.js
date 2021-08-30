@@ -15,8 +15,8 @@ if (window.dayjs_plugin_isBetween) {
 // create echarts instance
 const echartsHeatmap = echarts.init(cn2);
 const echartsLine = echarts.init(cn3);
-const echartsStack = echarts.init(cn5);
-const echartsLineA = echarts.init(cn22);
+const echartsLineA = echarts.init(cn5);
+const echartsStack = echarts.init(cn3a);
 
 const optionHeatmap = {
     tooltip: {
