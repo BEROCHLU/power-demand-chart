@@ -170,6 +170,7 @@ const optionStack = {
             '揚水': false
         }
     },
+    color: ['#800080', '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc', '#008000'],
     toolbox: {
         feature: {
             dataView: { // not work IE11
