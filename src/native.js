@@ -17,11 +17,12 @@ const echartsHeatmap = echarts.init(cn2);
 const echartsLine = echarts.init(cn3);
 const echartsLineA = echarts.init(cn5);
 const echartsStack = echarts.init(cn3a);
+const echartsPercent = echarts.init(cn2a);
 
 const optionHeatmap = {
     tooltip: {
         formatter: (p) => {
-            return `${p.name} ${p.value[1]}:00 <br> ${p.value[2]}`;
+            return `${p.name} ${p.value[1]}:00 <br> ${p.value[2]} MWh`;
         },
         position: 'right'
     },
@@ -113,7 +114,10 @@ const optionLine = {
         data: null
     },
     yAxis: {
-        type: 'value'
+        type: 'value',
+        axisLabel: {
+            formatter: '{value} MWh'
+        }
     },
     dataZoom: [{
             type: 'inside',
@@ -197,7 +201,10 @@ const optionStack = {
         data: null
     }],
     yAxis: [{
-        type: 'value'
+        type: 'value',
+        axisLabel: {
+            formatter: '{value} MWh'
+        }
     }],
     animation: false,
     dataZoom: [{
@@ -257,7 +264,10 @@ const optionLineA = {
         data: null
     },
     yAxis: {
-        type: 'value'
+        type: 'value',
+        axisLabel: {
+            formatter: '{value} MWh'
+        }
     },
     dataZoom: [{
             type: 'inside',
@@ -279,6 +289,89 @@ const optionLineA = {
         type: 'line' //line | bar
     }]
 }
+const optionPercent = {
+    title: {
+        text: ''
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'line',
+            label: {
+                backgroundColor: '#6a7985'
+            }
+        },
+        formatter: (arrParam) => {
+            let s = `<div style="width: 150px;"><div>${arrParam[0].name}</div>`;
+            let sum = 0;
+            _.forEach(arrParam, (param) => {
+                s += `<div style="overflow: hidden;">${param.marker}${param.seriesName}<span style="float: right;"><b>${param.value}%</b></span></div>`;
+                sum += param.value;
+            });
+            sum = _.min([100, sum]);
+            s += `<div style="overflow: hidden;"><div>合計</div><span style="float: right;"><b>${_.round(sum, 1)}%</b></span></div></div>`;
+            return s;
+        },
+        position: 'bottom'
+    },
+    legend: {
+        data: null,
+        selector: true,
+        selected: {
+            '需要': false,
+            '揚水': false
+        }
+    },
+    color: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'],
+    toolbox: {
+        feature: {
+            dataView: { // not work IE11
+                title: 'data view',
+                readOnly: true,
+                lang: ['data view', 'turn off', 'refresh']
+            },
+            restore: {
+                title: 'restore'
+            },
+            saveAsImage: {
+                title: 'saveAsImage'
+            }
+        }
+    },
+    grid: {
+        top: '7%',
+        left: '3%',
+        right: '4%',
+        bottom: '11%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        data: null
+    }],
+    yAxis: [{
+        type: 'value',
+        max: 100,
+        axisLabel: {
+            formatter: '{value}%'
+        }
+    }],
+    animation: false,
+    dataZoom: [{
+        type: 'inside',
+        start: 0,
+        end: 100
+    }, {
+        show: true,
+        type: 'slider',
+        bottom: '2%',
+        throttle: 200,
+        start: 0,
+        end: 100
+    }],
+    series: null
+}
 
 class SetupChart {
     constructor() {
@@ -298,9 +391,43 @@ class SetupChart {
         });
     }
 
+    setHshPercent() {
+        const arrHshCD = _.cloneDeep(arrHsh); //deep copy
+        _.forEach(arrHshCD, hsh => {
+            delete hsh["需要"];
+            delete hsh["揚水"];
+        });
+
+        this.arrHshPercent = _.map(arrHshCD, hsh => {
+            let sum = 0;
+            _.forEach(hsh, (value, key) => {
+                if (key === '月日' || key === '時刻') {
+                    sum += 0;
+                } else {
+                    sum += value;
+                }
+            });
+
+            return _.mapValues(hsh, (value, key, object) => {
+                let result;
+                if (key === '月日' || key === '時刻') {
+                    result = value;
+                } else {
+                    result = value / sum * 100;
+                    result = _.round(result, 1)
+                }
+                return result;
+            });
+        });
+    }
+
     setarrFilter() {
         const mStart = dayjs(ym_selector1.value);
         this.arrFilter = _.filter(arrHsh, hsh => {
+            return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
+        });
+        
+        this.arrHshFilterPercent = _.filter(this.arrHshPercent, hsh => {
             return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
         });
     }
@@ -318,6 +445,9 @@ class SetupChart {
             data_selector1.appendChild(elem);
             data_selector2.appendChild(elem2);
         });
+
+        const arrKeys2 = _.keys(this.arrHshFilterPercent[0]);
+        this.arrLegend2 = _.pull(arrKeys2, '月日', '時刻', '需要', '揚水');
     }
 
     setarrPlotHeat() {
@@ -388,6 +518,33 @@ class SetupChart {
         optionStack.legend.data = this.arrLegend;
     }
 
+    setStackPercent() {
+        const arrAxisXStack = _.map(this.arrHshFilterPercent, hsh => {
+            return `${hsh['月日']} ${hsh['時刻']}:00`;
+        });
+
+        let hshStack = {}
+        this.arrHshSeries2 = _.map(this.arrLegend2, strLegend => {
+            hshStack[strLegend] = _.map(this.arrHshFilterPercent, hsh => hsh[strLegend]);
+
+            return {
+                name: strLegend,
+                type: 'line',
+                stack: 'stackPercent',
+                areaStyle: {},
+                symbol: 'none',
+                lineStyle: {
+                    width: 0.5
+                },
+                data: hshStack[strLegend]
+            }
+        });
+
+        optionPercent.xAxis[0].data = arrAxisXStack;
+        optionPercent.series = this.arrHshSeries2;
+        optionPercent.legend.data = this.arrLegend2;
+    }
+
     setLineA() {
         let hshAxis = {
             arrAxisX: [],
@@ -435,6 +592,14 @@ class SetupChart {
         echartsStack.setOption(optionStack, true);
     }
 
+    reDrawPercent(arrAxisXStack) {
+        echartsPercent.clear();
+        optionPercent.xAxis[0].data = arrAxisXStack;
+        optionPercent.series = this.arrHshSeries2;
+
+        echartsPercent.setOption(optionPercent, true);
+    }
+
     reDrawLineA(hshAxis) {
         echartsLineA.clear();
         optionLineA.xAxis.data = hshAxis.arrAxisX;
@@ -445,17 +610,20 @@ class SetupChart {
 }
 
 const setupchart = new SetupChart();
+setupchart.setHshPercent();
 setupchart.setarrFilter();
 setupchart.setarrLegend();
 setupchart.setarrPlotHeat();
 setupchart.setStack();
+setupchart.setStackPercent();
 setupchart.setLineA();
 
 // draw a chart
 echartsHeatmap.setOption(optionHeatmap);
 echartsLine.setOption(optionLine);
-echartsStack.setOption(optionStack);
 echartsLineA.setOption(optionLineA);
+echartsPercent.setOption(optionPercent);
+echartsStack.setOption(optionStack);
 
 echartsStack.on('legendselectchanged', params => {
     setupchart.hshLegendSelect = params.selected;
@@ -531,6 +699,10 @@ period_button3.addEventListener('click', () => {
         return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
     });
 
+    const arrAxisXStack = _.map(setupchart.arrFilter, hsh => {
+        return `${hsh['月日']} ${hsh['時刻']}:00`;
+    });
+
     let hshStack = {}
     _.forEach(setupchart.arrLegend, strLegend => {
         hshStack[strLegend] = _.map(setupchart.arrFilter, hsh => hsh[strLegend]);
@@ -549,9 +721,27 @@ period_button3.addEventListener('click', () => {
         }
     });
 
-    let arrAxisXStack = _.map(setupchart.arrFilter, hsh => {
-        return `${hsh['月日']} ${hsh['時刻']}:00`;
+    const arrHshDataPercent = _.filter(setupchart.arrHshPercent, hsh => {
+        return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+    });
+
+    hshStack = {}
+    setupchart.arrHshSeries2 = _.map(setupchart.arrLegend2, strLegend => {
+        hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
+
+        return {
+            name: strLegend,
+            type: 'line',
+            stack: 'stackPercent',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 0.5
+            },
+            data: hshStack[strLegend]
+        }
     });
     //re-draw
+    setupchart.reDrawPercent(arrAxisXStack);
     setupchart.reDrawStack(arrAxisXStack);
 });
