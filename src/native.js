@@ -70,7 +70,6 @@ const optionHeatmap = {
         }
     }]
 }
-
 const optionLine = {
     tooltip: {
         trigger: 'axis', // item | axis
@@ -136,7 +135,6 @@ const optionLine = {
         type: 'line' //line | bar
     }]
 }
-
 const optionStack = {
     title: {
         text: ''
@@ -216,7 +214,6 @@ const optionStack = {
     }],
     series: null
 }
-
 const optionLineA = {
     tooltip: {
         trigger: 'axis', // item | axis
@@ -294,7 +291,7 @@ class SetupChart {
             elem.innerText = strOption;
             elem.value = strOption;
 
-            const arrDom = [ym_selector1, ym_selector2, ym_selector3, ym_selector4, ym_selector5];
+            const arrDom = [ym_selector1, ym_selector2a, ym_selector2b, ym_selector3a, ym_selector3b];
             _.forEach(arrDom, dom => {
                 dom.appendChild(elem.cloneNode(true));
             });
@@ -369,22 +366,21 @@ class SetupChart {
             arrAxisXStack.push(str_xAxis);
         });
 
-        this.hshStack = {}
-        this.arrSeriesStack = _.map(this.arrLegend, (strLegend) => {
-            let strStack = (strLegend === '需要') ? 'stackB' : 'stackA';
-            this.hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
-            const hshSeries = {
+        let hshStack = {}
+        this.arrSeriesStack = _.map(this.arrLegend, strLegend => {
+            hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
+
+            return {
                 name: strLegend,
                 type: 'line',
-                stack: strStack,
+                stack: (strLegend === '需要') ? 'stackB' : 'stackA',
                 areaStyle: {},
                 symbol: 'none',
                 lineStyle: {
                     width: 0.5
                 },
-                data: this.hshStack[strLegend]
+                data: hshStack[strLegend]
             }
-            return hshSeries;
         });
 
         optionStack.xAxis[0].data = arrAxisXStack;
@@ -398,11 +394,9 @@ class SetupChart {
             arrAxisY: []
         }
 
-        _.forEach(arrHsh, hsh => {
+        _.forEach(this.arrFilter, hsh => {
             const int_yAxis = hsh[data_selector2.value];
-            const str_day = hsh['月日'];
-            const str_h = hsh['時刻'];
-            const str_xAxis = `${str_day} ${str_h}:00`;
+            const str_xAxis = `${hsh['月日']} ${hsh['時刻']}:00`;
 
             hshAxis.arrAxisX.push(str_xAxis);
             hshAxis.arrAxisY.push(int_yAxis);
@@ -506,47 +500,8 @@ period_button.addEventListener('click', () => {
 
 // button click
 period_button2.addEventListener('click', () => {
-    const mStart = dayjs(ym_selector2.value);
-    const mEnd = dayjs(ym_selector5.value);
-    setupchart.arrFilter = _.filter(arrHsh, hsh => {
-        return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
-    });
-
-    _.forEach(setupchart.arrLegend, (strLegend) => {
-        setupchart.hshStack[strLegend] = _.map(setupchart.arrFilter, hsh => hsh[strLegend]);
-    });
-    setupchart.arrSeriesStack = _.map(setupchart.arrLegend, (strLegend) => {
-        const hshSeries = {
-            name: strLegend,
-            type: 'line',
-            stack: 'stackA',
-            areaStyle: {},
-            symbol: 'none',
-            lineStyle: {
-                width: 0.5
-            },
-            data: setupchart.hshStack[strLegend]
-        }
-        return hshSeries;
-    });
-
-    let arrAxisXStack = [];
-
-    _.forEach(setupchart.arrFilter, hsh => {
-        const str_day = hsh['月日'];
-        const str_h = hsh['時刻'];
-        const str_xAxis = `${str_day} ${str_h}:00`;
-
-        arrAxisXStack.push(str_xAxis);
-    });
-    //re-draw
-    setupchart.reDrawStack(arrAxisXStack);
-});
-
-// button click
-period_button3.addEventListener('click', () => {
-    const mStart = dayjs(ym_selector3.value);
-    const mEnd = dayjs(ym_selector4.value);
+    const mStart = dayjs(ym_selector2a.value);
+    const mEnd = dayjs(ym_selector2b.value);
     setupchart.arrFilter = _.filter(arrHsh, hsh => {
         return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
     });
@@ -558,9 +513,7 @@ period_button3.addEventListener('click', () => {
 
     _.forEach(setupchart.arrFilter, hsh => {
         const int_yAxis = hsh[data_selector2.value];
-        const str_day = hsh['月日'];
-        const str_h = hsh['時刻'];
-        const str_xAxis = `${str_day} ${str_h}:00`;
+        const str_xAxis = `${hsh['月日']} ${hsh['時刻']}:00`;
 
         hshAxis.arrAxisX.push(str_xAxis);
         hshAxis.arrAxisY.push(int_yAxis);
@@ -568,4 +521,37 @@ period_button3.addEventListener('click', () => {
 
     //re-draw
     setupchart.reDrawLineA(hshAxis);
+});
+
+// button click
+period_button3.addEventListener('click', () => {
+    const mStart = dayjs(ym_selector3a.value);
+    const mEnd = dayjs(ym_selector3b.value);
+    setupchart.arrFilter = _.filter(arrHsh, hsh => {
+        return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+    });
+
+    let hshStack = {}
+    _.forEach(setupchart.arrLegend, strLegend => {
+        hshStack[strLegend] = _.map(setupchart.arrFilter, hsh => hsh[strLegend]);
+    });
+    setupchart.arrSeriesStack = _.map(setupchart.arrLegend, strLegend => {
+        return {
+            name: strLegend,
+            type: 'line',
+            stack: (strLegend === '需要') ? 'stackB' : 'stackA',
+            areaStyle: {},
+            symbol: 'none',
+            lineStyle: {
+                width: 0.5
+            },
+            data: hshStack[strLegend]
+        }
+    });
+
+    let arrAxisXStack = _.map(setupchart.arrFilter, hsh => {
+        return `${hsh['月日']} ${hsh['時刻']}:00`;
+    });
+    //re-draw
+    setupchart.reDrawStack(arrAxisXStack);
 });
