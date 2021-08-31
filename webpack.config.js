@@ -15,7 +15,8 @@ const config = {
             dayjs: 'dayjs',
             isBetween: 'dayjs/plugin/isBetween.js',
             $: 'jquery',
-            math: 'mathjs'
+            math: 'mathjs',
+            crossfilter: 'crossfilter'
         })
     ],
     performance: {
