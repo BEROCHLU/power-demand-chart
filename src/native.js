@@ -12,6 +12,9 @@ if (window.dayjs_plugin_isBetween) {
     dayjs.extend(isBetween); //node.js
 }
 
+const arrLegendColor = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
+const arrLegendColorAll = ['#800080', ...arrLegendColor, '#008000'];
+
 // create echarts instance
 const echartsHeatmap = echarts.init(cn2);
 const echartsLine = echarts.init(cn3);
@@ -172,7 +175,7 @@ const optionStack = {
             '揚水': false
         }
     },
-    color: ['#800080', '#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc', '#008000'],
+    color: arrLegendColorAll,
     toolbox: {
         feature: {
             dataView: { // not work IE11
@@ -322,7 +325,7 @@ const optionPercent = {
             '揚水': false
         }
     },
-    color: ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'],
+    color: arrLegendColor,
     toolbox: {
         feature: {
             dataView: { // not work IE11
@@ -528,23 +531,23 @@ class SetupChart {
 
     setStack() {
         let hshStack = {}
-        this.arrSeriesStack = _.map(this.arrLegend, strLegend => {
+        this.arrSeriesStack = _.map(this.arrLegend, (strLegend, i) => {
             hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
 
-            let int_str = _.sum(hshStack[strLegend]);
-            int_str = math.unit(int_str, 'MW').format(3);
+            const elemhead = document.createElement('div');
+            elemhead.innerHTML = `<span style="float:left;margin-top:4px;border-radius:10px;width:10px;height:10px;background-color:${arrLegendColorAll[i]};"></span>${strLegend}`;
+            elemhead.className = 'series-legend';
 
-            const elem = document.createElement('div');
-            elem.innerText = int_str;
-            elem.className = 'numeric';
+            document.querySelector('.total-view-series').appendChild(elemhead);
 
-            const elem2 = document.createElement('div');//<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#5470c6;">${strLegend}</span>
-            elem2.innerText = strLegend;
-            elem2.className = 'series-legend';
+            const n = _.sum(hshStack[strLegend]);
+            const elemNumeric = document.createElement('div');
+            elemNumeric.innerText = math.unit(n, 'MW').format(3);
+            elemNumeric.className = 'numeric';
+            elemNumeric.setAttribute('value', strLegend);
 
-            document.querySelector('.total-view-series').appendChild(elem2);
-            document.querySelector('.total-view-series').appendChild(elem);
-        
+            document.querySelector('.total-view-series').appendChild(elemNumeric);
+
             return {
                 name: strLegend,
                 type: 'line',
@@ -790,6 +793,10 @@ period_button3.addEventListener('click', () => {
         hshStack[strLegend] = _.map(setupchart.arrFilter, hsh => hsh[strLegend]);
     });
     setupchart.arrSeriesStack = _.map(setupchart.arrLegend, strLegend => {
+
+        const n = _.sum(hshStack[strLegend]);
+        document.querySelector(`.numeric[value=${strLegend}]`).innerText = math.unit(n, 'MW').format(3);
+
         return {
             name: strLegend,
             type: 'line',
