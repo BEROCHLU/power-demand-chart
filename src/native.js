@@ -531,6 +531,20 @@ class SetupChart {
         this.arrSeriesStack = _.map(this.arrLegend, strLegend => {
             hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
 
+            let int_str = _.sum(hshStack[strLegend]);
+            int_str = math.unit(int_str, 'MW').format(3);
+
+            const elem = document.createElement('div');
+            elem.innerText = int_str;
+            elem.className = 'numeric';
+
+            const elem2 = document.createElement('div');//<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#5470c6;">${strLegend}</span>
+            elem2.innerText = strLegend;
+            elem2.className = 'series-legend';
+
+            document.querySelector('.total-view-series').appendChild(elem2);
+            document.querySelector('.total-view-series').appendChild(elem);
+        
             return {
                 name: strLegend,
                 type: 'line',

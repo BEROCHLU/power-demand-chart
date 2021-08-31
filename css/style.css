@@ -136,6 +136,14 @@ li:nth-of-type(2) {
     text-align: center;
 }
 
+.total-view-series {
+    text-align: center;
+}
+
 .numeric {
+    font-size: 14px;
+}
+
+.series-legend {
     font-size: 14px;
 }

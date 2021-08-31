@@ -7,6 +7,9 @@ import {
 import _ from 'lodash';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween.js';
+import {
+    unit
+} from 'mathjs';
 import crossfilter from 'crossfilter2';
 
 dayjs.extend(isBetween);
@@ -56,28 +59,10 @@ let arrZip = _.zipWith(...arrMap, (...args) => {
     return m;
 });
 
-console.log(arrZip);
-/*
+//console.log(arrZip);
+
 _.forEach(arrKeysOfHsh, strKey => {
-    const dim = myDimension.group().reduceSum(d => d[strKey]);
-    const arrHshDim = dim.all();
-    _.merge(hshMerge, arrHshDim);
-
-});*/
-
-/*
-const arrHshDay = _.map(arrStrUniqDay, strUniqDay => {
-    let hshDay = {}
-
-    _.forEach(arrKeysOfHsh, strKey => {
-        if(strKey === '月日') {
-            hshDay["月日"] = strUniqDay;
-            return;
-        }
-        
-        let sum = cf2.groupAll().reduceSum(d => d[strKey]).value();
-        hshDay[strKey] = _.round(sum, 1);
-    });
-
-    return hshDay;
-});*/
+    let n = myDimension.groupAll().reduceSum(d => d[strKey]).value();
+    n = unit(n, 'MW').format(3);
+    console.log(strKey, n);
+});
