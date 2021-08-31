@@ -27,7 +27,13 @@ const config = {
             test: /\.css$/,
             use: ["style-loader", "css-loader"]
         }]
+    },
+    resolve: {
+        alias: {
+            'crossfilter': path.resolve(__dirname, './node_modules/crossfilter2/crossfilter.min.js')
+        }
     }
+
 }
 
 module.exports = (env, argv) => {

@@ -662,6 +662,9 @@ class SetupChart {
         optionLineA.series[0].data = hshAxis.arrAxisY;
 
         echartsLineA.setOption(optionLineA, true);
+
+        const n = _.sum(hshAxis.arrAxisY);
+        document.querySelector('#powersum2').innerText = math.unit(n, 'MW').format(3);
     }
 }
 
@@ -745,16 +748,15 @@ period_button2.addEventListener('click', () => {
             hshAxis.arrAxisX.push(str_xAxis);
             hshAxis.arrAxisY.push(int_yAxis);
         });
+        //re-draw
+        setupchart.reDrawLineA(hshAxis);
     } else if (tick_selector.value === '1day') {
         const arrHshFilterDay = _.filter(setupchart.arrZip, hsh => {
             return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
         });
-
+        //re-draw
         setupchart.changeTick(arrHshFilterDay);
     }
-
-    //re-draw
-    setupchart.reDrawLineA(hshAxis);
 });
 
 // button click
