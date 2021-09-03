@@ -903,8 +903,28 @@ period_button3.addEventListener('click', () => {
         });
 
         arrAxisXStack = _.map(arrHshFilterDay, hsh => hsh['月日']);
+
+        const arrHshDataPercent = _.filter(setupchart.arrHshPercentDay, hsh => {
+            return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+        });
     
         hshStack = {}
+        setupchart.arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
+            hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
+    
+            return {
+                name: strLegend,
+                type: 'line',
+                stack: 'stackPercent',
+                areaStyle: {},
+                symbol: 'none',
+                lineStyle: {
+                    width: 0.5
+                },
+                data: hshStack[strLegend]
+            }
+        });
+    
         setupchart.changeTickStack(arrHshFilterDay);
     }
 
