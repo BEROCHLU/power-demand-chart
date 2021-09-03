@@ -602,7 +602,7 @@ class SetupChart {
         });
 
         let hshStack = {}
-        this.arrHshSeriesPercent = _.map(this.arrLegendPercent, strLegend => {
+        let arrHshSeriesPercent = _.map(this.arrLegendPercent, strLegend => {
             hshStack[strLegend] = _.map(this.arrHshFilterPercent, hsh => hsh[strLegend]);
 
             return {
@@ -619,7 +619,7 @@ class SetupChart {
         });
 
         optionPercent.xAxis[0].data = arrAxisXStack;
-        optionPercent.series = this.arrHshSeriesPercent;
+        optionPercent.series = arrHshSeriesPercent;
         optionPercent.legend.data = this.arrLegendPercent;
     }
 
@@ -673,10 +673,10 @@ class SetupChart {
         echartsStack.setOption(optionStack, true);
     }
 
-    reDrawPercent(arrAxisXStack) {
+    reDrawPercent(arrAxisXStack, arrHshSeriesPercent) {
         echartsPercent.clear();
         optionPercent.xAxis[0].data = arrAxisXStack;
-        optionPercent.series = this.arrHshSeriesPercent;
+        optionPercent.series = arrHshSeriesPercent;
 
         echartsPercent.setOption(optionPercent, true);
     }
@@ -845,6 +845,7 @@ period_button3.addEventListener('click', () => {
     });
 
     let arrAxisXStack;
+    let arrHshSeriesPercent;
     let hshStack = {}
 
     if(tick_selector2.value === '1h'){
@@ -879,7 +880,7 @@ period_button3.addEventListener('click', () => {
         });
     
         hshStack = {}
-        setupchart.arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
+        arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
             hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
     
             return {
@@ -909,7 +910,7 @@ period_button3.addEventListener('click', () => {
         });
     
         hshStack = {}
-        setupchart.arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
+        arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
             hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
     
             return {
@@ -929,5 +930,5 @@ period_button3.addEventListener('click', () => {
     }
 
     //re-draw
-    setupchart.reDrawPercent(arrAxisXStack);
+    setupchart.reDrawPercent(arrAxisXStack, arrHshSeriesPercent);
 });
