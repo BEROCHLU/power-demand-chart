@@ -382,7 +382,7 @@ class SetupChart {
             return dayjs(hsh['月日']).format('YYYY-MM');
         }).uniq().value();
 
-        _.forEach(arrStrDateUniq, (strOption) => { // create option innerText & value
+        _.forEach(arrStrDateUniq, strOption => { // create option innerText & value
             const elem = document.createElement('option');
             elem.innerText = strOption;
             elem.value = strOption;
@@ -659,9 +659,9 @@ class SetupChart {
         optionLine.xAxis.data = hshAxis.arrAxisX;
         optionLine.series[0].data = hshAxis.arrAxisY;
 
-        echartsLine.setOption(optionLine, true);
         const n = _.sum(hshAxis.arrAxisY);
         document.querySelector('#powersum1').innerText = math.unit(n, 'MW').format(3);
+        echartsLine.setOption(optionLine, true);
     }
 
     reDrawStack(arrAxisXStack) {
