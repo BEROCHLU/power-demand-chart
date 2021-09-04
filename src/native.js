@@ -305,7 +305,7 @@ const optionPercent = {
 }
 const optionStack = {
     title: {
-        text: '電力需要エネルギー積み上げグラフ',
+        text: '電力需要エネルギー別積み上げグラフ',
         left: 'center'
     },
     tooltip: {
@@ -333,8 +333,7 @@ const optionStack = {
         data: null,
         selector: true,
         selected: {
-            '電力需要': false,
-            '揚水': false
+            '電力需要': false
         },
         top: '5%'
     },
@@ -592,7 +591,7 @@ class SetupChart {
 
             return {
                 name: strLegend,
-                type: 'line',
+                type: (strLegend === '電力需要') ? 'line' : 'bar',
                 stack: (strLegend === '電力需要') ? 'stackB' : 'stackA',
                 areaStyle: {},
                 symbol: 'none',
@@ -739,7 +738,7 @@ class SetupChart {
 
             return {
                 name: strLegend,
-                type: 'line',
+                type: (strLegend === '電力需要') ? 'line' : 'bar',
                 stack: (strLegend === '電力需要') ? 'tickstackB' : 'tickstackA',
                 areaStyle: {},
                 symbol: 'none',
@@ -879,7 +878,7 @@ period_button3.addEventListener('click', () => {
 
             return {
                 name: strLegend,
-                type: 'line',
+                type: (strLegend === '電力需要') ? 'line' : 'bar',
                 stack: (strLegend === '電力需要') ? 'stackB' : 'stackA',
                 areaStyle: {},
                 symbol: 'none',

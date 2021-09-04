@@ -28,7 +28,7 @@ _.forEach(arrStrFile, strFile => {
         hsh['時刻'] = parseInt(strHour);
 
         const nExcelSerial = hsh['月日'] - 2; //Excelでは1900年が閏年判定され2月29日まであるため-2する
-        const strDate = dayjs('1900-01-01').add(nExcelSerial, 'days').format('YYYY/M/D');
+        const strDate = dayjs('1900-01-01').add(nExcelSerial, 'days').format('YYYY-MM-DD');
         hsh['月日'] = strDate;
 
         return _.mapKeys(hsh, (v, k) => {
