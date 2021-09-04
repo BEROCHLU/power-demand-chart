@@ -52,6 +52,7 @@ grid1 {
     grid-area: grid1;
     border-radius: 10px;
     background-color: #f0f0f0;
+    padding: 5px;
 }
 
 .last-panel.active-panel > grid1 {
@@ -105,6 +106,7 @@ grid4 {
     grid-area: grid4;
     border-radius: 10px;
     background-color: #f0f0f0;
+    padding: 5px;
 }
 
 grid5 {
@@ -148,7 +150,6 @@ select,
 button {
     font-size: 12px;
     width: 90px;
-    margin: 5px;
 }
 
 button {
@@ -180,6 +181,7 @@ li:nth-of-type(2) {
 
 .total-view {
     text-align: center;
+    font-size: 14px;
 }
 
 .total-view-series {
@@ -191,5 +193,11 @@ li:nth-of-type(2) {
 }
 
 .series-legend {
+    font-size: 13px;
+}
+
+.item {
     font-size: 14px;
+    color:#005aa0;
+    font-weight: bold;
 }

@@ -35,7 +35,7 @@ const optionHeatmap = {
     },
     animation: false,
     grid: {
-        height: '90%',
+        height: '88%',
         width: '70%',
         top: '6%'
     },
@@ -680,6 +680,7 @@ class SetupChart {
     reDrawStack(arrAxisXStack) {
         echartsStack.clear();
         optionStack.xAxis[0].data = arrAxisXStack;
+        optionStack.yAxis[0].axisLabel.formatter = '{value} MWh';
         optionStack.series = this.arrSeriesStack;
         optionStack.legend.selected = this.hshLegendSelect;
 
@@ -698,11 +699,12 @@ class SetupChart {
         echartsLineA.clear();
         optionLineA.title.text = `${data_selector2.value}: ${ym_selector2a.value}~${ym_selector2b.value}`;
         optionLineA.xAxis.data = hshAxis.arrAxisX;
+        optionLineA.yAxis.axisLabel.formatter = '{value} MWh';
         optionLineA.series[0].data = hshAxis.arrAxisY;
 
-        echartsLineA.setOption(optionLineA, true);
         const n = _.sum(hshAxis.arrAxisY);
         document.querySelector('#powersum2').innerText = math.unit(n, 'MW').format(3);
+        echartsLineA.setOption(optionLineA, true);
     }
 
     changeTick(arrHshFilterDay) {
@@ -724,6 +726,7 @@ class SetupChart {
 
         optionLineA.title.text = `${data_selector2.value}: ${ym_selector2a.value}~${ym_selector2b.value}`;
         optionLineA.xAxis.data = hshAxis.arrAxisX;
+        optionLineA.yAxis.axisLabel.formatter = '{value} MW';
         optionLineA.series[0].data = hshAxis.arrAxisY;
 
         echartsLineA.setOption(optionLineA, true);
@@ -751,6 +754,7 @@ class SetupChart {
         });
 
         optionStack.xAxis[0].data = _.map(arrHshFilterDay, hsh => hsh['月日']);
+        optionStack.yAxis[0].axisLabel.formatter = '{value} MW';
         optionStack.series = arrHshSeriesDay;
         optionStack.legend.data = this.arrLegend;
         optionStack.legend.selected = this.hshLegendSelect;
