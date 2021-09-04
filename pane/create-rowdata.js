@@ -23,13 +23,18 @@ _.forEach(arrStrFile, strFile => {
         range: 3 //skip 3 rows
     });
 
-    _.forEach(arrHsh, hsh => {
+    arrHsh = _.map(arrHsh, hsh => {
         const strHour = hsh['時刻'].replace('時', '');
         hsh['時刻'] = parseInt(strHour);
 
         const nExcelSerial = hsh['月日'] - 2; //Excelでは1900年が閏年判定され2月29日まであるため-2する
         const strDate = dayjs('1900-01-01').add(nExcelSerial, 'days').format('YYYY/M/D');
         hsh['月日'] = strDate;
+
+        return _.mapKeys(hsh, (v, k) => {
+            let newkey = (k === '需要')? '電力需要' : k;
+            return newkey;
+        });
     });
 
     arrConcat = _.concat(arrConcat, arrHsh);

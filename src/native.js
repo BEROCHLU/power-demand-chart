@@ -23,6 +23,10 @@ const echartsStack = echarts.init(cn3a);
 const echartsPercent = echarts.init(cn2a);
 
 const optionHeatmap = {
+    title: {
+        text: '電力需要ヒートマップ',
+        left: 'center'
+    },
     tooltip: {
         formatter: (p) => {
             return `${p.name} ${p.value[1]}:00 <br> ${p.value[2]} MWh`;
@@ -33,7 +37,7 @@ const optionHeatmap = {
     grid: {
         height: '90%',
         width: '70%',
-        top: '3%'
+        top: '6%'
     },
     xAxis: {
         type: 'category',
@@ -75,6 +79,10 @@ const optionHeatmap = {
     }]
 }
 const optionLine = {
+    title: {
+        text: '電力需要: 2020-01',
+        left: 'center'
+    },
     tooltip: {
         trigger: 'axis', // item | axis
         position: 'top',
@@ -142,89 +150,11 @@ const optionLine = {
         type: 'line' //line | bar
     }]
 }
-const optionStack = {
-    title: {
-        text: ''
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'cross',
-            label: {
-                backgroundColor: '#6a7985'
-            }
-        },
-        formatter: (arrParam) => {
-            let s = `<div style="width: 150px;"><div>${arrParam[0].name}</div>`;
-            let sum = 0;
-            _.forEach(arrParam, (param) => {
-                s += `<div style="overflow: hidden;">${param.marker}${param.seriesName}<span style="float: right;"><b>${param.value}</b></span></div>`;
-                if (param.seriesName === '需要') return;
-                sum += param.value;
-            });
-
-            s += `<div style="overflow: hidden;"><div>合計（需要除く）</div><span style="float: right;"><b>${_.round(sum, 1)}</b></span></div></div>`;
-            return s;
-        }
-    },
-    legend: {
-        data: null,
-        selector: true,
-        selected: {
-            '需要': false,
-            '揚水': false
-        }
-    },
-    color: arrLegendColorAll,
-    toolbox: {
-        feature: {
-            dataView: { // not work IE11
-                title: 'data view',
-                readOnly: true,
-                lang: ['data view', 'turn off', 'refresh']
-            },
-            restore: {
-                title: 'restore'
-            },
-            saveAsImage: {
-                title: 'saveAsImage'
-            }
-        }
-    },
-    grid: {
-        top: '7%',
-        left: '3%',
-        right: '4%',
-        bottom: '11%',
-        containLabel: true
-    },
-    xAxis: [{
-        type: 'category',
-        boundaryGap: false,
-        data: null
-    }],
-    yAxis: [{
-        type: 'value',
-        axisLabel: {
-            formatter: '{value} MWh'
-        }
-    }],
-    animation: false,
-    dataZoom: [{
-        type: 'inside',
-        start: 0,
-        end: 100
-    }, {
-        show: true,
-        type: 'slider',
-        bottom: '2%',
-        throttle: 200,
-        start: 0,
-        end: 100
-    }],
-    series: null
-}
 const optionLineA = {
+    title: {
+        text: '電力需要: 2020-01~2020-01',
+        left: 'center'
+    },
     tooltip: {
         trigger: 'axis', // item | axis
         position: 'top',
@@ -294,7 +224,8 @@ const optionLineA = {
 }
 const optionPercent = {
     title: {
-        text: ''
+        text: '電力需要エネルギー別割合',
+        left: 'center'
     },
     tooltip: {
         trigger: 'axis',
@@ -319,11 +250,7 @@ const optionPercent = {
     },
     legend: {
         data: null,
-        selector: true,
-        selected: {
-            '需要': false,
-            '揚水': false
-        }
+        selector: true
     },
     color: arrLegendColor,
     toolbox: {
@@ -375,6 +302,89 @@ const optionPercent = {
     }],
     series: null
 }
+const optionStack = {
+    title: {
+        text: '電力需要積み上げグラフ',
+        left: 'center'
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'cross',
+            label: {
+                backgroundColor: '#6a7985'
+            }
+        },
+        formatter: (arrParam) => {
+            let s = `<div style="width: 150px;"><div>${arrParam[0].name}</div>`;
+            let sum = 0;
+            _.forEach(arrParam, (param) => {
+                s += `<div style="overflow: hidden;">${param.marker}${param.seriesName}<span style="float: right;"><b>${param.value}</b></span></div>`;
+                if (param.seriesName === '電力需要') return;
+                sum += param.value;
+            });
+
+            s += `<div style="overflow: hidden;"><div>合計（電力需要除く）</div><span style="float: right;"><b>${_.round(sum, 1)}</b></span></div></div>`;
+            return s;
+        }
+    },
+    legend: {
+        data: null,
+        selector: true,
+        selected: {
+            '電力需要': false,
+            '揚水': false
+        }
+    },
+    color: arrLegendColorAll,
+    toolbox: {
+        feature: {
+            dataView: { // not work IE11
+                title: 'data view',
+                readOnly: true,
+                lang: ['data view', 'turn off', 'refresh']
+            },
+            restore: {
+                title: 'restore'
+            },
+            saveAsImage: {
+                title: 'saveAsImage'
+            }
+        }
+    },
+    grid: {
+        top: '7%',
+        left: '3%',
+        right: '4%',
+        bottom: '11%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+        boundaryGap: false,
+        data: null
+    }],
+    yAxis: [{
+        type: 'value',
+        axisLabel: {
+            formatter: '{value} MWh'
+        }
+    }],
+    animation: false,
+    dataZoom: [{
+        type: 'inside',
+        start: 0,
+        end: 100
+    }, {
+        show: true,
+        type: 'slider',
+        bottom: '2%',
+        throttle: 200,
+        start: 0,
+        end: 100
+    }],
+    series: null
+}
 
 class SetupChart {
     constructor() {
@@ -397,7 +407,7 @@ class SetupChart {
     setHshPercent() {
         const arrHshCD = _.cloneDeep(arrHsh); //deep copy
         _.forEach(arrHshCD, hsh => {
-            delete hsh["需要"];
+            delete hsh["電力需要"];
             delete hsh["揚水"];
         });
 
@@ -467,7 +477,7 @@ class SetupChart {
     setHshPercentDay() {
         const arrHshCD = _.cloneDeep(this.arrZip); //deep copy
         _.forEach(arrHshCD, hsh => {
-            delete hsh["需要"];
+            delete hsh["電力需要"];
             delete hsh["揚水"];
         });
 
@@ -520,7 +530,7 @@ class SetupChart {
         });
 
         const arrKeys2 = _.keys(this.arrHshFilterPercent[0]);
-        this.arrLegendPercent = _.pull(arrKeys2, '月日', '時刻', '需要', '揚水');
+        this.arrLegendPercent = _.pull(arrKeys2, '月日', '時刻', '電力需要', '揚水');
 
         this.hshLegendSelect = optionStack.legend.selected //initial selected legends
     }
@@ -581,7 +591,7 @@ class SetupChart {
             return {
                 name: strLegend,
                 type: 'line',
-                stack: (strLegend === '需要') ? 'stackB' : 'stackA',
+                stack: (strLegend === '電力需要') ? 'stackB' : 'stackA',
                 areaStyle: {},
                 symbol: 'none',
                 lineStyle: {
@@ -646,6 +656,7 @@ class SetupChart {
 
     reDrawHeat(hshAxis) {
         echartsHeatmap.clear();
+        optionHeatmap.title.text = `${data_selector1.value}ヒートマップ`;
         optionHeatmap.visualMap.min = _.min(hshAxis.arrAxisY);
         optionHeatmap.visualMap.max = _.max(hshAxis.arrAxisY);
         optionHeatmap.series[0].data = this.arrPlotHeat;
@@ -656,6 +667,7 @@ class SetupChart {
 
     reDrawLine(hshAxis) {
         echartsLine.clear();
+        optionLine.title.text = `${data_selector1.value}: ${ym_selector1.value}`;
         optionLine.xAxis.data = hshAxis.arrAxisX;
         optionLine.series[0].data = hshAxis.arrAxisY;
 
@@ -725,7 +737,7 @@ class SetupChart {
             return {
                 name: strLegend,
                 type: 'line',
-                stack: (strLegend === '需要') ? 'tickstackB' : 'tickstackA',
+                stack: (strLegend === '電力需要') ? 'tickstackB' : 'tickstackA',
                 areaStyle: {},
                 symbol: 'none',
                 lineStyle: {
@@ -865,7 +877,7 @@ period_button3.addEventListener('click', () => {
             return {
                 name: strLegend,
                 type: 'line',
-                stack: (strLegend === '需要') ? 'stackB' : 'stackA',
+                stack: (strLegend === '電力需要') ? 'stackB' : 'stackA',
                 areaStyle: {},
                 symbol: 'none',
                 lineStyle: {
