@@ -73,7 +73,7 @@ const optionPercent = {
     },
     xAxis: [{
         type: 'category',
-        boundaryGap: false,
+        boundaryGap: true,
         data: null
     }],
     yAxis: [{
@@ -156,7 +156,7 @@ const optionStack = {
     },
     xAxis: [{
         type: 'category',
-        boundaryGap: false,
+        boundaryGap: true,
         data: null
     }],
     yAxis: [{
@@ -330,7 +330,7 @@ class SetupChart {
 
             return {
                 name: strLegend,
-                type: 'line',
+                type: 'bar',
                 stack: (strLegend === '需要') ? 'stackB' : 'stackA',
                 areaStyle: {},
                 symbol: 'none',
@@ -356,7 +356,7 @@ class SetupChart {
             hshStack[strLegend] = _.map(this.arrHshFilterPercent, hsh => hsh[strLegend]);
             const hshSeries = {
                 name: strLegend,
-                type: 'line',
+                type: 'bar',
                 stack: 'stackPercent',
                 areaStyle: {},
                 symbol: 'none',
@@ -397,7 +397,7 @@ class SetupChart {
 
             return {
                 name: strLegend,
-                type: 'line',
+                type: 'bar',
                 stack: (strLegend === '需要') ? 'stackB' : 'stackA',
                 areaStyle: {},
                 symbol: 'none',
@@ -458,7 +458,7 @@ period_button.addEventListener('click', () => {
 
         return {
             name: strLegend,
-            type: 'line',
+            type: 'bar',
             stack: (strLegend === '需要') ? 'stackB' : 'stackA',
             areaStyle: {},
             symbol: 'none',
@@ -515,7 +515,7 @@ period_button.addEventListener('click', () => {
             
             return {
                 name: strLegend,
-                type: 'line',
+                type: 'bar',
                 stack: 'stackPercent',
                 areaStyle: {},
                 symbol: 'none',
@@ -530,3 +530,6 @@ period_button.addEventListener('click', () => {
         setupchart.reDrawPercent(arrAxisXStack);
     }
 });
+
+document.querySelector('#tick_selector').value = '1day';
+document.querySelector('#period_button').click();

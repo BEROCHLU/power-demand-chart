@@ -12,8 +12,8 @@ if (window.dayjs_plugin_isBetween) {
     dayjs.extend(isBetween); //node.js
 }
 
-const arrLegendColor = ['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc'];
-const arrLegendColorAll = ['#800080', ...arrLegendColor, '#008000'];
+const arrLegendColor = ['#5470c6', '#d2691e', '#73c0de', '#ee6666', '#9a60b4', '#91cc75', '#fc8452', '#fac858', '#ea7ccc', '#008000'];
+const arrLegendColorAll = ['#a3a3a3', ...arrLegendColor];
 
 // create echarts instance
 const echartsHeatmap = echarts.init(cn2);
@@ -230,7 +230,7 @@ const optionPercent = {
     tooltip: {
         trigger: 'axis',
         axisPointer: {
-            type: 'line',
+            type: 'cross',
             label: {
                 backgroundColor: '#6a7985'
             }
@@ -278,7 +278,7 @@ const optionPercent = {
     },
     xAxis: [{
         type: 'category',
-        boundaryGap: false,
+        boundaryGap: true,
         data: null
     }],
     yAxis: [{
@@ -305,7 +305,7 @@ const optionPercent = {
 }
 const optionStack = {
     title: {
-        text: '電力需要エネルギー別積み上げグラフ',
+        text: '電力需要エネルギー別積み上げ棒グラフ',
         left: 'center'
     },
     tooltip: {
@@ -362,7 +362,7 @@ const optionStack = {
     },
     xAxis: [{
         type: 'category',
-        boundaryGap: false,
+        boundaryGap: true,
         data: null
     }],
     yAxis: [{
@@ -409,7 +409,7 @@ class SetupChart {
         const arrHshCD = _.cloneDeep(arrHsh); //deep copy
         _.forEach(arrHshCD, hsh => {
             delete hsh["電力需要"];
-            delete hsh["揚水"];
+            //delete hsh["揚水"];
         });
 
         this.arrHshPercent = _.map(arrHshCD, hsh => {
@@ -479,7 +479,7 @@ class SetupChart {
         const arrHshCD = _.cloneDeep(this.arrZip); //deep copy
         _.forEach(arrHshCD, hsh => {
             delete hsh["電力需要"];
-            delete hsh["揚水"];
+            //delete hsh["揚水"];
         });
 
         this.arrHshPercentDay = _.map(arrHshCD, hsh => {
@@ -531,7 +531,7 @@ class SetupChart {
         });
 
         const arrKeys2 = _.keys(this.arrHshFilterPercent[0]);
-        this.arrLegendPercent = _.pull(arrKeys2, '月日', '時刻', '電力需要', '揚水');
+        this.arrLegendPercent = _.pull(arrKeys2, '月日', '時刻');
 
         this.hshLegendSelect = optionStack.legend.selected //initial selected legends
     }
@@ -618,7 +618,7 @@ class SetupChart {
 
             return {
                 name: strLegend,
-                type: 'line',
+                type: 'bar',
                 stack: 'stackPercent',
                 areaStyle: {},
                 symbol: 'none',
@@ -719,13 +719,14 @@ class SetupChart {
             hshAxis.arrAxisY.push(int_yAxis);
         });
 
+        const n = _.sum(hshAxis.arrAxisY);
+        document.querySelector('#powersum2').innerText = math.unit(n, 'MW').format(3);
+
+        optionLineA.title.text = `${data_selector2.value}: ${ym_selector2a.value}~${ym_selector2b.value}`;
         optionLineA.xAxis.data = hshAxis.arrAxisX;
         optionLineA.series[0].data = hshAxis.arrAxisY;
 
         echartsLineA.setOption(optionLineA, true);
-
-        const n = _.sum(hshAxis.arrAxisY);
-        document.querySelector('#powersum2').innerText = math.unit(n, 'MW').format(3);
     }
 
     changeTickStack(arrHshFilterDay) {
@@ -831,7 +832,7 @@ period_button2.addEventListener('click', () => {
         arrAxisY: []
     }
 
-    if (tick_selector.value === '1h') {
+    if (tick_selector.value === '1hour') {
         _.forEach(setupchart.arrFilter, hsh => {
             const int_yAxis = hsh[data_selector2.value];
             const str_xAxis = `${hsh['月日']} ${hsh['時刻']}:00`;
@@ -862,7 +863,7 @@ period_button3.addEventListener('click', () => {
     let arrHshSeriesPercent;
     let hshStack = {}
 
-    if (tick_selector2.value === '1h') {
+    if (tick_selector2.value === '1hour') {
         arrAxisXStack = _.map(setupchart.arrFilter, hsh => {
             return `${hsh['月日']} ${hsh['時刻']}:00`;
         });
@@ -899,7 +900,7 @@ period_button3.addEventListener('click', () => {
 
             return {
                 name: strLegend,
-                type: 'line',
+                type: 'bar',
                 stack: 'stackPercent',
                 areaStyle: {},
                 symbol: 'none',
@@ -911,11 +912,14 @@ period_button3.addEventListener('click', () => {
         });
 
         setupchart.reDrawStack(arrAxisXStack);
+        optionPercent.yAxis[0].min = null;
 
     } else if (tick_selector2.value === '1day') {
         const arrHshFilterDay = _.filter(setupchart.arrZip, hsh => {
             return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
         });
+
+        setupchart.changeTickStack(arrHshFilterDay);
 
         arrAxisXStack = _.map(arrHshFilterDay, hsh => hsh['月日']);
 
@@ -929,7 +933,7 @@ period_button3.addEventListener('click', () => {
 
             return {
                 name: strLegend,
-                type: 'line',
+                type: 'bar',
                 stack: 'stackPercent',
                 areaStyle: {},
                 symbol: 'none',
@@ -940,7 +944,7 @@ period_button3.addEventListener('click', () => {
             }
         });
 
-        setupchart.changeTickStack(arrHshFilterDay);
+        optionPercent.yAxis[0].min = -10;
     }
 
     //re-draw
