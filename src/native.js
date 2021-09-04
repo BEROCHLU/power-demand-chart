@@ -24,7 +24,7 @@ const echartsPercent = echarts.init(cn2a);
 
 const optionHeatmap = {
     title: {
-        text: '電力需要ヒートマップ',
+        text: '電力需要ヒートマップ: 2020-01',
         left: 'center'
     },
     tooltip: {
@@ -219,7 +219,7 @@ const optionLineA = {
     series: [{
         data: null,
         symbol: 'none',
-        type: 'line' //line | bar
+        type: 'bar' //line | bar
     }]
 }
 const optionPercent = {
@@ -250,7 +250,8 @@ const optionPercent = {
     },
     legend: {
         data: null,
-        selector: true
+        selector: true,
+        top: '5%'
     },
     color: arrLegendColor,
     toolbox: {
@@ -269,7 +270,7 @@ const optionPercent = {
         }
     },
     grid: {
-        top: '7%',
+        top: '12%', //7% + 5%(legend)
         left: '3%',
         right: '4%',
         bottom: '11%',
@@ -304,7 +305,7 @@ const optionPercent = {
 }
 const optionStack = {
     title: {
-        text: '電力需要積み上げグラフ',
+        text: '電力需要エネルギー積み上げグラフ',
         left: 'center'
     },
     tooltip: {
@@ -334,7 +335,8 @@ const optionStack = {
         selected: {
             '電力需要': false,
             '揚水': false
-        }
+        },
+        top: '5%'
     },
     color: arrLegendColorAll,
     toolbox: {
@@ -353,7 +355,7 @@ const optionStack = {
         }
     },
     grid: {
-        top: '7%',
+        top: '12%', //7% + 5%(legend)
         left: '3%',
         right: '4%',
         bottom: '11%',
@@ -656,7 +658,7 @@ class SetupChart {
 
     reDrawHeat(hshAxis) {
         echartsHeatmap.clear();
-        optionHeatmap.title.text = `${data_selector1.value}ヒートマップ`;
+        optionHeatmap.title.text = `${data_selector1.value}ヒートマップ: ${ym_selector1.value}`;
         optionHeatmap.visualMap.min = _.min(hshAxis.arrAxisY);
         optionHeatmap.visualMap.max = _.max(hshAxis.arrAxisY);
         optionHeatmap.series[0].data = this.arrPlotHeat;
@@ -695,6 +697,7 @@ class SetupChart {
 
     reDrawLineA(hshAxis) {
         echartsLineA.clear();
+        optionLineA.title.text = `${data_selector2.value}: ${ym_selector2a.value}~${ym_selector2b.value}`;
         optionLineA.xAxis.data = hshAxis.arrAxisX;
         optionLineA.series[0].data = hshAxis.arrAxisY;
 
@@ -860,20 +863,20 @@ period_button3.addEventListener('click', () => {
     let arrHshSeriesPercent;
     let hshStack = {}
 
-    if(tick_selector2.value === '1h'){
+    if (tick_selector2.value === '1h') {
         arrAxisXStack = _.map(setupchart.arrFilter, hsh => {
             return `${hsh['月日']} ${hsh['時刻']}:00`;
         });
-    
+
         hshStack = {}
         _.forEach(setupchart.arrLegend, strLegend => {
             hshStack[strLegend] = _.map(setupchart.arrFilter, hsh => hsh[strLegend]);
         });
         setupchart.arrSeriesStack = _.map(setupchart.arrLegend, strLegend => {
-    
+
             const n = _.sum(hshStack[strLegend]);
             document.querySelector(`.numeric[value=${strLegend}]`).innerText = math.unit(n, 'MW').format(3);
-    
+
             return {
                 name: strLegend,
                 type: 'line',
@@ -886,15 +889,15 @@ period_button3.addEventListener('click', () => {
                 data: hshStack[strLegend]
             }
         });
-    
+
         const arrHshDataPercent = _.filter(setupchart.arrHshPercent, hsh => {
             return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
         });
-    
+
         hshStack = {}
         arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
             hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
-    
+
             return {
                 name: strLegend,
                 type: 'line',
@@ -910,7 +913,7 @@ period_button3.addEventListener('click', () => {
 
         setupchart.reDrawStack(arrAxisXStack);
 
-    } else if(tick_selector2.value === '1day') {
+    } else if (tick_selector2.value === '1day') {
         const arrHshFilterDay = _.filter(setupchart.arrZip, hsh => {
             return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
         });
@@ -920,11 +923,11 @@ period_button3.addEventListener('click', () => {
         const arrHshDataPercent = _.filter(setupchart.arrHshPercentDay, hsh => {
             return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
         });
-    
+
         hshStack = {}
         arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
             hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
-    
+
             return {
                 name: strLegend,
                 type: 'line',
@@ -937,7 +940,7 @@ period_button3.addEventListener('click', () => {
                 data: hshStack[strLegend]
             }
         });
-    
+
         setupchart.changeTickStack(arrHshFilterDay);
     }
 
