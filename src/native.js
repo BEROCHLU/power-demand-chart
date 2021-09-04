@@ -305,7 +305,7 @@ const optionPercent = {
 }
 const optionStack = {
     title: {
-        text: '電力需要エネルギー別積み上げ棒グラフ',
+        text: '電力需要エネルギー別積み上げグラフ',
         left: 'center'
     },
     tooltip: {
