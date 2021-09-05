@@ -18,13 +18,17 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@master
+      #- uses: actions/checkout@master
+      - uses: actions/checkout@v2
 
-      - name: Install Dependencies
-        run: npm install
+      #- name: Install Dependencies
+      #  run: npm install
 
       - name: babel-Build
-        run: npm run babel
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - run: npm run babel
         
       - name: Configure AWS credentials from Test account
         uses: aws-actions/configure-aws-credentials@v1
@@ -35,4 +39,4 @@ jobs:
 
       - name: Copy files to the test website with the AWS CLI
         run: |
-          aws s3 sync ./dist s3://aws-s3-tokyo
+          aws s3 sync ./dist/wpack-babel.js s3://aws-s3-tokyo/dist
