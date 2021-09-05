@@ -283,7 +283,8 @@ const optionPercent = {
     }],
     yAxis: [{
         type: 'value',
-        max: 100,
+        max: 'dataMax',
+        min: 'dataMin',
         axisLabel: {
             formatter: '{value}%'
         }
@@ -369,7 +370,8 @@ const optionStack = {
         type: 'value',
         axisLabel: {
             formatter: '{value} MWh'
-        }
+        },
+        min: 'dataMin',
     }],
     animation: false,
     dataZoom: [{
@@ -534,6 +536,7 @@ class SetupChart {
         this.arrLegendPercent = _.pull(arrKeys2, '月日', '時刻');
 
         this.hshLegendSelect = optionStack.legend.selected //initial selected legends
+        this.hshLegendSelectPercent = optionPercent.legend.selected //initial selected legends
     }
 
     setarrPlotHeat() {
@@ -632,6 +635,7 @@ class SetupChart {
         optionPercent.xAxis[0].data = arrAxisXStack;
         optionPercent.series = arrHshSeriesPercent;
         optionPercent.legend.data = this.arrLegendPercent;
+        optionPercent.legend.selected = this.hshLegendSelectPercent;
     }
 
     setLineA() {
@@ -691,6 +695,7 @@ class SetupChart {
         echartsPercent.clear();
         optionPercent.xAxis[0].data = arrAxisXStack;
         optionPercent.series = arrHshSeriesPercent;
+        optionPercent.legend.selected = this.hshLegendSelectPercent;
 
         echartsPercent.setOption(optionPercent, true);
     }
@@ -724,6 +729,7 @@ class SetupChart {
         const n = _.sum(hshAxis.arrAxisY);
         document.querySelector('#powersum2').innerText = math.unit(n, 'MW').format(3);
 
+        echartsLineA.clear();
         optionLineA.title.text = `${data_selector2.value}: ${ym_selector2a.value}~${ym_selector2b.value}`;
         optionLineA.xAxis.data = hshAxis.arrAxisX;
         optionLineA.yAxis.axisLabel.formatter = '{value} MW';
@@ -753,6 +759,7 @@ class SetupChart {
             }
         });
 
+        echartsStack.clear();
         optionStack.xAxis[0].data = _.map(arrHshFilterDay, hsh => hsh['月日']);
         optionStack.yAxis[0].axisLabel.formatter = '{value} MW';
         optionStack.series = arrHshSeriesDay;
@@ -781,6 +788,16 @@ echartsLineA.setOption(optionLineA);
 echartsPercent.setOption(optionPercent);
 echartsStack.setOption(optionStack);
 
+//legend addEventListener
+echartsPercent.on('legendselectchanged', params => {
+    setupchart.hshLegendSelectPercent = params.selected;
+});
+echartsPercent.on('legendselectall', params => {
+    setupchart.hshLegendSelectPercent = params.selected;
+});
+echartsPercent.on('legendinverseselect', params => {
+    setupchart.hshLegendSelectPercent = params.selected;
+});
 echartsStack.on('legendselectchanged', params => {
     setupchart.hshLegendSelect = params.selected;
 });
@@ -916,14 +933,12 @@ period_button3.addEventListener('click', () => {
         });
 
         setupchart.reDrawStack(arrAxisXStack);
-        optionPercent.yAxis[0].min = null;
+        //optionPercent.yAxis[0].min = null;
 
     } else if (tick_selector2.value === '1day') {
         const arrHshFilterDay = _.filter(setupchart.arrZip, hsh => {
             return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
         });
-
-        setupchart.changeTickStack(arrHshFilterDay);
 
         arrAxisXStack = _.map(arrHshFilterDay, hsh => hsh['月日']);
 
@@ -948,7 +963,8 @@ period_button3.addEventListener('click', () => {
             }
         });
 
-        optionPercent.yAxis[0].min = -10;
+        //optionPercent.yAxis[0].min = -10;
+        setupchart.changeTickStack(arrHshFilterDay);
     }
 
     //re-draw
