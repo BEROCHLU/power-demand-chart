@@ -35,9 +35,9 @@ const optionHeatmap = {
     },
     animation: false,
     grid: {
-        height: '88%',
+        height: '86%',
         width: '70%',
-        top: '6%'
+        top: '7%'
     },
     xAxis: {
         type: 'category',
