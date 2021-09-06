@@ -18,8 +18,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      #- uses: actions/checkout@master
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v2
 
       - name: setup Node.js
         uses: actions/setup-node@v2
@@ -40,6 +40,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-1
 
-      - name: Copy files to the test website with the AWS CLI
+      - name: upload AWS s3
+        #run: |
+          #aws s3 cp ./dist/wpack-babel.js s3://aws-s3-tokyo/dist/wpack-babel.js
         run: |
-          aws s3 cp ./dist/wpack-babel.js s3://aws-s3-tokyo/dist/wpack-babel.js
+          aws s3 sync ./dist s3://aws-s3-tokyo/build
