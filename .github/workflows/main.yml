@@ -48,9 +48,9 @@ jobs:
           #aws s3 cp ./dist/wpack-babel.js s3://aws-s3-tokyo/dist/wpack-babel.js
         run: |
           aws s3 sync ./dist s3://aws-s3-tokyo/build
-        run: ls -l ./dist
+      - run: ls -l ./dist
 
       - name: upload css to AWS s3
         run: |
           aws s3 sync ./css s3://aws-s3-tokyo/build
-        run: ls -l ./css
+      - run: ls -l ./css
