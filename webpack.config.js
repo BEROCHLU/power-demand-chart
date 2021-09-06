@@ -3,9 +3,9 @@ const webpack = require('webpack');
 
 const config = {
     mode: 'production', //production | development
-    entry: ['@babel/polyfill', './src/native.js', './src/jqtab.js'],
+    entry: ['@babel/polyfill', './dev/src/native.js', './dev/src/jqtab.js'],
     output: {
-        filename: './dist/wpack.js',
+        filename: './dev/build/wpack.js',
         path: path.join(__dirname)
     },
     plugins: [

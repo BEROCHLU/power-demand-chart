@@ -1,0 +1,72 @@
+
+#wrapper {
+    width: 640px;
+    margin: auto;
+    padding: 10px;
+    background-color: #bbb;
+    border-radius: 20px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    position: relative;
+}
+
+ul::after {
+    content: " ";
+    display: block;
+    clear: both;
+}
+
+li {
+    cursor: pointer;
+}
+
+li:first-of-type {
+    float: left;
+    margin-left: -40px;
+}
+
+li:last-of-type {
+    float: right;
+}
+
+li:nth-of-type(2) {
+    float: left;
+    position: absolute;
+    left: calc(50% - 16px);
+    cursor: default;
+}
+
+.active-tab {
+    opacity: 0.2;
+    cursor: default;
+}
+
+.active-panel {
+    border: 2px solid white;
+    border-radius: 0 0 20px 20px;
+    height: 150px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.active-panel>a {
+    color: white;
+    display: inline-block;
+    text-decoration: none;
+}
+
+#panel_group>div:not(.active-panel) {
+    display: none;
+}
+
+input#img_path {
+    background-color: #f0f5ff;
+    width: 360px;
+}
+
+input[name="upimg"] {
+    width: 110px;
+}

@@ -1,5 +1,4 @@
 node_modules/
 package-lock.json
-old/
-dist/*.map
-wpack.html
+test/old/
+dev/build/*.map

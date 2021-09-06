@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>OCCTO電力需給グラフ</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+	<link rel="stylesheet" href="./css/style.css">
+	<link rel="icon" type="image/png" href="./img/favicon.png">
+	<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/echarts@5.2.0/dist/echarts.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.6/dayjs.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.6/plugin/isBetween.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/mathjs@9.4.4/lib/browser/math.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/crossfilter2@1.5.4/crossfilter.min.js"></script>
+</head>
+
+<body>
+	<div class="wrapper">
+		<div id="panel_group">
+			<div class="first-panel active-panel">
+				<grid1>
+					<div class="item">期間</div>
+					<select id="ym_selector1">
+					</select>
+					<div class="item">エネルギー</div>
+					<select id="data_selector1">
+					</select>
+					<button id="period_button" type="button">変更</button>
+					<div class="total-view">電力量合計</div>
+					<div class="total-view"><span class="numeric" id="powersum1"></span></div>
+				</grid1>
+				<grid2>
+					<div id="cn2"></div>
+				</grid2>
+				<grid3>
+					<div id="cn3"></div>
+				</grid3>
+				<grid4>
+					<div class="item">期間</div>
+					<select id="ym_selector2a">
+					</select>
+					<select id="ym_selector2b">
+					</select>
+					<div class="item">エネルギー</div>
+					<select id="data_selector2">
+					</select>
+					<div class="item">単位</div>
+					<select id="tick_selector">
+						<option value="1hour">1hour</option>
+						<option value="1day">1day</option>
+					</select>
+					<button id="period_button2" type="button">変更</button>
+					<div class="total-view">電力量合計</div>
+					<div class="total-view"><span class="numeric" id="powersum2"></span></div>
+				</grid4>
+				<grid5>
+					<div id="cn5"></div>
+				</grid5>
+				<grid6>
+					<ul>
+						<li class="active-tab"><img src="./img/left.png" width="20" height="20" alt=""></li>
+						<li>1/2</li>
+						<li><img src="./img/right.png" width="20" height="20" alt=""></li>
+					</ul>
+				</grid6>
+			</div>
+			<div class="axis-panel"></div>
+			<div class="last-panel">
+				<grid1>
+					<div class="item">期間</div>
+					<select id="ym_selector3a">
+					</select>
+					<select id="ym_selector3b">
+					</select>
+					<div class="item">単位</div>
+					<select id="tick_selector2">
+						<option value="1hour">1hour</option>
+						<option value="1day">1day</option>
+					</select>
+					<button id="period_button3" type="button">変更</button>
+					<div class="total-view">電力量合計</div>
+					<div class="total-view-series"></div>
+				</grid1>
+				<grid2>
+					<div id="cn2a"></div>
+				</grid2>
+				<grid3>
+					<div id="cn3a"></div>
+				</grid3>
+				<grid6>
+					<ul>
+						<li><img src="./img/left.png" width="20" height="20" alt=""></li>
+						<li>1/2</li>
+						<li><img src="./img/right.png" width="20" height="20" alt=""></li>
+					</ul>
+				</grid6>
+			</div>
+		</div>
+	</div>
+	<script src="./src/native.js" type="module"></script>
+	<script src="./src/jqtab.js"></script>
+</body>
+
+</html>

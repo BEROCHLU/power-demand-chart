@@ -1,13 +1,13 @@
 {
-  "name": "babel-test",
-  "version": "1.0.0",
+  "name": "webpack-babel",
+  "version": "2.0.0",
   "description": "No description",
   "main": "index.js",
   "scripts": {
     "webpack": "npx webpack",
     "webpackd": "npx webpack --mode=development",
-    "ie11": "npx postcss -c postcss.config.js -o ./css/ms-style.css ./css/style.css",
-    "babel": "npx babel ./dist/wpack.js --out-file ./dist/wpack-babel.js"
+    "ie11": "npx postcss -c postcss.config.js -o ./dist/css/ms-style.css ./dev/css/style.css",
+    "babel": "npx babel ./dev/build/wpack.js --out-file ./dist/build/wpack-babel.js"
   },
   "keywords": [],
   "author": "",
