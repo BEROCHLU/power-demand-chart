@@ -30,6 +30,9 @@ jobs:
       - name: webpack-Build
         run: npm run webpack
         
+      - name: autoprefixer
+        run: npm run ie11
+
       - name: babel-Build
         run: npm run babel
         
@@ -40,8 +43,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-1
 
-      - name: upload AWS s3
+      - name: upload dist to AWS s3
         #run: |
           #aws s3 cp ./dist/wpack-babel.js s3://aws-s3-tokyo/dist/wpack-babel.js
         run: |
           aws s3 sync ./dist s3://aws-s3-tokyo/build
+
+      - name: upload css to AWS s3
+        run: |
+          aws s3 sync ./css s3://aws-s3-tokyo/build
