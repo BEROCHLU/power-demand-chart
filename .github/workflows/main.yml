@@ -43,7 +43,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-1
 
-      - name: upload dist to AWS s3
+      - name: upload AWS s3
         run: |
           aws s3 sync ./dist s3://aws-s3-tokyo/build
           ls -l ./dist
