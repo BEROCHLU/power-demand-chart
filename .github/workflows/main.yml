@@ -46,9 +46,6 @@ jobs:
       - name: upload dist to AWS s3
         run: |
           aws s3 sync ./dist s3://aws-s3-tokyo/build
-      - run: ls -l ./dist
-
-      - name: upload css to AWS s3
-        run: |
+          ls -l ./dist
           aws s3 sync ./css s3://aws-s3-tokyo/build
-      - run: ls -l ./css
+          ls -l ./css
