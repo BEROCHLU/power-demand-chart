@@ -235,6 +235,15 @@ const optionPercent = {
                 backgroundColor: '#6a7985'
             }
         },
+        position: function (point, params, dom, rect, size) {
+            // x, y
+            return [point[0] - 190, point[1] + 20];
+            var obj = {
+                top: 60
+            };
+            obj[['left', 'right'][+(point[0] < size.viewSize[0] / 2)]] = 5;
+            return obj;
+        },
         formatter: (arrParam) => {
             let s = `<div style="width: 150px;"><div>${arrParam[0].name}</div>`;
             let sum = 0;
@@ -245,8 +254,7 @@ const optionPercent = {
             sum = _.min([100, sum]);
             s += `<div style="overflow: hidden;"><div>合計</div><span style="float: right;"><b>${_.round(sum, 1)}%</b></span></div></div>`;
             return s;
-        },
-        position: 'bottom'
+        }
     },
     legend: {
         data: null,
