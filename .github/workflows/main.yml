@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 14
-      - run: npm install
+        run: npm install
 
       - name: webpack-Build
         run: npm run webpack
@@ -44,12 +44,10 @@ jobs:
           aws-region: ap-northeast-1
 
       - name: upload dist to AWS s3
-        #run: |
-          #aws s3 cp ./dist/wpack-babel.js s3://aws-s3-tokyo/dist/wpack-babel.js
         run: |
           aws s3 sync ./dist s3://aws-s3-tokyo/build
       - run: ls -l ./dist
-
+#aws s3 cp ./dist/wpack-babel.js s3://aws-s3-tokyo/dist/wpack-babel.js
       - name: upload css to AWS s3
         run: |
           aws s3 sync ./css s3://aws-s3-tokyo/build
