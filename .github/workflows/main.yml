@@ -6,7 +6,7 @@ name: CI-CD
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master2 ]
+    branches: [ master ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -44,4 +44,4 @@ jobs:
 
       - name: upload AWS s3
         run: |
-          aws s3 sync ./dist s3://aws-s3-tokyo/test
+          aws s3 sync ./dist s3://aws-s3-tokyo
