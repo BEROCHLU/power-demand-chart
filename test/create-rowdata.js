@@ -6,7 +6,7 @@ const dayjs = require('dayjs');
 const fs = require('fs');
 const path = require('path');
 
-const DIR_PATH = path.join(__dirname, '../data');
+const DIR_PATH = path.join(__dirname, './data');
 const arrStrFile = fs.readdirSync(DIR_PATH);
 
 let arrConcat = [];
