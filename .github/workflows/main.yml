@@ -23,10 +23,10 @@ jobs:
 
       - name: setup Node.js
         uses: actions/setup-node@v2
-        #with:
-          #node-version: 14
-      - run: node --version
+        with:
+          node-version: 12
       - run: npm install
+      - run: node --version
 
       - name: webpack-Build
         run: npm run webpack
@@ -47,4 +47,4 @@ jobs:
       - name: upload AWS s3
         run: |
           aws s3 sync ./dist s3://aws-s3-tokyo/test
-          ls -l ./dist/build
+
