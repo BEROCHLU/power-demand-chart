@@ -1,6 +1,6 @@
 'use strict';
 
-$('li:nth-of-type(1),li:nth-of-type(3)').on('click', function () {
+$('li[name="arrow"]').on('click', function () {
     const INDEX = $(this).index();
     //アクティブなクラスは全て削除
     $('li').removeClass('active-tab');

@@ -238,11 +238,6 @@ const optionPercent = {
         position: function (point, params, dom, rect, size) {
             // x, y
             return [point[0] - 190, point[1] + 20];
-            var obj = {
-                top: 60
-            };
-            obj[['left', 'right'][+(point[0] < size.viewSize[0] / 2)]] = 5;
-            return obj;
         },
         formatter: (arrParam) => {
             let s = `<div style="width: 150px;"><div>${arrParam[0].name}</div>`;
