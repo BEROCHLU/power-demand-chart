@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI-beta
+name: CI-CD
 
 # Controls when the workflow will run
 on:
@@ -23,8 +23,9 @@ jobs:
 
       - name: setup Node.js
         uses: actions/setup-node@v2
-        with:
-          node-version: 14
+        #with:
+          #node-version: 14
+      - run: node --version
       - run: npm install
 
       - name: webpack-Build
@@ -45,5 +46,5 @@ jobs:
 
       - name: upload AWS s3
         run: |
-          aws s3 sync ./dist s3://aws-s3-tokyo
+          aws s3 sync ./dist s3://aws-s3-tokyo/test
           ls -l ./dist/build
