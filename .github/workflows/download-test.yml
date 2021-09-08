@@ -43,3 +43,6 @@ jobs:
             dist/build
             dist/css
             dev/build
+
+      - name: Download all workflow run artifacts
+        uses: actions/download-artifact@v2
