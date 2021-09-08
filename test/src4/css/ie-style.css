@@ -20,9 +20,12 @@ grid6 {
 
 .first-panel.active-panel {
     height: inherit;
+    display: -ms-grid;
     display: grid;
     gap: 4px;
-    grid-template:
+    -ms-grid-rows: 1fr 4px 1fr 4px 28px;
+    -ms-grid-columns: 100px 4px 1fr 4px 1fr;
+        grid-template:
         "grid1 grid2 grid3"1fr 
         "grid4 grid5 grid5"1fr 
         "grid6 grid6 grid6"28px 
@@ -31,9 +34,12 @@ grid6 {
 
 .last-panel.active-panel {
     height: inherit;
+    display: -ms-grid;
     display: grid;
     gap: 4px;
-    grid-template:
+    -ms-grid-rows: 1fr 4px 1fr 4px 28px;
+    -ms-grid-columns: 100px 4px 1fr;
+        grid-template:
         "grid1 grid2"1fr 
         "grid1 grid3"1fr 
         "grid6 grid6"28px 
@@ -41,14 +47,29 @@ grid6 {
 }
 
 grid1 {
+    -ms-grid-row: 1;
+    -ms-grid-column: 1;
     grid-area: grid1;
     border-radius: 10px;
     background-color: #f0f0f0;
     padding: 5px;
 }
 
+.last-panel.active-panel > grid1 {
+    -ms-grid-row: 1;
+    -ms-grid-row-span: 3;
+    -ms-grid-column: 1;
+}
+
 grid2 {
+    -ms-grid-row: 1;
+    -ms-grid-column: 3;
     grid-area: grid2;
+}
+
+.last-panel.active-panel > grid2 {
+    -ms-grid-row: 1;
+    -ms-grid-column: 3;
 }
 
 #cn2,
@@ -69,10 +90,19 @@ grid2 {
 }
 
 grid3 {
+    -ms-grid-row: 1;
+    -ms-grid-column: 5;
     grid-area: grid3;
 }
 
+.last-panel.active-panel > grid3 {
+    -ms-grid-row: 3;
+    -ms-grid-column: 3;
+}
+
 grid4 {
+    -ms-grid-row: 3;
+    -ms-grid-column: 1;
     grid-area: grid4;
     border-radius: 10px;
     background-color: #f0f0f0;
@@ -80,20 +110,36 @@ grid4 {
 }
 
 grid5 {
+    -ms-grid-row: 3;
+    -ms-grid-column: 3;
+    -ms-grid-column-span: 3;
     grid-area: grid5;
 }
 
 grid6 {
+    -ms-grid-row: 5;
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 5;
     grid-area: grid6;
     border-radius: 10px;
     background-color: #f0f0f0;
 }
 
+.last-panel.active-panel > grid6 {
+    -ms-grid-row: 5;
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 3;
+}
+
 ul {
     list-style-type: none;
     margin: 3px 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    justify-content: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
 }
 
 li {
@@ -115,9 +161,9 @@ button {
 }
 
 li:nth-of-type(1) {
-    margin-right: auto;
     margin-left: -40px;
-    width: 120px;
+    text-align: left;
+    width: 100%;
 }
 
 li:nth-of-type(3) {
@@ -127,8 +173,8 @@ li:nth-of-type(3) {
 }
 
 li:nth-of-type(5) {
-    margin-left: auto;
-    width: 120px;
+    text-align: right;
+    width: 100%;
 }
 
 .active-tab {
