@@ -44,4 +44,5 @@ jobs:
 
       - name: upload AWS s3
         run: |
-          aws s3 sync ./dist s3://aws-s3-tokyo/test
+          aws s3 sync s3://aws-s3-tokyo s3://aws-s3-tokyo/backup
+          aws s3 sync ./dist s3://aws-s3-tokyo
