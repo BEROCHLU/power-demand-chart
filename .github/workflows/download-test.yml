@@ -35,3 +35,10 @@ jobs:
       - name: babel-Build
         run: yarn run babel
         
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: output artifacts
+          path: |
+            output
+        
