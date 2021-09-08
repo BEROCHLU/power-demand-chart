@@ -39,5 +39,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: output artifacts
-          path: dist/build
-          
+          path: |
+            dist/build
+            dist/css
+            dev/build
