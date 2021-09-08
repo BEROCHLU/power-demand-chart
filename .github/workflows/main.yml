@@ -42,7 +42,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-1
 
-      - name: upload AWS s3
+      - name: upload AWS S3
         run: |
-          aws s3 sync s3://aws-s3-tokyo s3://aws-s3-tokyo/backup
+          aws s3 sync s3://aws-s3-tokyo s3://aws-s3-tokyo/backup \
+            --exclude "backup/*" \
+            --exclude "license/*"
           aws s3 sync ./dist s3://aws-s3-tokyo
