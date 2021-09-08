@@ -89,17 +89,6 @@ grid6 {
     background-color: #f0f0f0;
 }
 
-ul {
-    list-style-type: none;
-    margin: 3px 0;
-    display: flex;
-    justify-content: center;
-}
-
-li {
-    cursor: pointer;
-}
-
 select,
 button {
     font-size: 12px;
@@ -114,10 +103,21 @@ button {
     border-radius: 5px;
 }
 
+ul {
+    list-style-type: none;
+    margin: 3px 0;
+    display: flex;
+    justify-content: center;
+}
+
+li {
+    cursor: pointer;
+}
+
 li:nth-of-type(1) {
     margin-right: auto;
-    margin-left: -40px;
-    width: 120px;
+    text-align: left;
+    width: 100%;
 }
 
 li:nth-of-type(3) {
@@ -127,8 +127,8 @@ li:nth-of-type(3) {
 }
 
 li:nth-of-type(5) {
-    margin-left: auto;
-    width: 120px;
+    text-align: right;
+    width: 100%;
 }
 
 .active-tab {
