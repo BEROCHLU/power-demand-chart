@@ -26,9 +26,9 @@ jobs:
           node-version: 14
       - run: npm install
 
-      - name: yarn
+      - name: package install with yarn
         run: yarn install
         
       - name: yarn licenses
-        run: yarn licenses list
+        run: yarn licenses generate-disclaimer
 
