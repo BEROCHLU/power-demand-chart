@@ -27,13 +27,13 @@ jobs:
       - run: yarn
 
       - name: webpack-Build
-        run: yarn run webpack
+        run: npm run webpack
         
       - name: autoprefixer
-        run: yarn run ie11
+        run: npm run ie11
 
       - name: babel-Build
-        run: yarn run babel
+        run: npm run babel
         
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
@@ -42,7 +42,3 @@ jobs:
           path: |
             dist/build
             dist/css
-            dev/build
-
-      - name: Download all workflow run artifacts
-        uses: actions/download-artifact@v2
