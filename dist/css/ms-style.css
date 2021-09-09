@@ -208,3 +208,7 @@ li:nth-of-type(5) {
     color: #005aa0;
     font-weight: bold;
 }
+
+.license {
+    cursor: default;
+}
