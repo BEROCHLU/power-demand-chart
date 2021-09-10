@@ -29,15 +29,15 @@ const config = {
         maxEntrypointSize: 16.0 * 1000000,
         maxAssetSize: 16.0 * 1000000
     },
-    module: {
+    /*module: {
         rules: [{
             test: /\.css$/,
             use: ["style-loader", "css-loader"]
         }]
-    },
+    },*/
     resolve: {
         alias: {
-            'crossfilter': path.resolve(__dirname, './node_modules/crossfilter2/crossfilter.min.js')
+            'crossfilter': path.resolve(__dirname, './node_modules/crossfilter2/crossfilter.js')
         }
     }
 
