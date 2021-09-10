@@ -5,8 +5,14 @@ const config = {
     mode: 'production', //production | development
     entry: ['@babel/polyfill', './dev/src/native.js', './dev/src/jqtab.js'],
     output: {
-        filename: './dev/build/wpack.js',
+        filename: './dev/build/[name].js',
         path: path.join(__dirname)
+    },
+    optimization: {
+        splitChunks: {
+            name: 'vendor',
+            chunks: 'initial',
+        }
     },
     plugins: [
         new webpack.ProvidePlugin({
