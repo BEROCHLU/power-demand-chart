@@ -1,11 +1,10 @@
 const path = require('path');
-const webpack = require('webpack');
 
 const config = {
     mode: 'production', //production | development
-    entry: ['@babel/polyfill', './dev/src/native.js', './dev/src/jqtab.js'],
+    entry: ['./dev/src/native.js', './dev/src/jqtab.js'],
     output: {
-        filename: './dev/build/[name].js',
+        filename: './dist/build/[name].js',
         path: path.join(__dirname)
     },
     optimization: {
@@ -14,33 +13,32 @@ const config = {
             chunks: 'initial',
         }
     },
-    plugins: [
-        new webpack.ProvidePlugin({
-            _: 'lodash',
-            echarts: 'echarts',
-            dayjs: 'dayjs',
-            isBetween: 'dayjs/plugin/isBetween.js',
-            $: 'jquery',
-            math: 'mathjs',
-            crossfilter: 'crossfilter'
-        })
-    ],
     performance: {
         maxEntrypointSize: 16.0 * 1000000,
         maxAssetSize: 16.0 * 1000000
     },
-    /*module: {
+    module: {
         rules: [{
-            test: /\.css$/,
-            use: ["style-loader", "css-loader"]
+            test: /\.m?js$/,
+            exclude: /node_modules[\\\/]core-js/,
+            use: {
+                loader: 'babel-loader',
+                options: {
+                    presets: [
+                        [
+                            "@babel/preset-env",
+                            {
+                                "targets": ["ie 11"],
+                                "useBuiltIns": "entry",
+                                "corejs": 3,
+                                "debug": false
+                            }
+                        ]
+                    ]
+                }
+            }
         }]
-    },*/
-    resolve: {
-        alias: {
-            'crossfilter': path.resolve(__dirname, './node_modules/crossfilter2/crossfilter.js')
-        }
     }
-
 }
 
 module.exports = (env, argv) => {

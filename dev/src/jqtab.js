@@ -1,5 +1,7 @@
 'use strict';
 
+import $ from 'jquery';
+
 $('li[name="arrow"]').on('click', function () {
     const INDEX = $(this).index();
     const LEN = $('li').length;
