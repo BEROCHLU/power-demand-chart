@@ -26,7 +26,7 @@ jobs:
           node-version: 14
 
       - name: package install with yarn
-        run: yarn install
+        run: yarn
         
       - name: yarn licenses
         run: yarn licenses list

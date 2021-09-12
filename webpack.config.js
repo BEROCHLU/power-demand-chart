@@ -26,12 +26,12 @@ const config = {
                 options: {
                     presets: [
                         [
-                            "@babel/preset-env",
+                            '@babel/preset-env',
                             {
-                                "targets": ["ie 11"],
-                                "useBuiltIns": "entry",
-                                "corejs": 3,
-                                "debug": false
+                                targets: ['ie 11'],
+                                useBuiltIns: 'entry',
+                                corejs: 3,
+                                debug: false
                             }
                         ]
                     ]
@@ -45,7 +45,8 @@ module.exports = (env, argv) => {
     if (argv.mode === 'development') {
         config.mode = 'development';
         config.devtool = 'cheap-source-map';
+        console.log(config);
     }
-    console.log(config);
+    
     return config;
 }
