@@ -9,14 +9,15 @@
     "ie11": "npx postcss -c postcss.config.js -o ./dist/css/ms-style.css ./dev/css/style.css",
     "babel": "npx babel ./dev/build/wpack.js --out-file ./dist/build/wpack-babel.js",
     "babelm": "npx babel ./dev/build/main.js --out-file ./dist/build/main-babel.js",
-    "babelv": "npx babel ./dev/build/vendor.js --out-file ./dist/build/vendor-babel.js"
+    "babelv": "npx babel ./dev/build/vendor.js --out-file ./dist/build/vendor-babel.js",
+    "babelmv": "npm run babelm && npm run babelv"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "crossfilter2": "^1.5.4",
-    "dayjs": "^1.10.6",
+    "dayjs": "^1.10.7",
     "echarts": "^5.2.0",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
@@ -27,19 +28,16 @@
     "@babel/cli": "^7.15.4",
     "@babel/core": "^7.15.5",
     "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.15.4",
+    "@babel/preset-env": "^7.15.6",
     "autoprefixer": "^10.3.4",
     "babel-loader": "^8.2.2",
-    "css-loader": "^6.2.0",
     "postcss": "^8.3.6",
     "postcss-cli": "^8.3.1",
-    "postcss-loader": "^6.1.1",
-    "style-loader": "^3.2.1",
-    "webpack": "^5.52.0",
+    "webpack": "^5.52.1",
     "webpack-cli": "^4.8.0"
   },
   "browserslist": [
-    "last 2 version",
-    "ie >= 11"
+    "ie 11",
+    "last 2 version"
   ]
 }
