@@ -6,11 +6,7 @@
   "scripts": {
     "webpack": "npx webpack",
     "webpackd": "npx webpack --mode=development",
-    "ie11": "npx postcss -c postcss.config.js -o ./dist/css/ms-style.css ./dev/css/style.css",
-    "babel": "npx babel ./dev/build/wpack.js --out-file ./dist/build/wpack-babel.js",
-    "babelm": "npx babel ./dev/build/main.js --out-file ./dist/build/main-babel.js",
-    "babelv": "npx babel ./dev/build/vendor.js --out-file ./dist/build/vendor-babel.js",
-    "babelmv": "npm run babelm && npm run babelv"
+    "ie11": "npx postcss -c postcss.config.js -o ./dist/css/ms-style.css ./dev/css/style.css"
   },
   "keywords": [],
   "author": "",
