@@ -238,7 +238,7 @@ const optionPercent = {
                 backgroundColor: '#6a7985'
             }
         },
-        position: function (point, params, dom, rect, size) {
+        position: function(point, params, dom, rect, size) {
             // x, y
             return [point[0] - 190, point[1] + 20];
         },
