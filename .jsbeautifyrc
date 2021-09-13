@@ -1,0 +1,8 @@
+{
+    "html": {
+        "wrap_line_length": 512
+    },
+    "css": {
+        "selector_separator_newline": false
+    }
+}
