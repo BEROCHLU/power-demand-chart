@@ -1,6 +1,6 @@
 'use strict';
 
-import $ from 'jquery';
+import $ from 'jquery/dist/jquery.slim';
 
 $('li[name="arrow"]').on('click', function () {
     const INDEX = $(this).index();
