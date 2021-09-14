@@ -28,7 +28,7 @@ jobs:
 
       - name: webpack-build
         run: npx webpack
-        
+
       - name: autoprefixer
         run: npm run ie11
 
