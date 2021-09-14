@@ -1,10 +1,9 @@
 {
   "name": "webpack-babel",
-  "version": "2.0.0",
-  "description": "No description",
+  "version": "2.0.1",
+  "description": "babel-load webpack",
   "main": "index.js",
   "scripts": {
-    "webpack": "npx webpack",
     "webpackd": "npx webpack --mode=development",
     "webpackw": "npx webpack --watch",
     "ie11": "npx postcss -c postcss.config.js -o ./dist/css/ms-style.css ./dev/css/style.css"
