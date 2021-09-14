@@ -47,6 +47,6 @@ module.exports = (env, argv) => {
         config.devtool = 'cheap-source-map';
         console.log(config);
     }
-    
+
     return config;
 }

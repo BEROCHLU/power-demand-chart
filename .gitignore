@@ -1,4 +1,4 @@
 node_modules/
 package-lock.json
 test/old/
-dev/build/*.map
+dist/build/*.map
