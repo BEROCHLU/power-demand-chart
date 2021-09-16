@@ -29,12 +29,13 @@ const config = {
                             '@babel/preset-env',
                             {
                                 targets: ['ie 11'],
-                                useBuiltIns: 'entry',
+                                useBuiltIns: 'usage',
                                 corejs: 3,
                                 debug: false
                             }
                         ]
-                    ]
+                    ],
+                    sourceType: 'unambiguous'
                 }
             }
         }]

@@ -1,7 +1,7 @@
 'use strict';
 
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
+//import 'core-js/stable';
+//import 'regenerator-runtime/runtime';
 
 import _ from 'lodash';
 import * as echarts from 'echarts';
