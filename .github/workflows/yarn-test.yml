@@ -26,7 +26,5 @@ jobs:
           node-version: 14
       - run: npm install --production
 
-      - name: package install with yarn
-        run: |
-          npm install --production
-          npm list --depth=0
+      - name: command test
+        run: npm list --depth=0
