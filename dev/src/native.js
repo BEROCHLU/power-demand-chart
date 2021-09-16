@@ -1,16 +1,19 @@
 'use strict';
 
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
+import _ from 'lodash';
+import * as echarts from 'echarts';
+import dayjs from 'dayjs';
+import isBetween from 'dayjs/plugin/isBetween.js';
 import {
-    arrHsh
-} from './rowdata-all.mjs';
+    unit
+} from 'mathjs';
+import crossfilter from 'crossfilter2';
+import arrHsh from './rowdata-all';
 
-//import '../css/ms-style.css';
-
-if (window.dayjs_plugin_isBetween) {
-    dayjs.extend(window.dayjs_plugin_isBetween); //install dayjs-plugin from browser
-} else {
-    dayjs.extend(isBetween); //node.js
-}
+dayjs.extend(isBetween); //node.js
 
 const arrLegendColor = ['#5470c6', '#d2691e', '#73c0de', '#ee6666', '#9a60b4', '#91cc75', '#fc8452', '#fac858', '#ea7ccc', '#008000'];
 const arrLegendColorAll = ['#a3a3a3', ...arrLegendColor];
@@ -235,7 +238,7 @@ const optionPercent = {
                 backgroundColor: '#6a7985'
             }
         },
-        position: function (point, params, dom, rect, size) {
+        position: function(point, params, dom, rect, size) {
             // x, y
             return [point[0] - 190, point[1] + 20];
         },
@@ -573,7 +576,7 @@ class SetupChart {
         optionHeatmap.series[0].data = this.arrPlotHeat;
 
         const n = _.sum(hshAxis.arrAxisY);
-        document.querySelector('#powersum1').innerText = math.unit(n, 'MW').format(3);
+        document.querySelector('#powersum1').innerText = unit(n, 'MW').format(3);
     }
 
     setStack() {
@@ -589,7 +592,7 @@ class SetupChart {
 
             const n = _.sum(hshStack[strLegend]);
             const elemNumeric = document.createElement('div');
-            elemNumeric.innerText = math.unit(n, 'MW').format(3);
+            elemNumeric.innerText = unit(n, 'MW').format(3);
             elemNumeric.className = 'numeric';
             elemNumeric.setAttribute('value', strLegend);
 
@@ -659,7 +662,7 @@ class SetupChart {
         optionLineA.series[0].data = hshAxis.arrAxisY;
 
         const n = _.sum(hshAxis.arrAxisY);
-        document.querySelector('#powersum2').innerText = math.unit(n, 'MW').format(3);
+        document.querySelector('#powersum2').innerText = unit(n, 'MW').format(3);
     }
 
     reDrawHeat(hshAxis) {
@@ -680,7 +683,7 @@ class SetupChart {
         optionLine.series[0].data = hshAxis.arrAxisY;
 
         const n = _.sum(hshAxis.arrAxisY);
-        document.querySelector('#powersum1').innerText = math.unit(n, 'MW').format(3);
+        document.querySelector('#powersum1').innerText = unit(n, 'MW').format(3);
         echartsLine.setOption(optionLine, true);
     }
 
@@ -711,7 +714,7 @@ class SetupChart {
         optionLineA.series[0].data = hshAxis.arrAxisY;
 
         const n = _.sum(hshAxis.arrAxisY);
-        document.querySelector('#powersum2').innerText = math.unit(n, 'MW').format(3);
+        document.querySelector('#powersum2').innerText = unit(n, 'MW').format(3);
         echartsLineA.setOption(optionLineA, true);
     }
 
@@ -730,7 +733,7 @@ class SetupChart {
         });
 
         const n = _.sum(hshAxis.arrAxisY);
-        document.querySelector('#powersum2').innerText = math.unit(n, 'MW').format(3);
+        document.querySelector('#powersum2').innerText = unit(n, 'MW').format(3);
 
         echartsLineA.clear();
         optionLineA.title.text = `${data_selector2.value}: ${ym_selector2a.value}~${ym_selector2b.value}`;
@@ -747,7 +750,7 @@ class SetupChart {
             hshStack[strLegend] = _.map(arrHshFilterDay, hsh => hsh[strLegend]);
 
             const n = _.sum(hshStack[strLegend]);
-            document.querySelector(`.numeric[value=${strLegend}]`).innerText = math.unit(n, 'MW').format(3);
+            document.querySelector(`.numeric[value=${strLegend}]`).innerText = unit(n, 'MW').format(3);
 
             return {
                 name: strLegend,
@@ -899,7 +902,7 @@ period_button3.addEventListener('click', () => {
         setupchart.arrSeriesStack = _.map(setupchart.arrLegend, strLegend => {
 
             const n = _.sum(hshStack[strLegend]);
-            document.querySelector(`.numeric[value=${strLegend}]`).innerText = math.unit(n, 'MW').format(3);
+            document.querySelector(`.numeric[value=${strLegend}]`).innerText = unit(n, 'MW').format(3);
 
             return {
                 name: strLegend,

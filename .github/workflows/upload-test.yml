@@ -6,7 +6,7 @@ name: upload-test
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: [ babel-test ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -26,17 +26,12 @@ jobs:
           node-version: 14
       - run: npm install
 
-      - name: webpack-Build
-        run: npm run webpack
-        
+      - name: webpack-build
+        run: npx webpack
+
       - name: autoprefixer
         run: npm run ie11
 
-      - name: babel-Build
-        run: |
-          npm run babelm
-          npm run babelv
-        
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
