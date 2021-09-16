@@ -23,7 +23,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 14
-      - run: npm install --production
+      - run: |
+          npm install --production
+          npm ls
 
       - name: webpack build
         run: npx webpack

@@ -27,7 +27,7 @@ const echartsPercent = echarts.init(cn2a);
 
 const optionHeatmap = {
     title: {
-        text: '電力需要ヒートマップ: 2020-01',
+        text: null,
         left: 'center'
     },
     tooltip: {
@@ -83,7 +83,7 @@ const optionHeatmap = {
 }
 const optionLine = {
     title: {
-        text: '電力需要: 2020-01',
+        text: null,
         left: 'center'
     },
     tooltip: {
@@ -155,7 +155,7 @@ const optionLine = {
 }
 const optionLineA = {
     title: {
-        text: '電力需要: 2020-01~2020-01',
+        text: null,
         left: 'center'
     },
     tooltip: {
@@ -417,7 +417,6 @@ class SetupChart {
         const arrHshCD = _.cloneDeep(arrHsh); //deep copy
         _.forEach(arrHshCD, hsh => {
             delete hsh["電力需要"];
-            //delete hsh["揚水"];
         });
 
         this.arrHshPercent = _.map(arrHshCD, hsh => {
@@ -487,7 +486,6 @@ class SetupChart {
         const arrHshCD = _.cloneDeep(this.arrZip); //deep copy
         _.forEach(arrHshCD, hsh => {
             delete hsh["電力需要"];
-            //delete hsh["揚水"];
         });
 
         this.arrHshPercentDay = _.map(arrHshCD, hsh => {
@@ -566,9 +564,11 @@ class SetupChart {
             return [int_day, int_hour, int_value || '-'];
         });
 
+        optionLine.title.text = `${data_selector1.value}: ${ym_selector1.value}`;
         optionLine.xAxis.data = hshAxis.arrAxisX;
         optionLine.series[0].data = hshAxis.arrAxisY;
 
+        optionHeatmap.title.text = `${data_selector1.value}ヒートマップ: ${ym_selector1.value}`;
         optionHeatmap.xAxis.data = _.chain(this.arrFilter).map(hsh => hsh['月日']).uniq().value();
         optionHeatmap.yAxis.data = _.map(_.range(24), String);
         optionHeatmap.visualMap.min = _.min(hshAxis.arrAxisY);
@@ -658,6 +658,7 @@ class SetupChart {
             hshAxis.arrAxisY.push(int_yAxis);
         });
 
+        optionLineA.title.text = `${data_selector2.value}: ${ym_selector2a.value}~${ym_selector2b.value}`;
         optionLineA.xAxis.data = hshAxis.arrAxisX;
         optionLineA.series[0].data = hshAxis.arrAxisY;
 
