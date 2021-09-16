@@ -1,6 +1,6 @@
 {
   "name": "webpack-babel",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "babel-load webpack",
   "main": "index.js",
   "scripts": {
