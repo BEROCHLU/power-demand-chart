@@ -1,9 +1,10 @@
 {
   "name": "webpack-babel",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "babel-load webpack",
   "main": "index.js",
   "scripts": {
+    "webpack": "npx webpack",
     "webpackd": "npx webpack --mode=development",
     "webpackw": "npx webpack --watch",
     "ie11": "npx postcss -c postcss.config.js -o ./dist/css/ms-style.css ./dev/css/style.css"
@@ -17,8 +18,8 @@
     "echarts": "^5.2.0",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
-    "mathjs": "^9.4.4",
-    "xlsx": "^0.17.1"
+    "mathjs": "^9.4.5",
+    "xlsx": "^0.17.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.4",
