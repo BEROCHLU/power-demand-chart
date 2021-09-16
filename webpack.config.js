@@ -20,7 +20,7 @@ const config = {
             echarts: 'echarts',
             dayjs: 'dayjs',
             isBetween: 'dayjs/plugin/isBetween.js',
-            $: 'jquery',
+            $: 'jquery/dist/jquery.slim',
             math: 'mathjs',
             crossfilter: 'crossfilter'
         })
@@ -47,7 +47,8 @@ module.exports = (env, argv) => {
     if (argv.mode === 'development') {
         config.mode = 'development';
         config.devtool = 'cheap-source-map';
+        console.log(config);
     }
-    console.log(config);
+    
     return config;
 }
