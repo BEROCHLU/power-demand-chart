@@ -27,7 +27,7 @@ jobs:
           npm install --production
           npm list --depth=0
 
-      - name: webpack build
+      - name: webpack-build
         run: npx webpack
         
       - name: autoprefixer
