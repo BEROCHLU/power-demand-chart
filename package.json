@@ -4,10 +4,10 @@
   "description": "babel-load webpack",
   "main": "index.js",
   "scripts": {
-    "webpack": "npx webpack",
-    "webpackd": "npx webpack --mode=development",
-    "webpackw": "npx webpack --watch",
-    "ie11": "npx postcss -c postcss.config.js -o ./dist/css/ms-style.css ./dev/css/style.css"
+    "build": "npx webpack",
+    "buildv": "npx webpack --mode=development",
+    "buildw": "npx webpack --watch",
+    "postbuild": "npx postcss ./dev/css/style.css --config postcss.config.js -o ./dist/css/ms-style.css"
   },
   "keywords": [],
   "author": "",
