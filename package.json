@@ -1,6 +1,6 @@
 {
   "name": "webpack-babel",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "babel-load webpack",
   "main": "index.js",
   "scripts": {
@@ -13,22 +13,22 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@babel/cli": "^7.15.4",
+    "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.6",
     "autoprefixer": "^10.3.4",
     "babel-loader": "^8.2.2",
-    "core-js": "^3.17.3",
+    "core-js": "^3.18.0",
     "crossfilter2": "^1.5.4",
     "dayjs": "^1.10.7",
-    "echarts": "^5.2.0",
+    "echarts": "^5.2.1",
     "jquery": "^3.6.0",
     "lodash": "^4.17.21",
     "mathjs": "^9.4.5",
     "postcss": "^8.3.6",
     "postcss-cli": "^8.3.1",
     "regenerator-runtime": "^0.13.9",
-    "webpack": "^5.52.1",
+    "webpack": "^5.53.0",
     "webpack-cli": "^4.8.0"
   },
   "devDependencies": {
