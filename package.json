@@ -1,6 +1,6 @@
 {
   "name": "webpack-babel",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "babel-load webpack",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.5",
@@ -36,6 +36,6 @@
   },
   "browserslist": [
     "ie 11",
-    "last 2 version"
+    "> 2%"
   ]
 }

@@ -139,12 +139,8 @@ button {
 ul {
     list-style-type: none;
     margin: 3px 0;
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
-    -webkit-box-pack: center;
-        -ms-flex-pack: center;
-            justify-content: center;
+    justify-content: center;
 }
 
 li {
