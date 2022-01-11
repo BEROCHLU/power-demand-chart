@@ -7,7 +7,8 @@
     "build": "npx webpack",
     "buildv": "npx webpack --mode=development",
     "buildw": "npx webpack --watch",
-    "postbuild": "npx postcss ./dev/css/style.css --config postcss.config.js -o ./dist/css/ms-style.css"
+    "postbuild": "npx postcss ./dev/css/style.css --config postcss.config.js -o ./dist/css/ms-style.css",
+    "create-data": "cd ./test && npx ts-node ./create-rowdata.ts"
   },
   "keywords": [],
   "author": "",
