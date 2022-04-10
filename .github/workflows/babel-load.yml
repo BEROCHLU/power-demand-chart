@@ -22,7 +22,7 @@ jobs:
       - name: setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
       - run: |
           npm install --production
           npm list --depth=0
