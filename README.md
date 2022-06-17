@@ -10,4 +10,4 @@ Data source: public data by OCCTO
 Server: AWS S3  
 Build: webpack, babel  
 CI/CD: GitHub Actions  
-Supported browsers: Google Chrome, Firefox, Edge, IE11  
+Supported browsers: Google Chrome, Firefox, Edge  
