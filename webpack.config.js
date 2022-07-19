@@ -28,7 +28,7 @@ const config = {
                         [
                             '@babel/preset-env',
                             {
-                                targets: ['ie 11'],
+                                targets: ["> 0.5%", "not IE 11"],
                                 useBuiltIns: 'usage',
                                 corejs: 3,
                                 debug: false
