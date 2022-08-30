@@ -15,9 +15,12 @@ grid1, grid2, grid3, grid4, grid5, grid6 {
 
 .first-panel.active-panel {
     height: inherit;
+    display: -ms-grid;
     display: grid;
     gap: 4px;
-    grid-template:
+    -ms-grid-rows: 1fr 4px 1fr 4px 28px;
+    -ms-grid-columns: 100px 4px 1fr 4px 1fr;
+        grid-template:
         "grid1 grid2 grid3"1fr 
         "grid4 grid5 grid5"1fr 
         "grid6 grid6 grid6"28px 
@@ -26,9 +29,12 @@ grid1, grid2, grid3, grid4, grid5, grid6 {
 
 .last-panel.active-panel {
     height: inherit;
+    display: -ms-grid;
     display: grid;
     gap: 4px;
-    grid-template:
+    -ms-grid-rows: 1fr 4px 1fr 4px 28px;
+    -ms-grid-columns: 100px 4px 1fr;
+        grid-template:
         "grid1 grid2"1fr 
         "grid1 grid3"1fr 
         "grid6 grid6"28px 

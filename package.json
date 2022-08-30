@@ -37,6 +37,6 @@
   },
   "browserslist": [
     "> 0.5%",
-    "not IE 11"
+    "IE 11"
   ]
 }
