@@ -22,8 +22,12 @@ const arrLegendColorAll = ['#a3a3a3', ...arrLegendColor];
 const echartsHeatmap = echarts.init(cn2);
 const echartsLine = echarts.init(cn3);
 const echartsLineA = echarts.init(cn5);
-const echartsStack = echarts.init(cn3a);
-const echartsPercent = echarts.init(cn2a);
+const echartsStack = echarts.init(cn3a, null, {
+    renderer: 'svg'
+});
+const echartsPercent = echarts.init(cn2a, null, {
+    renderer: 'svg'
+});
 
 const optionHeatmap = {
     title: {
@@ -585,7 +589,7 @@ class SetupChart {
             hshStack[strLegend] = _.map(this.arrFilter, hsh => hsh[strLegend]);
 
             const elemhead = document.createElement('div');
-            elemhead.innerHTML = `<span style="float:left;margin-top:4px;border-radius:10px;width:10px;height:10px;background-color:${arrLegendColorAll[i]};"></span>${strLegend}`;
+            elemhead.innerHTML = `<span style="float:left;margin-top:4px;border-radius:9px;width:9px;height:9px;background-color:${arrLegendColorAll[i]};"></span>${strLegend}`;
             elemhead.className = 'series-legend';
 
             document.querySelector('.total-view-series').appendChild(elemhead);
