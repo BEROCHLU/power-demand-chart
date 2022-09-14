@@ -23,6 +23,16 @@
  * Date: 2021-03-02T17:08Z
  */
 
+/*!
+* ZRender, a high performance 2d drawing library.
+*
+* Copyright (c) 2013, Baidu Inc.
+* All rights reserved.
+*
+* LICENSE
+* https://github.com/ecomfe/zrender/blob/master/LICENSE.txt
+*/
+
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
 
