@@ -5,8 +5,8 @@ URL: http://aws-s3-tokyo.s3-website-ap-northeast-1.amazonaws.com/
 or  
 URL: http://pleasecov.g2.xrea.com/pdc/  
   
-Description: Time series chart for power supply and demand in Japan  
-Data source: public data by OCCTO  
+Description: A time series chart depicting power supply and demand in Japan.  
+Data source: Publicly available and provided by OCCTO.  
 Server: AWS S3  
 Build: webpack, babel  
 CI/CD: GitHub Actions  
