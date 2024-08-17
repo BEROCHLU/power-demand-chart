@@ -1,12 +1,12 @@
 {
   "name": "webpack-babel",
-  "version": "3.0.5",
+  "version": "3.1.0",
   "description": "babel-load webpack",
   "main": "index.js",
   "scripts": {
     "build": "npx webpack",
-    "buildv": "npx webpack --mode=development",
-    "buildw": "npx webpack --watch",
+    "build-v": "npx webpack --mode=development",
+    "build-w": "npx webpack --watch",
     "postbuild": "npx postcss ./dev/css/style.css --config postcss.config.js -o ./dist/css/ms-style.css",
     "create-data": "cd ./test && npx ts-node ./create-rowdata.ts"
   },
@@ -14,23 +14,23 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@babel/cli": "^7.17.6",
-    "@babel/core": "^7.17.9",
-    "@babel/preset-env": "^7.16.11",
-    "autoprefixer": "^10.4.4",
-    "babel-loader": "^8.2.4",
-    "core-js": "^3.21.1",
+    "@babel/cli": "^7.24.8",
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.3",
+    "autoprefixer": "^10.4.20",
+    "babel-loader": "^8.3.0",
+    "core-js": "^3.38.0",
     "crossfilter2": "^1.5.4",
-    "dayjs": "^1.11.0",
+    "dayjs": "^1.11.12",
     "echarts": "^5.5.1",
     "jquery": "^3.7.1",
     "lodash": "^4.17.21",
     "mathjs": "^12.4.3",
-    "postcss": "^8.4.12",
+    "postcss": "^8.4.41",
     "postcss-cli": "^9.1.0",
-    "regenerator-runtime": "^0.13.9",
-    "webpack": "^5.72.0",
-    "webpack-cli": "^4.9.2"
+    "regenerator-runtime": "^0.13.11",
+    "webpack": "^5.93.0",
+    "webpack-cli": "^4.10.0"
   },
   "devDependencies": {
     "xlsx": "^0.18.5"
