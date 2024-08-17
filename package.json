@@ -1,6 +1,6 @@
 {
   "name": "webpack-babel",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "description": "babel-load webpack",
   "main": "index.js",
   "scripts": {
@@ -22,10 +22,10 @@
     "core-js": "^3.21.1",
     "crossfilter2": "^1.5.4",
     "dayjs": "^1.11.0",
-    "echarts": "^5.5.0",
-    "jquery": "^3.6.0",
+    "echarts": "^5.5.1",
+    "jquery": "^3.7.1",
     "lodash": "^4.17.21",
-    "mathjs": "^10.4.3",
+    "mathjs": "^12.4.3",
     "postcss": "^8.4.12",
     "postcss-cli": "^9.1.0",
     "regenerator-runtime": "^0.13.9",
