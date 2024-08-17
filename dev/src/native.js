@@ -737,6 +737,8 @@ class SetupChart {
             hshAxis.arrAxisY.push(int_yAxis);
         });
 
+        //let _arr = hshAxis.arrAxisY;
+        //_arr = _.filter(_arr, (value) => !_.isNaN(value));
         const n = _.sum(hshAxis.arrAxisY);
         document.querySelector('#powersum2').innerText = unit(n, 'MW').format(3);
 

@@ -1,4 +1,4 @@
-export {};
+export { };
 
 const XLSX = require('xlsx');
 const _ = require('lodash');
@@ -55,7 +55,9 @@ _.forEach(arrStrFile, (strFile: string) => {
         range: 3 //skip 3 rows
     });
 
-    let arrTemplate: Power[] = _.map(arrHsh, (hsh: Hsh) => {
+    let arrTemplate: Power[] = [];
+
+    _.forEach(arrHsh, (hsh: Hsh) => {
         const strHour = hsh['時刻'].replace('時', '');
         hsh['時刻'] = parseInt(strHour);
 
@@ -63,9 +65,15 @@ _.forEach(arrStrFile, (strFile: string) => {
         const strDate = dayjs('1900-01-01').add(nExcelSerial, 'days').format('YYYY-MM-DD');
         hsh['月日'] = strDate;
 
-        return _.mapKeys(hsh, (value: number, key: string) => {
+        if (!_.isNumber(hsh['需要'])) {
+            console.table(hsh);
+            return;
+        }
+
+        let newhsh = _.mapKeys(hsh, (value: number, key: string) => {
             return (key === '需要') ? '電力需要' : key;
         });
+        arrTemplate.push(newhsh);
     });
 
     arrConcat = _.concat(arrConcat, arrTemplate);
