@@ -1,15 +1,12 @@
-'use strict';
-
 //import 'core-js/stable';
 //import 'regenerator-runtime/runtime';
-
 import _ from 'lodash';
 import * as echarts from 'echarts';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween.js';
 import { unit } from 'mathjs';
 import crossfilter from 'crossfilter2';
-import arrHsh from './rowdata-all';
+import { arrHsh } from './rowdata-all.js';
 
 dayjs.extend(isBetween); //node.js
 
