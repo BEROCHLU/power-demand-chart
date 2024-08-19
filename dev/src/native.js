@@ -2,14 +2,9 @@ import _ from 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/+esm';
 import * as echarts from "https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.esm.min.js";
 import dayjs from 'https://cdn.jsdelivr.net/npm/dayjs@1.11.12/+esm';
 import isBetween from 'https://cdn.jsdelivr.net/npm/dayjs@1.11.12/esm/plugin/isBetween/index.js';
-import {
-    unit
-} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+import { unit } from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
 import crossfilter from 'https://cdn.jsdelivr.net/npm/crossfilter2@1.5.4/+esm';
-
-import {
-    arrHsh
-} from './rowdata-all.js';
+import { arrHsh } from './rowdata-all.js';
 
 dayjs.extend(isBetween);
 

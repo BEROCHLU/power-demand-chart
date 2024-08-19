@@ -1,5 +1,3 @@
-'use strict';
-
 import $ from 'https://cdn.jsdelivr.net/npm/jquery@3.7.1/+esm';
 
 $('li[name="arrow"]').on('click', function () {
