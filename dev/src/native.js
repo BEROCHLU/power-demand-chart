@@ -1,19 +1,17 @@
-'use strict';
-
-//import 'core-js/stable';
-//import 'regenerator-runtime/runtime';
-
-import _ from 'lodash';
-import * as echarts from 'echarts';
-import dayjs from 'dayjs';
-import isBetween from 'dayjs/plugin/isBetween.js';
+import _ from 'https://cdn.jsdelivr.net/npm/lodash@4.17.21/+esm';
+import * as echarts from "https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.esm.min.js";
+import dayjs from 'https://cdn.jsdelivr.net/npm/dayjs@1.11.12/+esm';
+import isBetween from 'https://cdn.jsdelivr.net/npm/dayjs@1.11.12/esm/plugin/isBetween/index.js';
 import {
     unit
-} from 'mathjs';
-import crossfilter from 'crossfilter2';
-import arrHsh from './rowdata-all';
+} from 'https://cdn.jsdelivr.net/npm/mathjs@13.0.3/+esm';
+import crossfilter from 'https://cdn.jsdelivr.net/npm/crossfilter2@1.5.4/+esm';
 
-dayjs.extend(isBetween); //node.js
+import {
+    arrHsh
+} from './rowdata-all.js';
+
+dayjs.extend(isBetween);
 
 const arrLegendColor = ['#5470c6', '#d2691e', '#73c0de', '#ee6666', '#9a60b4', '#91cc75', '#fc8452', '#fac858', '#ea7ccc', '#008000'];
 const arrLegendColorAll = ['#a3a3a3', ...arrLegendColor];
