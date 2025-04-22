@@ -66,6 +66,7 @@ _.forEach(arrStrFile, (strFile: string) => {
         hsh['月日'] = strDate;
 
         if (!_.isNumber(hsh['需要'])) {
+            console.log("データが欠けている")
             console.table(hsh);
             return;
         }
