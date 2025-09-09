@@ -1,7 +1,7 @@
 # Power Demand Chart
 
-![page1](https://user-images.githubusercontent.com/42054433/132652050-cef34bf0-7228-4a53-b6b9-dba8404c4b9d.JPG)  
-![page2](https://user-images.githubusercontent.com/42054433/132651939-c1bd24d9-6d05-4913-922b-ab9f23ff22d5.JPG)   
+![page1](https://github.com/BEROCHLU/power-demand-chart/blob/main/.github/image1.png)  
+![page2](https://github.com/BEROCHLU/power-demand-chart/blob/main/.github/image2.png)   
 
 ---
 
