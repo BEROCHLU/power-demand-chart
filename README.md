@@ -1,5 +1,9 @@
 # 日本の電力需給チャート
 
+<p align="right">
+  <strong>日本語</strong> | <a href="./README_EN.md">English</a>
+</p>
+
 [![Deploy to S3](https://github.com/BEROCHLU/power-demand-chart/actions/workflows/deploy-s3.yml/badge.svg)](https://github.com/BEROCHLU/power-demand-chart/actions/workflows/deploy-s3.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
