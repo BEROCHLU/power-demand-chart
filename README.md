@@ -15,9 +15,7 @@
 
 AWS S3 の静的 Web サイトホスティングで公開します。
 
-```text
-http://aws-s3-tokyo.s3-website-ap-northeast-1.amazonaws.com/
-```
+[http://aws-s3-tokyo.s3-website-ap-northeast-1.amazonaws.com/](http://aws-s3-tokyo.s3-website-ap-northeast-1.amazonaws.com/)
 
 `main` ブランチへの push をトリガーに、GitHub Actions が `npm install`、`npm run build`、`dist` の S3 同期を実行します。
 
