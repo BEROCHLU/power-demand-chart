@@ -309,3 +309,27 @@ li[name="arrow"]:not(.active-tab):hover img {
 .license {
     cursor: default;
 }
+
+/* Z-Index Stacking Context adjustments to bring upper chart tooltips to the front */
+.first-panel grid2, .first-panel grid3 {
+    position: relative;
+    z-index: 10;
+}
+.first-panel grid5 {
+    position: relative;
+    z-index: 5;
+}
+
+.last-panel grid2 {
+    position: relative;
+    z-index: 10;
+}
+.last-panel grid3 {
+    position: relative;
+    z-index: 5;
+}
+
+/* Dynamically raise z-index of hovered chart container to bring its tooltip to the front */
+grid2:hover, grid3:hover, grid5:hover {
+    z-index: 100 !important;
+}

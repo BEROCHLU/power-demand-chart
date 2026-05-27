@@ -605,6 +605,75 @@ class SetupChart {
         });
     }
 
+    setCrossfilterYear() {
+        const cf2 = crossfilter(arrHsh);
+        const myYearDimension = cf2.dimension(d => {
+            return dayjs(d['月日']).format('YYYY');
+        });
+
+        const arrKeysOfHsh = _.pull(_.keys(arrHsh[0]), '月日', '時刻');
+        const arrMap = _.map(arrKeysOfHsh, strKey => {
+            const arrHshDim = myYearDimension.group().reduceSum(d => d[strKey]).all();
+
+            let arrReturn = _.map(arrHshDim, hshDim => {
+                return _.mapKeys(hshDim, (v, k) => {
+                    if (k === 'key') {
+                        return '月日';
+                    } else if (k === 'value') {
+                        return strKey;
+                    }
+                });
+            });
+
+            arrReturn = _.map(arrReturn, hsh => {
+                return _.mapValues(hsh, (value, key) => {
+                    let result;
+                    if (key === '月日') {
+                        result = value;
+                    } else {
+                        result = _.round(value, 1);
+                    }
+                    return result;
+                });
+            });
+
+            return arrReturn;
+        });
+
+        this.arrZipYear = _.zipWith(...arrMap, (...args) => {
+            return _.merge(...args);
+        });
+    }
+
+    setHshPercentYear() {
+        const arrHshCD = _.cloneDeep(this.arrZipYear); //deep copy
+        _.forEach(arrHshCD, hsh => {
+            delete hsh["電力需要"];
+        });
+
+        this.arrHshPercentYear = _.map(arrHshCD, hsh => {
+            let sum = 0;
+            _.forEach(hsh, (value, key) => {
+                if (key === '月日') {
+                    sum += 0;
+                } else {
+                    sum += value;
+                }
+            });
+
+            return _.mapValues(hsh, (value, key, object) => {
+                let result;
+                if (key === '月日') {
+                    result = value;
+                } else {
+                    result = value / sum * 100;
+                    result = _.round(result, 1)
+                }
+                return result;
+            });
+        });
+    }
+
     setarrFilter() {
         const mStart = dayjs(ym_selector1.value);
         this.arrFilter = _.filter(arrHsh, hsh => {
@@ -880,6 +949,8 @@ function initApp() {
     setupchart.setHshPercentDay();
     setupchart.setCrossfilterMonth();
     setupchart.setHshPercentMonth();
+    setupchart.setCrossfilterYear();
+    setupchart.setHshPercentYear();
     setupchart.setarrFilter();
     setupchart.setLegend();
     setupchart.setarrPlotHeat();
@@ -981,6 +1052,12 @@ function initApp() {
                 });
                 //re-draw
                 setupchart.changeTick(arrHshFilterMonth);
+            } else if (tick_selector.value === '1year') {
+                const arrHshFilterYear = _.filter(setupchart.arrZipYear, hsh => {
+                    return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'year', '[]');
+                });
+                //re-draw
+                setupchart.changeTick(arrHshFilterYear);
             }
     });
 
@@ -1106,6 +1183,35 @@ function initApp() {
             });
 
             setupchart.changeTickStack(arrHshFilterMonth);
+        } else if (tick_selector2.value === '1year') {
+            const arrHshFilterYear = _.filter(setupchart.arrZipYear, hsh => {
+                return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'year', '[]');
+            });
+
+            arrAxisXStack = _.map(arrHshFilterYear, hsh => hsh['月日']);
+
+            const arrHshDataPercent = _.filter(setupchart.arrHshPercentYear, hsh => {
+                return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'year', '[]');
+            });
+
+            hshStack = {}
+            arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
+                hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
+
+                return {
+                    name: strLegend,
+                    type: 'bar',
+                    stack: 'stackPercent',
+                    areaStyle: {},
+                    symbol: 'none',
+                    lineStyle: {
+                        width: 0.5
+                    },
+                    data: hshStack[strLegend]
+                }
+            });
+
+            setupchart.changeTickStack(arrHshFilterYear);
         }
 
         //re-draw
