@@ -80,5 +80,8 @@ _.forEach(arrStrFile, (strFile: string) => {
     arrConcat = _.concat(arrConcat, arrTemplate);
 });
 
-const strExport: string = 'module.exports = ' + JSON.stringify(arrConcat, null, '\t') + ';';
-fs.writeFileSync('../dev/src/rowdata-all.js', strExport);
+const dirDistData = path.join(__dirname, '../dist/data');
+if (!fs.existsSync(dirDistData)) {
+    fs.mkdirSync(dirDistData, { recursive: true });
+}
+fs.writeFileSync(path.join(dirDistData, 'rowdata-all.json'), JSON.stringify(arrConcat));

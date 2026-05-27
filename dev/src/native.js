@@ -8,7 +8,8 @@ import {
     unit
 } from 'mathjs';
 import crossfilter from 'crossfilter2';
-import arrHsh from './rowdata-all';
+
+let arrHsh = [];
 
 dayjs.extend(isBetween); //node.js
 
@@ -867,244 +868,261 @@ class SetupChart {
     }
 }
 
-const setupchart = new SetupChart();
-setupchart.setHshPercent();
-setupchart.setCrossfilter();
-setupchart.setHshPercentDay();
-setupchart.setCrossfilterMonth();
-setupchart.setHshPercentMonth();
-setupchart.setarrFilter();
-setupchart.setLegend();
-setupchart.setarrPlotHeat();
-setupchart.setStack();
-setupchart.setStackPercent();
-setupchart.setLineA();
+function initApp() {
+    const setupchart = new SetupChart();
+    setupchart.setHshPercent();
+    setupchart.setCrossfilter();
+    setupchart.setHshPercentDay();
+    setupchart.setCrossfilterMonth();
+    setupchart.setHshPercentMonth();
+    setupchart.setarrFilter();
+    setupchart.setLegend();
+    setupchart.setarrPlotHeat();
+    setupchart.setStack();
+    setupchart.setStackPercent();
+    setupchart.setLineA();
 
-// draw a chart
-echartsHeatmap.setOption(optionHeatmap);
-echartsLine.setOption(optionLine);
-echartsLineA.setOption(optionLineA);
-echartsPercent.setOption(optionPercent);
-echartsStack.setOption(optionStack);
+    // draw a chart
+    echartsHeatmap.setOption(optionHeatmap);
+    echartsLine.setOption(optionLine);
+    echartsLineA.setOption(optionLineA);
+    echartsPercent.setOption(optionPercent);
+    echartsStack.setOption(optionStack);
 
-//legend addEventListener
-echartsPercent.on('legendselectchanged', params => {
-    setupchart.hshLegendSelectPercent = params.selected;
-});
-echartsPercent.on('legendselectall', params => {
-    setupchart.hshLegendSelectPercent = params.selected;
-});
-echartsPercent.on('legendinverseselect', params => {
-    setupchart.hshLegendSelectPercent = params.selected;
-});
-echartsStack.on('legendselectchanged', params => {
-    setupchart.hshLegendSelect = params.selected;
-});
-echartsStack.on('legendselectall', params => {
-    setupchart.hshLegendSelect = params.selected;
-});
-echartsStack.on('legendinverseselect', params => {
-    setupchart.hshLegendSelect = params.selected;
-});
-
-// button click
-period_button.addEventListener('click', () => {
-    const mStart = dayjs(ym_selector1.value);
-    setupchart.arrFilter = _.filter(arrHsh, hsh => {
-        return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
+    //legend addEventListener
+    echartsPercent.on('legendselectchanged', params => {
+        setupchart.hshLegendSelectPercent = params.selected;
+    });
+    echartsPercent.on('legendselectall', params => {
+        setupchart.hshLegendSelectPercent = params.selected;
+    });
+    echartsPercent.on('legendinverseselect', params => {
+        setupchart.hshLegendSelectPercent = params.selected;
+    });
+    echartsStack.on('legendselectchanged', params => {
+        setupchart.hshLegendSelect = params.selected;
+    });
+    echartsStack.on('legendselectall', params => {
+        setupchart.hshLegendSelect = params.selected;
+    });
+    echartsStack.on('legendinverseselect', params => {
+        setupchart.hshLegendSelect = params.selected;
     });
 
-    let hshAxis = {
-        arrAxisX: [],
-        arrAxisY: []
-    }
+    // button click
+    period_button.addEventListener('click', () => {
+        const mStart = dayjs(ym_selector1.value);
+        setupchart.arrFilter = _.filter(arrHsh, hsh => {
+            return dayjs(hsh['月日']).isBetween(mStart, mStart, 'month', '[]');
+        });
 
-    setupchart.arrPlotHeat = _.map(setupchart.arrFilter, (hsh, i) => {
-        const int_day = parseInt(i / 24);
-        const int_hour = hsh['時刻'];
-        const int_value = hsh[data_selector1.value];
+        let hshAxis = {
+            arrAxisX: [],
+            arrAxisY: []
+        }
 
-        const str_day = hsh['月日'];
-        const str_h = hsh['時刻'];
-        const str_xAxis = `${str_day} ${str_h}:00`;
+        setupchart.arrPlotHeat = _.map(setupchart.arrFilter, (hsh, i) => {
+            const int_day = parseInt(i / 24);
+            const int_hour = hsh['時刻'];
+            const int_value = hsh[data_selector1.value];
 
-        hshAxis.arrAxisX.push(str_xAxis);
-        hshAxis.arrAxisY.push(int_value);
-
-        return [int_day, int_hour, int_value || '-'];
-    });
-
-    //re-draw
-    setupchart.reDrawLine(hshAxis);
-    setupchart.reDrawHeat(hshAxis);
-});
-
-// button click
-period_button2.addEventListener('click', () => {
-    const mStart = dayjs(ym_selector2a.value);
-    const mEnd = dayjs(ym_selector2b.value);
-    setupchart.arrFilter = _.filter(arrHsh, hsh => {
-        return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
-    });
-
-    let hshAxis = {
-        arrAxisX: [],
-        arrAxisY: []
-    }
-
-    if (tick_selector.value === '1hour') {
-        _.forEach(setupchart.arrFilter, hsh => {
-            const int_yAxis = hsh[data_selector2.value];
-            const str_xAxis = `${hsh['月日']} ${hsh['時刻']}:00`;
+            const str_day = hsh['月日'];
+            const str_h = hsh['時刻'];
+            const str_xAxis = `${str_day} ${str_h}:00`;
 
             hshAxis.arrAxisX.push(str_xAxis);
-            hshAxis.arrAxisY.push(int_yAxis);
+            hshAxis.arrAxisY.push(int_value);
+
+            return [int_day, int_hour, int_value || '-'];
         });
+
         //re-draw
-        setupchart.reDrawLineA(hshAxis);
-        } else if (tick_selector.value === '1day') {
+        setupchart.reDrawLine(hshAxis);
+        setupchart.reDrawHeat(hshAxis);
+    });
+
+    // button click
+    period_button2.addEventListener('click', () => {
+        const mStart = dayjs(ym_selector2a.value);
+        const mEnd = dayjs(ym_selector2b.value);
+        setupchart.arrFilter = _.filter(arrHsh, hsh => {
+            return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+        });
+
+        let hshAxis = {
+            arrAxisX: [],
+            arrAxisY: []
+        }
+
+        if (tick_selector.value === '1hour') {
+            _.forEach(setupchart.arrFilter, hsh => {
+                const int_yAxis = hsh[data_selector2.value];
+                const str_xAxis = `${hsh['月日']} ${hsh['時刻']}:00`;
+
+                hshAxis.arrAxisX.push(str_xAxis);
+                hshAxis.arrAxisY.push(int_yAxis);
+            });
+            //re-draw
+            setupchart.reDrawLineA(hshAxis);
+            } else if (tick_selector.value === '1day') {
+                const arrHshFilterDay = _.filter(setupchart.arrZip, hsh => {
+                    return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+                });
+                //re-draw
+                setupchart.changeTick(arrHshFilterDay);
+            } else if (tick_selector.value === '1month') {
+                const arrHshFilterMonth = _.filter(setupchart.arrZipMonth, hsh => {
+                    return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+                });
+                //re-draw
+                setupchart.changeTick(arrHshFilterMonth);
+            }
+    });
+
+    // button click
+    period_button3.addEventListener('click', () => {
+        const mStart = dayjs(ym_selector3a.value);
+        const mEnd = dayjs(ym_selector3b.value);
+        setupchart.arrFilter = _.filter(arrHsh, hsh => {
+            return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+        });
+
+        let arrAxisXStack;
+        let arrHshSeriesPercent;
+        let hshStack = {}
+
+        if (tick_selector2.value === '1hour') {
+            arrAxisXStack = _.map(setupchart.arrFilter, hsh => {
+                return `${hsh['月日']} ${hsh['時刻']}:00`;
+            });
+
+            hshStack = {}
+            _.forEach(setupchart.arrLegend, strLegend => {
+                hshStack[strLegend] = _.map(setupchart.arrFilter, hsh => hsh[strLegend]);
+            });
+            setupchart.arrSeriesStack = _.map(setupchart.arrLegend, strLegend => {
+
+                const n = _.sum(hshStack[strLegend]);
+                document.querySelector(`.numeric[value=${strLegend}]`).innerText = unit(n, 'MWh').format(3);
+
+                return {
+                    name: strLegend,
+                    type: (strLegend === '電力需要') ? 'line' : 'bar',
+                    stack: (strLegend === '電力需要') ? 'stackB' : 'stackA',
+                    areaStyle: {},
+                    symbol: 'none',
+                    lineStyle: {
+                        width: 0.5
+                    },
+                    data: hshStack[strLegend]
+                }
+            });
+
+            const arrHshDataPercent = _.filter(setupchart.arrHshPercent, hsh => {
+                return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+            });
+
+            hshStack = {}
+            arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
+                hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
+
+                return {
+                    name: strLegend,
+                    type: 'bar',
+                    stack: 'stackPercent',
+                    areaStyle: {},
+                    symbol: 'none',
+                    lineStyle: {
+                        width: 0.5
+                    },
+                    data: hshStack[strLegend]
+                }
+            });
+
+            setupchart.reDrawStack(arrAxisXStack);
+            //optionPercent.yAxis[0].min = null;
+
+        } else if (tick_selector2.value === '1day') {
             const arrHshFilterDay = _.filter(setupchart.arrZip, hsh => {
                 return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
             });
-            //re-draw
-            setupchart.changeTick(arrHshFilterDay);
-        } else if (tick_selector.value === '1month') {
+
+            arrAxisXStack = _.map(arrHshFilterDay, hsh => hsh['月日']);
+
+            const arrHshDataPercent = _.filter(setupchart.arrHshPercentDay, hsh => {
+                return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+            });
+
+            hshStack = {}
+            arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
+                hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
+
+                return {
+                    name: strLegend,
+                    type: 'bar',
+                    stack: 'stackPercent',
+                    areaStyle: {},
+                    symbol: 'none',
+                    lineStyle: {
+                        width: 0.5
+                    },
+                    data: hshStack[strLegend]
+                }
+            });
+
+            //optionPercent.yAxis[0].min = -10;
+            setupchart.changeTickStack(arrHshFilterDay);
+        } else if (tick_selector2.value === '1month') {
             const arrHshFilterMonth = _.filter(setupchart.arrZipMonth, hsh => {
                 return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
             });
-            //re-draw
-            setupchart.changeTick(arrHshFilterMonth);
-        }
-});
 
-// button click
-period_button3.addEventListener('click', () => {
-    const mStart = dayjs(ym_selector3a.value);
-    const mEnd = dayjs(ym_selector3b.value);
-    setupchart.arrFilter = _.filter(arrHsh, hsh => {
-        return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+            arrAxisXStack = _.map(arrHshFilterMonth, hsh => hsh['月日']);
+
+            const arrHshDataPercent = _.filter(setupchart.arrHshPercentMonth, hsh => {
+                return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+            });
+
+            hshStack = {}
+            arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
+                hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
+
+                return {
+                    name: strLegend,
+                    type: 'bar',
+                    stack: 'stackPercent',
+                    areaStyle: {},
+                    symbol: 'none',
+                    lineStyle: {
+                        width: 0.5
+                    },
+                    data: hshStack[strLegend]
+                }
+            });
+
+            setupchart.changeTickStack(arrHshFilterMonth);
+        }
+
+        //re-draw
+        setupchart.reDrawPercent(arrAxisXStack, arrHshSeriesPercent);
     });
 
-    let arrAxisXStack;
-    let arrHshSeriesPercent;
-    let hshStack = {}
+    // Dispatch click events on load to initialize charts with the default selected option (1month)
+    period_button2.dispatchEvent(new Event('click'));
+    period_button3.dispatchEvent(new Event('click'));
+}
 
-    if (tick_selector2.value === '1hour') {
-        arrAxisXStack = _.map(setupchart.arrFilter, hsh => {
-            return `${hsh['月日']} ${hsh['時刻']}:00`;
-        });
-
-        hshStack = {}
-        _.forEach(setupchart.arrLegend, strLegend => {
-            hshStack[strLegend] = _.map(setupchart.arrFilter, hsh => hsh[strLegend]);
-        });
-        setupchart.arrSeriesStack = _.map(setupchart.arrLegend, strLegend => {
-
-            const n = _.sum(hshStack[strLegend]);
-            document.querySelector(`.numeric[value=${strLegend}]`).innerText = unit(n, 'MWh').format(3);
-
-            return {
-                name: strLegend,
-                type: (strLegend === '電力需要') ? 'line' : 'bar',
-                stack: (strLegend === '電力需要') ? 'stackB' : 'stackA',
-                areaStyle: {},
-                symbol: 'none',
-                lineStyle: {
-                    width: 0.5
-                },
-                data: hshStack[strLegend]
-            }
-        });
-
-        const arrHshDataPercent = _.filter(setupchart.arrHshPercent, hsh => {
-            return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
-        });
-
-        hshStack = {}
-        arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
-            hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
-
-            return {
-                name: strLegend,
-                type: 'bar',
-                stack: 'stackPercent',
-                areaStyle: {},
-                symbol: 'none',
-                lineStyle: {
-                    width: 0.5
-                },
-                data: hshStack[strLegend]
-            }
-        });
-
-        setupchart.reDrawStack(arrAxisXStack);
-        //optionPercent.yAxis[0].min = null;
-
-    } else if (tick_selector2.value === '1day') {
-        const arrHshFilterDay = _.filter(setupchart.arrZip, hsh => {
-            return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
-        });
-
-        arrAxisXStack = _.map(arrHshFilterDay, hsh => hsh['月日']);
-
-        const arrHshDataPercent = _.filter(setupchart.arrHshPercentDay, hsh => {
-            return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
-        });
-
-        hshStack = {}
-        arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
-            hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
-
-            return {
-                name: strLegend,
-                type: 'bar',
-                stack: 'stackPercent',
-                areaStyle: {},
-                symbol: 'none',
-                lineStyle: {
-                    width: 0.5
-                },
-                data: hshStack[strLegend]
-            }
-        });
-
-        //optionPercent.yAxis[0].min = -10;
-        setupchart.changeTickStack(arrHshFilterDay);
-    } else if (tick_selector2.value === '1month') {
-        const arrHshFilterMonth = _.filter(setupchart.arrZipMonth, hsh => {
-            return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
-        });
-
-        arrAxisXStack = _.map(arrHshFilterMonth, hsh => hsh['月日']);
-
-        const arrHshDataPercent = _.filter(setupchart.arrHshPercentMonth, hsh => {
-            return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
-        });
-
-        hshStack = {}
-        arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
-            hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
-
-            return {
-                name: strLegend,
-                type: 'bar',
-                stack: 'stackPercent',
-                areaStyle: {},
-                symbol: 'none',
-                lineStyle: {
-                    width: 0.5
-                },
-                data: hshStack[strLegend]
-            }
-        });
-
-        setupchart.changeTickStack(arrHshFilterMonth);
-    }
-
-    //re-draw
-    setupchart.reDrawPercent(arrAxisXStack, arrHshSeriesPercent);
-});
-
-// Dispatch click events on load to initialize charts with the default selected option (1month)
-period_button2.dispatchEvent(new Event('click'));
-period_button3.dispatchEvent(new Event('click'));
+fetch('./data/rowdata-all.json')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('HTTP error ' + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {
+        arrHsh = data;
+        initApp();
+    })
+    .catch(error => {
+        console.error('Failed to load chart data:', error);
+    });
