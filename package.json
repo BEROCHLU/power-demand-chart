@@ -7,7 +7,7 @@
     "build": "npx webpack",
     "build-v": "npx webpack --mode=development",
     "build-w": "npx webpack --watch",
-    "create-data": "cd ./test && npx ts-node ./create-rowdata.ts"
+    "create-data": "cd ./rawdata && npx ts-node ./create-rowdata.ts"
   },
   "keywords": [],
   "author": "",
