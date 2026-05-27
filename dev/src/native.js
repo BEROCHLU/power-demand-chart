@@ -17,17 +17,18 @@ const arrLegendColor = ['#5470c6', '#d2691e', '#73c0de', '#ee6666', '#9a60b4', '
 const arrLegendColorAll = ['#a3a3a3', ...arrLegendColor];
 
 // create echarts instance
-const echartsHeatmap = echarts.init(cn2);
-const echartsLine = echarts.init(cn3);
-const echartsLineA = echarts.init(cn5);
-const echartsStack = echarts.init(cn3a, null, {
+const echartsHeatmap = echarts.init(cn2, 'dark');
+const echartsLine = echarts.init(cn3, 'dark');
+const echartsLineA = echarts.init(cn5, 'dark');
+const echartsStack = echarts.init(cn3a, 'dark', {
     renderer: 'svg'
 });
-const echartsPercent = echarts.init(cn2a, null, {
+const echartsPercent = echarts.init(cn2a, 'dark', {
     renderer: 'svg'
 });
 
 const optionHeatmap = {
+    backgroundColor: 'transparent',
     title: {
         text: null,
         left: 'center',
@@ -87,6 +88,7 @@ const optionHeatmap = {
     }]
 }
 const optionLine = {
+    backgroundColor: 'transparent',
     title: {
         text: null,
         left: 'center',
@@ -162,6 +164,7 @@ const optionLine = {
     }]
 }
 const optionLineA = {
+    backgroundColor: 'transparent',
     title: {
         text: null,
         left: 'center',
@@ -237,6 +240,7 @@ const optionLineA = {
     }]
 }
 const optionPercent = {
+    backgroundColor: 'transparent',
     title: {
         text: '電力需要エネルギー別割合',
         left: 'center',
@@ -325,6 +329,7 @@ const optionPercent = {
     series: null
 }
 const optionStack = {
+    backgroundColor: 'transparent',
     title: {
         text: '電力需要エネルギー別積み上げグラフ',
         left: 'center',
@@ -1122,6 +1127,13 @@ fetch('./data/rowdata-all.json')
     .then(data => {
         arrHsh = data;
         initApp();
+        window.addEventListener('resize', () => {
+            echartsHeatmap.resize();
+            echartsLine.resize();
+            echartsLineA.resize();
+            echartsStack.resize();
+            echartsPercent.resize();
+        });
     })
     .catch(error => {
         console.error('Failed to load chart data:', error);
