@@ -29,7 +29,10 @@ const echartsPercent = echarts.init(cn2a, null, {
 const optionHeatmap = {
     title: {
         text: null,
-        left: 'center'
+        left: 'center',
+        textStyle: {
+            fontSize: 14
+        }
     },
     tooltip: {
         formatter: (p) => {
@@ -85,7 +88,10 @@ const optionHeatmap = {
 const optionLine = {
     title: {
         text: null,
-        left: 'center'
+        left: 'center',
+        textStyle: {
+            fontSize: 14
+        }
     },
     tooltip: {
         trigger: 'axis', // item | axis
@@ -157,7 +163,10 @@ const optionLine = {
 const optionLineA = {
     title: {
         text: null,
-        left: 'center'
+        left: 'center',
+        textStyle: {
+            fontSize: 14
+        }
     },
     tooltip: {
         trigger: 'axis', // item | axis
@@ -229,7 +238,10 @@ const optionLineA = {
 const optionPercent = {
     title: {
         text: '電力需要エネルギー別割合',
-        left: 'center'
+        left: 'center',
+        textStyle: {
+            fontSize: 14
+        }
     },
     tooltip: {
         trigger: 'axis',
@@ -314,7 +326,10 @@ const optionPercent = {
 const optionStack = {
     title: {
         text: '電力需要エネルギー別積み上げグラフ',
-        left: 'center'
+        left: 'center',
+        textStyle: {
+            fontSize: 14
+        }
     },
     tooltip: {
         trigger: 'axis',
