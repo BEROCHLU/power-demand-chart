@@ -1,8 +1,5 @@
 'use strict';
 
-//import 'core-js/stable';
-//import 'regenerator-runtime/runtime';
-
 import _ from 'lodash';
 import * as echarts from 'echarts';
 import dayjs from 'dayjs';
@@ -100,7 +97,7 @@ const optionLine = {
     toolbox: {
         show: true,
         feature: {
-            dataView: { // not work IE11
+            dataView: {
                 title: 'data view',
                 readOnly: true,
                 lang: ['data view', 'turn off', 'refresh']
@@ -172,7 +169,7 @@ const optionLineA = {
     toolbox: {
         show: true,
         feature: {
-            dataView: { // not work IE11
+            dataView: {
                 title: 'data view',
                 readOnly: true,
                 lang: ['data view', 'turn off', 'refresh']
@@ -266,7 +263,7 @@ const optionPercent = {
     color: arrLegendColor,
     toolbox: {
         feature: {
-            dataView: { // not work IE11
+            dataView: {
                 title: 'data view',
                 readOnly: true,
                 lang: ['data view', 'turn off', 'refresh']
@@ -351,7 +348,7 @@ const optionStack = {
     color: arrLegendColorAll,
     toolbox: {
         feature: {
-            dataView: { // not work IE11
+            dataView: {
                 title: 'data view',
                 readOnly: true,
                 lang: ['data view', 'turn off', 'refresh']
@@ -415,6 +412,9 @@ class SetupChart {
                 dom.appendChild(elem.cloneNode(true));
             });
         });
+
+        ym_selector2b.value = _.last(arrStrDateUniq);
+        ym_selector3b.value = _.last(arrStrDateUniq);
     }
 
     setHshPercent() {
@@ -1089,3 +1089,7 @@ period_button3.addEventListener('click', () => {
     //re-draw
     setupchart.reDrawPercent(arrAxisXStack, arrHshSeriesPercent);
 });
+
+// Dispatch click events on load to initialize charts with the default selected option (1month)
+period_button2.dispatchEvent(new Event('click'));
+period_button3.dispatchEvent(new Event('click'));

@@ -16,29 +16,6 @@ const config = {
     performance: {
         maxEntrypointSize: 16.0 * 1000000,
         maxAssetSize: 16.0 * 1000000
-    },
-    module: {
-        rules: [{
-            test: /\.m?js$/,
-            exclude: /node_modules[\\\/]core-js/,
-            use: {
-                loader: 'babel-loader',
-                options: {
-                    presets: [
-                        [
-                            '@babel/preset-env',
-                            {
-                                targets: ["> 0.5%", "not dead"],
-                                useBuiltIns: 'usage',
-                                corejs: 3,
-                                debug: false
-                            }
-                        ]
-                    ],
-                    sourceType: 'unambiguous'
-                }
-            }
-        }]
     }
 }
 

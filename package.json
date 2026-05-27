@@ -1,7 +1,7 @@
 {
-  "name": "webpack-babel",
+  "name": "power-demand-chart",
   "version": "3.1.0",
-  "description": "babel-load webpack",
+  "description": "Japan power supply and demand visualization chart",
   "main": "index.js",
   "scripts": {
     "build": "npx webpack",
@@ -13,23 +13,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@babel/cli": "^7.24.8",
-    "@babel/core": "^7.25.2",
-    "@babel/preset-env": "^7.25.3",
-    "autoprefixer": "^10.4.20",
-    "babel-loader": "^8.3.0",
-    "core-js": "^3.38.0",
     "crossfilter2": "^1.5.4",
     "dayjs": "^1.11.12",
     "echarts": "^5.6.0",
     "jquery": "^3.7.1",
     "lodash": "^4.18.1",
-    "mathjs": "^12.4.3",
-    "postcss": "^8.4.41",
-    "postcss-cli": "^9.1.0",
-    "regenerator-runtime": "^0.13.11",
-    "webpack": "^5.93.0",
-    "webpack-cli": "^4.10.0"
+    "mathjs": "^15.2.0",
+    "webpack": "^5.107.2",
+    "webpack-cli": "^7.0.2"
   },
   "devDependencies": {
     "xlsx": "^0.18.5"

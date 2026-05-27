@@ -6,6 +6,10 @@ on:
     branches:
       - main
 
+env:
+  # Opt-in to Node.js 24 for runner actions to avoid Node.js 20 deprecation warnings
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build-and-deploy:
     # Use the latest Ubuntu runner
