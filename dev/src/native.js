@@ -134,7 +134,7 @@ const optionLine = {
     yAxis: {
         type: 'value',
         axisLabel: {
-            formatter: '{value} MWh'
+            formatter: (value) => unit(value, 'MWh').format(3)
         }
     },
     dataZoom: [{
@@ -206,7 +206,7 @@ const optionLineA = {
     yAxis: {
         type: 'value',
         axisLabel: {
-            formatter: '{value} MWh'
+            formatter: (value) => unit(value, 'MWh').format(3)
         }
     },
     dataZoom: [{
@@ -379,7 +379,7 @@ const optionStack = {
     yAxis: [{
         type: 'value',
         axisLabel: {
-            formatter: '{value} MWh'
+            formatter: (value) => unit(value, 'MWh').format(3)
         },
         min: 'dataMin',
     }],
@@ -515,6 +515,75 @@ class SetupChart {
         });
     }
 
+    setCrossfilterMonth() {
+        const cf2 = crossfilter(arrHsh);
+        const myMonthDimension = cf2.dimension(d => {
+            return dayjs(d['月日']).format('YYYY-MM');
+        });
+
+        const arrKeysOfHsh = _.pull(_.keys(arrHsh[0]), '月日', '時刻');
+        const arrMap = _.map(arrKeysOfHsh, strKey => {
+            const arrHshDim = myMonthDimension.group().reduceSum(d => d[strKey]).all();
+
+            let arrReturn = _.map(arrHshDim, hshDim => {
+                return _.mapKeys(hshDim, (v, k) => {
+                    if (k === 'key') {
+                        return '月日';
+                    } else if (k === 'value') {
+                        return strKey;
+                    }
+                });
+            });
+
+            arrReturn = _.map(arrReturn, hsh => {
+                return _.mapValues(hsh, (value, key) => {
+                    let result;
+                    if (key === '月日') {
+                        result = value;
+                    } else {
+                        result = _.round(value, 1);
+                    }
+                    return result;
+                });
+            });
+
+            return arrReturn;
+        });
+
+        this.arrZipMonth = _.zipWith(...arrMap, (...args) => {
+            return _.merge(...args);
+        });
+    }
+
+    setHshPercentMonth() {
+        const arrHshCD = _.cloneDeep(this.arrZipMonth); //deep copy
+        _.forEach(arrHshCD, hsh => {
+            delete hsh["電力需要"];
+        });
+
+        this.arrHshPercentMonth = _.map(arrHshCD, hsh => {
+            let sum = 0;
+            _.forEach(hsh, (value, key) => {
+                if (key === '月日') {
+                    sum += 0;
+                } else {
+                    sum += value;
+                }
+            });
+
+            return _.mapValues(hsh, (value, key, object) => {
+                let result;
+                if (key === '月日') {
+                    result = value;
+                } else {
+                    result = value / sum * 100;
+                    result = _.round(result, 1)
+                }
+                return result;
+            });
+        });
+    }
+
     setarrFilter() {
         const mStart = dayjs(ym_selector1.value);
         this.arrFilter = _.filter(arrHsh, hsh => {
@@ -580,7 +649,7 @@ class SetupChart {
         optionHeatmap.series[0].data = this.arrPlotHeat;
 
         const n = _.sum(hshAxis.arrAxisY);
-        document.querySelector('#powersum1').innerText = unit(n, 'MW').format(3);
+        document.querySelector('#powersum1').innerText = unit(n, 'MWh').format(3);
     }
 
     setStack() {
@@ -596,7 +665,7 @@ class SetupChart {
 
             const n = _.sum(hshStack[strLegend]);
             const elemNumeric = document.createElement('div');
-            elemNumeric.innerText = unit(n, 'MW').format(3);
+            elemNumeric.innerText = unit(n, 'MWh').format(3);
             elemNumeric.className = 'numeric';
             elemNumeric.setAttribute('value', strLegend);
 
@@ -667,7 +736,7 @@ class SetupChart {
         optionLineA.series[0].data = hshAxis.arrAxisY;
 
         const n = _.sum(hshAxis.arrAxisY);
-        document.querySelector('#powersum2').innerText = unit(n, 'MW').format(3);
+        document.querySelector('#powersum2').innerText = unit(n, 'MWh').format(3);
     }
 
     reDrawHeat(hshAxis) {
@@ -688,14 +757,14 @@ class SetupChart {
         optionLine.series[0].data = hshAxis.arrAxisY;
 
         const n = _.sum(hshAxis.arrAxisY);
-        document.querySelector('#powersum1').innerText = unit(n, 'MW').format(3);
+        document.querySelector('#powersum1').innerText = unit(n, 'MWh').format(3);
         echartsLine.setOption(optionLine, true);
     }
 
     reDrawStack(arrAxisXStack) {
         echartsStack.clear();
         optionStack.xAxis[0].data = arrAxisXStack;
-        optionStack.yAxis[0].axisLabel.formatter = '{value} MWh';
+        optionStack.yAxis[0].axisLabel.formatter = (value) => unit(value, 'MWh').format(3);
         optionStack.series = this.arrSeriesStack;
         optionStack.legend.selected = this.hshLegendSelect;
 
@@ -715,11 +784,11 @@ class SetupChart {
         echartsLineA.clear();
         optionLineA.title.text = `${data_selector2.value}: ${ym_selector2a.value}~${ym_selector2b.value}`;
         optionLineA.xAxis.data = hshAxis.arrAxisX;
-        optionLineA.yAxis.axisLabel.formatter = '{value} MWh';
+        optionLineA.yAxis.axisLabel.formatter = (value) => unit(value, 'MWh').format(3);
         optionLineA.series[0].data = hshAxis.arrAxisY;
 
         const n = _.sum(hshAxis.arrAxisY);
-        document.querySelector('#powersum2').innerText = unit(n, 'MW').format(3);
+        document.querySelector('#powersum2').innerText = unit(n, 'MWh').format(3);
         echartsLineA.setOption(optionLineA, true);
     }
 
@@ -740,12 +809,12 @@ class SetupChart {
         //let _arr = hshAxis.arrAxisY;
         //_arr = _.filter(_arr, (value) => !_.isNaN(value));
         const n = _.sum(hshAxis.arrAxisY);
-        document.querySelector('#powersum2').innerText = unit(n, 'MW').format(3);
+        document.querySelector('#powersum2').innerText = unit(n, 'MWh').format(3);
 
         echartsLineA.clear();
         optionLineA.title.text = `${data_selector2.value}: ${ym_selector2a.value}~${ym_selector2b.value}`;
         optionLineA.xAxis.data = hshAxis.arrAxisX;
-        optionLineA.yAxis.axisLabel.formatter = '{value} MW';
+        optionLineA.yAxis.axisLabel.formatter = (value) => unit(value, 'MWh').format(3);
         optionLineA.series[0].data = hshAxis.arrAxisY;
 
         echartsLineA.setOption(optionLineA, true);
@@ -757,7 +826,7 @@ class SetupChart {
             hshStack[strLegend] = _.map(arrHshFilterDay, hsh => hsh[strLegend]);
 
             const n = _.sum(hshStack[strLegend]);
-            document.querySelector(`.numeric[value=${strLegend}]`).innerText = unit(n, 'MW').format(3);
+            document.querySelector(`.numeric[value=${strLegend}]`).innerText = unit(n, 'MWh').format(3);
 
             return {
                 name: strLegend,
@@ -774,7 +843,7 @@ class SetupChart {
 
         echartsStack.clear();
         optionStack.xAxis[0].data = _.map(arrHshFilterDay, hsh => hsh['月日']);
-        optionStack.yAxis[0].axisLabel.formatter = '{value} MW';
+        optionStack.yAxis[0].axisLabel.formatter = (value) => unit(value, 'MWh').format(3);
         optionStack.series = arrHshSeriesDay;
         optionStack.legend.data = this.arrLegend;
         optionStack.legend.selected = this.hshLegendSelect;
@@ -787,6 +856,8 @@ const setupchart = new SetupChart();
 setupchart.setHshPercent();
 setupchart.setCrossfilter();
 setupchart.setHshPercentDay();
+setupchart.setCrossfilterMonth();
+setupchart.setHshPercentMonth();
 setupchart.setarrFilter();
 setupchart.setLegend();
 setupchart.setarrPlotHeat();
@@ -876,13 +947,19 @@ period_button2.addEventListener('click', () => {
         });
         //re-draw
         setupchart.reDrawLineA(hshAxis);
-    } else if (tick_selector.value === '1day') {
-        const arrHshFilterDay = _.filter(setupchart.arrZip, hsh => {
-            return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
-        });
-        //re-draw
-        setupchart.changeTick(arrHshFilterDay);
-    }
+        } else if (tick_selector.value === '1day') {
+            const arrHshFilterDay = _.filter(setupchart.arrZip, hsh => {
+                return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+            });
+            //re-draw
+            setupchart.changeTick(arrHshFilterDay);
+        } else if (tick_selector.value === '1month') {
+            const arrHshFilterMonth = _.filter(setupchart.arrZipMonth, hsh => {
+                return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+            });
+            //re-draw
+            setupchart.changeTick(arrHshFilterMonth);
+        }
 });
 
 // button click
@@ -909,7 +986,7 @@ period_button3.addEventListener('click', () => {
         setupchart.arrSeriesStack = _.map(setupchart.arrLegend, strLegend => {
 
             const n = _.sum(hshStack[strLegend]);
-            document.querySelector(`.numeric[value=${strLegend}]`).innerText = unit(n, 'MW').format(3);
+            document.querySelector(`.numeric[value=${strLegend}]`).innerText = unit(n, 'MWh').format(3);
 
             return {
                 name: strLegend,
@@ -978,6 +1055,35 @@ period_button3.addEventListener('click', () => {
 
         //optionPercent.yAxis[0].min = -10;
         setupchart.changeTickStack(arrHshFilterDay);
+    } else if (tick_selector2.value === '1month') {
+        const arrHshFilterMonth = _.filter(setupchart.arrZipMonth, hsh => {
+            return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+        });
+
+        arrAxisXStack = _.map(arrHshFilterMonth, hsh => hsh['月日']);
+
+        const arrHshDataPercent = _.filter(setupchart.arrHshPercentMonth, hsh => {
+            return dayjs(hsh['月日']).isBetween(mStart, mEnd, 'month', '[]');
+        });
+
+        hshStack = {}
+        arrHshSeriesPercent = _.map(setupchart.arrLegendPercent, strLegend => {
+            hshStack[strLegend] = _.map(arrHshDataPercent, hsh => hsh[strLegend]);
+
+            return {
+                name: strLegend,
+                type: 'bar',
+                stack: 'stackPercent',
+                areaStyle: {},
+                symbol: 'none',
+                lineStyle: {
+                    width: 0.5
+                },
+                data: hshStack[strLegend]
+            }
+        });
+
+        setupchart.changeTickStack(arrHshFilterMonth);
     }
 
     //re-draw

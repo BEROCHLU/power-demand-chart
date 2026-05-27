@@ -7,7 +7,6 @@
     "build": "npx webpack",
     "build-v": "npx webpack --mode=development",
     "build-w": "npx webpack --watch",
-    "postbuild": "npx postcss ./dev/css/style.css --config postcss.config.js -o ./dist/css/ms-style.css",
     "create-data": "cd ./test && npx ts-node ./create-rowdata.ts"
   },
   "keywords": [],
@@ -24,7 +23,7 @@
     "dayjs": "^1.11.12",
     "echarts": "^5.6.0",
     "jquery": "^3.7.1",
-    "lodash": "^4.17.23",
+    "lodash": "^4.18.1",
     "mathjs": "^12.4.3",
     "postcss": "^8.4.41",
     "postcss-cli": "^9.1.0",
