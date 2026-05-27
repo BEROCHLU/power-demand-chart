@@ -1,0 +1,51 @@
+# GitHub Actions workflow to build the project and deploy the static files to AWS S3.
+name: Deploy to S3
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    # Use the latest Ubuntu runner
+    runs-on: ubuntu-24.04
+
+    steps:
+      # Step 1: Checkout the source code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up Node.js environment
+      - name: Setup Node.js (v22)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Step 3: Install project dependencies
+      - name: Install dependencies
+        run: |
+          npm install
+          npm list --depth=0
+
+      # Step 4: Run Webpack build to generate production files in ./dist
+      - name: Webpack build
+        run: npm run build
+
+      # Step 5: Configure AWS IAM credentials for S3 deployment
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-1
+
+      # Step 6: Deploy built files to AWS S3 after backing up current bucket files
+      - name: Upload files to AWS S3
+        run: |
+          # Create backup of current bucket contents
+          aws s3 sync s3://aws-s3-tokyo s3://aws-s3-tokyo/backup \
+            --exclude "backup/*" \
+            --exclude "license/*"
+          # Sync ./dist contents to the bucket root
+          aws s3 sync ./dist s3://aws-s3-tokyo
