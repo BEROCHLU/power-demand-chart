@@ -6,10 +6,6 @@ on:
     branches:
       - main
 
-env:
-  # Opt-in to Node.js 24 for runner actions to avoid Node.js 20 deprecation warnings
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 jobs:
   build-and-deploy:
     # Use the latest Ubuntu runner
@@ -18,11 +14,11 @@ jobs:
     steps:
       # Step 1: Checkout the source code
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # Step 2: Set up Node.js environment
       - name: Setup Node.js (v22)
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
 
@@ -38,7 +34,7 @@ jobs:
 
       # Step 5: Configure AWS IAM credentials for S3 deployment
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
