@@ -23,6 +23,6 @@
     "webpack-cli": "^7.0.2"
   },
   "devDependencies": {
-    "xlsx": "^0.18.5"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   }
 }

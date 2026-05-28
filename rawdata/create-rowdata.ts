@@ -58,8 +58,14 @@ _.forEach(arrStrFile, (strFile: string) => {
     let arrTemplate: Power[] = [];
 
     _.forEach(arrHsh, (hsh: Hsh) => {
-        const strHour = hsh['時刻'].replace('時', '');
-        hsh['時刻'] = parseInt(strHour);
+        let nHour: number;
+        if (typeof hsh['時刻'] === 'number') {
+            nHour = Math.round(hsh['時刻'] * 24);
+        } else {
+            const strHour = hsh['時刻'].replace('時', '');
+            nHour = parseInt(strHour);
+        }
+        hsh['時刻'] = nHour;
 
         const nExcelSerial = hsh['月日'] - 2; //Excelでは1900年が閏年判定され2月29日まであるため-2する
         const strDate = dayjs('1900-01-01').add(nExcelSerial, 'days').format('YYYY-MM-DD');
