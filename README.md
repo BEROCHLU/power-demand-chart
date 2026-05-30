@@ -17,7 +17,7 @@
 
 ## 公開先
 
-AWS S3 の静的 Web サイトホスティングで公開します。
+AWS S3 の静的 Web サイトホスティングで公開しています。
 
 [http://aws-s3-tokyo.s3-website-ap-northeast-1.amazonaws.com/](http://aws-s3-tokyo.s3-website-ap-northeast-1.amazonaws.com/)
 
