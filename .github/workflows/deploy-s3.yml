@@ -43,5 +43,13 @@ jobs:
       # Step 6: Deploy built files to AWS S3
       - name: Upload files to AWS S3
         run: |
-          # Sync ./dist contents to the bucket root
-          aws s3 sync ./dist s3://aws-s3-tokyo
+          # Compress the large JSON file using gzip (-9 for maximum compression)
+          gzip -9 dist/data/rowdata-all.json
+          
+          # Sync other static assets to the bucket (excluding the JSON and its compressed version)
+          aws s3 sync ./dist s3://aws-s3-tokyo --exclude "data/rowdata-all.json*"
+          
+          # Upload the compressed JSON with correct headers so browsers decompress it automatically
+          aws s3 cp dist/data/rowdata-all.json.gz s3://aws-s3-tokyo/data/rowdata-all.json \
+            --content-type "application/json" \
+            --content-encoding "gzip"
