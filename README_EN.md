@@ -62,8 +62,8 @@ The current `dist/data/rowdata-all.json` dataset contains:
 
 | Item | Details |
 | --- | --- |
-| Total Records | 65,063 |
-| Date Range | 2018-10-01 to 2026-03-31 |
+| Total Records | 66,527 |
+| Date Range | 2018-10-01 to 2026-05-31 |
 | Granularity | 1 hour |
 | Base Unit | MWh |
 | Input Files | `rawdata/data/*_10エリア計.csv` |
@@ -72,7 +72,7 @@ The current `dist/data/rowdata-all.json` dataset contains:
 *Note: Raw CSV files are compiled from general transmission and distribution companies' public releases. They are CP932/Shift_JIS encoded, and parsed using the `xlsx` library with `codepage: 932`.*
 
 Important notes on the dataset:
-- Current raw data files cover `201810_10エリア計.csv` through `202603_10エリア計.csv`.
+- Current raw data files cover `201810_10エリア計.csv` through `202605_10エリア計.csv`.
 - `2026-02` CSV data is missing in the current repository.
 - In `2024-03`, there are 743 records (1 hour short).
 - Totals may slightly differ from the sum of individual items due to rounding in raw files.
@@ -210,7 +210,7 @@ Target AWS region is `ap-northeast-1`.
 ## Development Notes
 
 - The core logic is built with vanilla JavaScript. It does not use UI frameworks like React or Vue.
-- `dist/data/rowdata-all.json` is around 16 MB. The charts are initialized after this JSON is completely fetched.
+- `dist/data/rowdata-all.json` is around 16 MB, but it is gzip-compressed to about 2 MB during deployment to AWS S3 to reduce transfer size. The charts are initialized after this JSON is completely fetched.
 - `dev/src/vendor.js` is the pre-compiled vendor bundle. Normal development focuses on editing `dev/src/native.js` and `dev/src/jqtab.js`.
 - `dist/css/style.css` is referenced directly by HTML. Make sure to update the static stylesheet for layout changes.
 
