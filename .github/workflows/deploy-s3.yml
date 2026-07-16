@@ -40,12 +40,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-1
 
-      # Step 6: Deploy built files to AWS S3 after backing up current bucket files
+      # Step 6: Deploy built files to AWS S3
       - name: Upload files to AWS S3
         run: |
-          # Create backup of current bucket contents
-          aws s3 sync s3://aws-s3-tokyo s3://aws-s3-tokyo/backup \
-            --exclude "backup/*" \
-            --exclude "license/*"
           # Sync ./dist contents to the bucket root
           aws s3 sync ./dist s3://aws-s3-tokyo
