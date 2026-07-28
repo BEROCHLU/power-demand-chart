@@ -1,0 +1,59 @@
+# GitHub Actions workflow to build the project and deploy to GitHub Pages.
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+# Permissions required for GitHub Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Prevent concurrent deployment conflicts
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-24.04
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      # Step 2: Setup Node.js (v22)
+      - name: Setup Node.js (v22)
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: Run Webpack build
+      - name: Webpack build
+        run: npm run build
+
+      # Step 5: Setup GitHub Pages configuration
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # Step 6: Upload ./dist directory as Pages artifact
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+
+      # Step 7: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
