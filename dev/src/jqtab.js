@@ -17,4 +17,5 @@ $('li[name="arrow"]').on('click', function () {
     //console.log(INDEX);
     const n = Math.min(2, INDEX);
     $('li.axis-tab').text(`${n}/2`);
+    window.dispatchEvent(new Event('resize'));
 });

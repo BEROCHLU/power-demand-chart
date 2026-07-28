@@ -17,6 +17,7 @@ grid1, grid2, grid3, grid4, grid5, grid6 {
     height: inherit;
     display: grid;
     gap: 4px;
+    overflow: hidden;
     grid-template:
         "grid1 grid2 grid3"1fr 
         "grid4 grid5 grid5"1fr 
@@ -28,6 +29,7 @@ grid1, grid2, grid3, grid4, grid5, grid6 {
     height: inherit;
     display: grid;
     gap: 4px;
+    overflow: hidden;
     grid-template:
         "grid1 grid2"1fr 
         "grid1 grid3"1fr 
@@ -40,15 +42,22 @@ grid1 {
     border-radius: 10px;
     background-color: #f0f0f0;
     padding: 5px;
+    min-width: 0;
+    min-height: 0;
 }
 
 grid2 {
     grid-area: grid2;
+    min-width: 0;
+    min-height: 0;
 }
 
 #cn2, #cn3, #cn5 {
     width: 100%;
     height: 100%;
+    min-width: 0;
+    min-height: 0;
+    overflow: hidden;
     background-color: #f0f0f0;
     border-radius: 10px;
 }
@@ -62,6 +71,8 @@ grid2 {
 
 grid3 {
     grid-area: grid3;
+    min-width: 0;
+    min-height: 0;
 }
 
 grid4 {
@@ -73,6 +84,8 @@ grid4 {
 
 grid5 {
     grid-area: grid5;
+    min-width: 0;
+    min-height: 0;
 }
 
 grid6 {
@@ -132,7 +145,9 @@ li:nth-of-type(5) {
 }
 
 .total-view {
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-size: 14px;
 }
 
@@ -149,7 +164,7 @@ li:nth-of-type(5) {
 }
 
 .item {
-    font-size: 14px;
+    font-size: 11.5px;
     color: #005aa0;
     font-weight: bold;
 }
