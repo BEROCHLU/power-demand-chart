@@ -4,7 +4,7 @@
   <a href="./README.md">日本語</a> | <strong>English</strong>
 </p>
 
-[![Deploy to S3](https://github.com/BEROCHLU/power-demand-chart/actions/workflows/deploy-s3.yml/badge.svg)](https://github.com/BEROCHLU/power-demand-chart/actions/workflows/deploy-s3.yml)
+[![Deploy to GitHub Pages](https://github.com/BEROCHLU/power-demand-chart/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/BEROCHLU/power-demand-chart/actions/workflows/deploy-pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 An interactive, high-performance web dashboard that visualizes Japan's power supply and demand situations over time. Built with modern web technologies, it allows users to analyze energy breakdowns, trends, and patterns through various specialized charts.
@@ -17,11 +17,11 @@ This repository compiles monthly CSV files into `dist/data/rowdata-all.json`, wh
 
 ## Deployment URL
 
-The application is deployed using AWS S3 static website hosting:
+The application is deployed using GitHub Pages:
 
-[http://aws-s3-tokyo.s3-website-ap-northeast-1.amazonaws.com/](http://aws-s3-tokyo.s3-website-ap-northeast-1.amazonaws.com/)
+[https://berochlu.github.io/power-demand-chart/](https://berochlu.github.io/power-demand-chart/)
 
-Whenever a push is made to the `main` branch, GitHub Actions will automatically run `npm install`, `npm run build`, and sync the `dist` directory with the S3 bucket.
+Whenever a push is made to the `main` branch, GitHub Actions will automatically run `npm install`, `npm run build`, and deploy the `dist` directory to GitHub Pages.
 
 ## Key Features
 
@@ -88,7 +88,7 @@ Important notes on the dataset:
 | Object/Array Helpers | lodash |
 | Bundler | Webpack |
 | Data Compilation | TypeScript + xlsx |
-| Deployment | GitHub Actions + AWS S3 |
+| Deployment | GitHub Actions + GitHub Pages |
 
 ## Directory Layout
 
@@ -97,7 +97,7 @@ Important notes on the dataset:
 ├── .github/
 │   ├── image1.png
 │   ├── image2.png
-│   └── workflows/deploy-s3.yml
+│   └── workflows/deploy-pages.yml
 ├── dev/
 │   ├── css/style.css
 │   └── src/
@@ -191,26 +191,19 @@ This runs `rawdata/create-rowdata.ts` and overwrites `dist/data/rowdata-all.json
 
 ## Deployment
 
-The GitHub Actions workflow defined in `.github/workflows/deploy-s3.yml` triggers on pushes to the `main` branch:
+The GitHub Actions workflow defined in `.github/workflows/deploy-pages.yml` triggers on pushes to the `main` branch:
 
 1. Checks out the repository.
 2. Sets up Node.js 22.
 3. Runs `npm install`.
 4. Runs `npm run build`.
-5. Authenticates with AWS via GitHub Secrets.
-6. Backs up the current S3 bucket.
-7. Deploys the built `dist` directory to `s3://aws-s3-tokyo`.
-
-Required GitHub Secrets:
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
-
-Target AWS region is `ap-northeast-1`.
+5. Configures GitHub Pages settings.
+6. Uploads the `dist` directory as an artifact and deploys to GitHub Pages.
 
 ## Development Notes
 
 - The core logic is built with vanilla JavaScript. It does not use UI frameworks like React or Vue.
-- `dist/data/rowdata-all.json` is around 16 MB, but it is gzip-compressed to about 2 MB during deployment to AWS S3 to reduce transfer size. The charts are initialized after this JSON is completely fetched.
+- `dist/data/rowdata-all.json` is around 16 MB, but it is automatically compressed (gzip/Brotli) by GitHub Pages CDN during transfer to reduce size to about 2 MB. The charts are initialized after this JSON is completely fetched.
 - `dev/src/vendor.js` is the pre-compiled vendor bundle. Normal development focuses on editing `dev/src/native.js` and `dev/src/jqtab.js`.
 - `dist/css/style.css` is referenced directly by HTML. Make sure to update the static stylesheet for layout changes.
 

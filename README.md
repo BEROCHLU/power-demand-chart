@@ -4,7 +4,7 @@
   <strong>日本語</strong> | <a href="./README_EN.md">English</a>
 </p>
 
-[![Deploy to S3](https://github.com/BEROCHLU/power-demand-chart/actions/workflows/deploy-s3.yml/badge.svg)](https://github.com/BEROCHLU/power-demand-chart/actions/workflows/deploy-s3.yml)
+[![Deploy to GitHub Pages](https://github.com/BEROCHLU/power-demand-chart/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/BEROCHLU/power-demand-chart/actions/workflows/deploy-pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 日本の電力需給実績を、ヒートマップ、時系列グラフ、積み上げグラフ、構成比グラフで確認する静的 Web アプリケーションです。
@@ -17,11 +17,11 @@
 
 ## 公開先
 
-AWS S3 の静的 Web サイトホスティングで公開しています。
+GitHub Pages の静的 Web サイトホスティングで公開しています。
 
-[http://aws-s3-tokyo.s3-website-ap-northeast-1.amazonaws.com/](http://aws-s3-tokyo.s3-website-ap-northeast-1.amazonaws.com/)
+[https://berochlu.github.io/power-demand-chart/](https://berochlu.github.io/power-demand-chart/)
 
-`main` ブランチへの push をトリガーに、GitHub Actions が `npm install`、`npm run build`、`dist` の S3 同期を実行します。
+`main` ブランチへの push をトリガーに、GitHub Actions が `npm install`、`npm run build`、`dist` の GitHub Pages デプロイを自動実行します。
 
 ## 主な機能
 
@@ -90,7 +90,7 @@ CSV のヘッダーには「一般送配電事業者各社の公表データを�
 | 配列、オブジェクト処理 | lodash |
 | バンドル | webpack |
 | データ変換 | TypeScript + xlsx |
-| デプロイ | GitHub Actions + AWS S3 |
+| デプロイ | GitHub Actions + GitHub Pages |
 
 ## ディレクトリ構成
 
@@ -99,7 +99,7 @@ CSV のヘッダーには「一般送配電事業者各社の公表データを�
 ├── .github/
 │   ├── image1.png
 │   ├── image2.png
-│   └── workflows/deploy-s3.yml
+│   └── workflows/deploy-pages.yml
 ├── dev/
 │   ├── css/style.css
 │   └── src/
@@ -204,27 +204,19 @@ npm run create-data
 
 ## デプロイ
 
-`.github/workflows/deploy-s3.yml` は、`main` ブランチへの push で次を実行します。
+`.github/workflows/deploy-pages.yml` は、`main` ブランチへの push で次を実行します。
 
 1. リポジトリを checkout します。
 2. Node.js 22 をセットアップします。
 3. `npm install` を実行します。
 4. `npm run build` を実行します。
-5. AWS 認証情報を GitHub Secrets から読み込みます。
-6. 既存 S3 バケット内容を `backup` に同期します。
-7. `dist` 配下を `s3://aws-s3-tokyo` に同期します。
-
-必要な GitHub Secrets:
-
-- `AWS_ACCESS_KEY_ID`
-- `AWS_SECRET_ACCESS_KEY`
-
-AWS リージョンは `ap-northeast-1` です。
+5. GitHub Pages 構成をセットアップします。
+6. `dist` 配下をアーティファクトとしてアップロードし、GitHub Pages にデプロイします。
 
 ## 開発メモ
 
 - アプリ本体はプレーンな JavaScript で、React や Vue などの UI フレームワークは使っていません。
-- `dist/data/rowdata-all.json` は約 16 MB ありますが、AWS S3 へのデプロイ時に gzip 圧縮されるため実際の転送量は約 2 MB です。初回表示時はこの JSON の読み込み後にチャートを初期化します。
+- `dist/data/rowdata-all.json` は約 16 MB ありますが、GitHub Pages 配信時に自動的に圧縮（gzip / Brotli）して配信されるため実際の転送量は約 2 MB です。初回表示時はこの JSON の読み込み後にチャートを初期化します。
 - `dev/src/vendor.js` は生成済みバンドルです。通常の開発では `dev/src/native.js` と `dev/src/jqtab.js` を編集します。
 - `dist/css/style.css` が実際に HTML から参照されます。CSS を変更する場合は、配信対象の `dist/css/style.css` を更新してください。
 - 現在の `package.json` にはテスト用スクリプトはありません。
